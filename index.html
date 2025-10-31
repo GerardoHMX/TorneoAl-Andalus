@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Torneo Al-Ándalus 2025-2026</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header>
+        <h1>Torneo Al-Ándalus 2025-2026</h1>
+        <p id="app-status">Cargando datos...</p>
+    </header>
+
+    <nav class="filters">
+        <label>Grupo
+            <select id="f-grupo">
+                <option value="">Todos</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+                <option>D</option>
+            </select>
+        </label>
+        <label>Etapa
+            <select id="f-etapa">
+                <option value="">Todas</option>
+                <option>ESO</option>
+                <option>Bach</option>
+            </select>
+        </label>
+    </nav>
+
+    
+    <main>
+        <section id="sec-jornadas">
+            <h2>🗓️ Jornadas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-t="j" data-k="fecha">Fecha</th>
+                        <th data-t="j" data-k="hora">Hora</th>
+                        <th data-t="j" data-k="grupo">Grupo</th>
+                        <th data-t="j" data-k="local">Local</th>
+                        <th data-t="j" data-k="visitante">Visitante</th>
+                        <th data-t="j" data-k="gLocal,gVisit">Marcador</th>
+                        <th data-t="j" data-k="estado">Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="jornadas-body"></tbody>
+            </table>
+            <div id="paginacion-jornadas" class="paginacion">
+                <button id="prev-j">⏮ Anterior</button>
+                <span id="pagina-j">1</span>
+                <button id="next-j">Siguiente ⏭</button>
+            </div>
+        </section>
+
+        <section id="sec-clasificacion">
+            <h2>🏆 Clasificación de grupos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-t="c" data-k="pos">Pos</th>
+                        <th data-t="c" data-k="grupo">Grupo</th>
+                        <th data-t="c" data-k="equipo">Equipo</th>
+                        <th data-t="c" data-k="PJ">PJ</th>
+                        <th data-t="c" data-k="G">G</th>
+                        <th data-t="c" data-k="E">E</th>
+                        <th data-t="c" data-k="P">P</th>
+                        <th data-t="c" data-k="GF">GF</th>
+                        <th data-t="c" data-k="GC">GC</th>
+                        <th data-t="c" data-k="DG">DG</th>
+                        <th data-t="c" data-k="Ptos">Ptos</th>
+                    </tr>
+                </thead>
+                <tbody id="clasificacion-body"></tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>⚡ Goleadores</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Jugador</th>
+                        <th>Equipo</th>
+                        <th>Goles</th>
+                    </tr>
+                </thead>
+                <tbody id="goleadores-body"></tbody>
+            </table>
+        </section>
+        
+        <section>
+            <h2>🚫 Sancionados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Jugador</th>
+                        <th>Equipo</th>
+                        <th>Tipo</th>
+                        <th>Part.</th>
+                        <th>Motivo</th>
+                    </tr>
+                </thead>
+                <tbody id="sancionados-body"></tbody>
+            </table>
+        </section>
+        
+        <section>
+            <h2>📰 Noticias</h2>
+            <ul id="noticias-list"></ul>
+        </section>
+        
+        <section>
+            <h2>🏅 Bracket</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fase</th>
+                        <th>Clave</th>
+                        <th>Equipo 1</th>
+                        <th>Equipo 2</th>
+                        <th>Marcador</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="bracket-body"></tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2025 Comité Deportivo Al-Ándalus</p>
+    </footer>
+
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <button id="close-modal" class="close">✖</button>
+            <h3 id="m-partido"></h3>
+            <p><strong>Grupo:</strong> <span id="m-grupo"></span></p>
+            <p><strong>Marcador:</strong> <span id="m-marcador"></span></p>
+            <p><strong>Cancha:</strong> <span id="m-cancha"></span></p>
+            <p><strong>Árbitro:</strong> <span id="m-arbitro"></span></p>
+            <p><strong>Estado:</strong> <span id="m-estado"></span></p>
+        </div>
+    </div>
+
+
+    <script src="app.js"></script>
+</body>
+
+</html>
