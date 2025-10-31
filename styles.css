@@ -123,3 +123,49 @@ th {
     font-size: 1.2rem;
     cursor: pointer;
 }
+
+#clasificacion-grupos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.grupo table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .9rem;
+}
+
+.grupo th,
+.grupo td {
+    border: 1px solid #cbd5e1;
+    padding: .4rem;
+    text-align: center;
+}
+
+.grupo h3 {
+    text-align: center;
+    color: #4f46e5;
+}
+
+.semana-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+    font-weight: 600;
+}
+
+.semana-nav button {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: .4rem .8rem;
+    border-radius: .5rem;
+    cursor: pointer;
+}
+
+.semana-nav button:hover {
+    background: #4f46e5;
+}

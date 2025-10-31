@@ -15,33 +15,27 @@
     </header>
 
     <nav class="filters">
-        <label>Grupo
-            <select id="f-grupo">
-                <option value="">Todos</option>
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
-                <option>D</option>
-            </select>
-        </label>
         <label>Etapa
             <select id="f-etapa">
                 <option value="">Todas</option>
                 <option>ESO</option>
-                <option>Bach</option>
+                <option>Bachillerato</option>
             </select>
         </label>
     </nav>
-
     
     <main>
         <section id="sec-jornadas">
             <h2>🗓️ Jornadas</h2>
+            <div id="semana-nav" class="semana-nav">
+                <button id="semana-prev">← Semana anterior</button>
+                <span id="semana-label">Semana actual</span>
+                <button id="semana-next">Semana siguiente →</button>
+            </div>
             <table>
                 <thead>
                     <tr>
-                        <th data-t="j" data-k="fecha">Fecha</th>
-                        <th data-t="j" data-k="hora">Hora</th>
+                        <th data-t="j" data-k="fecha">Fecha / Hora</th>
                         <th data-t="j" data-k="grupo">Grupo</th>
                         <th data-t="j" data-k="local">Local</th>
                         <th data-t="j" data-k="visitante">Visitante</th>
@@ -51,34 +45,102 @@
                 </thead>
                 <tbody id="jornadas-body"></tbody>
             </table>
-            <div id="paginacion-jornadas" class="paginacion">
-                <button id="prev-j">⏮ Anterior</button>
-                <span id="pagina-j">1</span>
-                <button id="next-j">Siguiente ⏭</button>
-            </div>
         </section>
 
         <section id="sec-clasificacion">
-            <h2>🏆 Clasificación de grupos</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th data-t="c" data-k="pos">Pos</th>
-                        <th data-t="c" data-k="grupo">Grupo</th>
-                        <th data-t="c" data-k="equipo">Equipo</th>
-                        <th data-t="c" data-k="PJ">PJ</th>
-                        <th data-t="c" data-k="G">G</th>
-                        <th data-t="c" data-k="E">E</th>
-                        <th data-t="c" data-k="P">P</th>
-                        <th data-t="c" data-k="GF">GF</th>
-                        <th data-t="c" data-k="GC">GC</th>
-                        <th data-t="c" data-k="DG">DG</th>
-                        <th data-t="c" data-k="Ptos">Ptos</th>
-                    </tr>
-                </thead>
-                <tbody id="clasificacion-body"></tbody>
-            </table>
+            <h2>🏆 Clasificación — Fase de Grupos</h2>
+        
+            <div id="clasificacion-grupos">
+                <div class="grupo" id="grupo-A">
+                    <h3>Grupo A</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Equipo</th>
+                                <th>PJ</th>
+                                <th>G</th>
+                                <th>E</th>
+                                <th>P</th>
+                                <th>GF</th>
+                                <th>GC</th>
+                                <th>DG</th>
+                                <th>Ptos</th>
+                                <th>FP</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+        
+                <div class="grupo" id="grupo-B">
+                    <h3>Grupo B</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Equipo</th>
+                                <th>PJ</th>
+                                <th>G</th>
+                                <th>E</th>
+                                <th>P</th>
+                                <th>GF</th>
+                                <th>GC</th>
+                                <th>DG</th>
+                                <th>Ptos</th>
+                                <th>FP</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+        
+                <div class="grupo" id="grupo-C">
+                    <h3>Grupo C</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Equipo</th>
+                                <th>PJ</th>
+                                <th>G</th>
+                                <th>E</th>
+                                <th>P</th>
+                                <th>GF</th>
+                                <th>GC</th>
+                                <th>DG</th>
+                                <th>Ptos</th>
+                                <th>FP</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+        
+                <div class="grupo" id="grupo-D">
+                    <h3>Grupo D</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Equipo</th>
+                                <th>PJ</th>
+                                <th>G</th>
+                                <th>E</th>
+                                <th>P</th>
+                                <th>GF</th>
+                                <th>GC</th>
+                                <th>DG</th>
+                                <th>Ptos</th>
+                                <th>FP</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
         </section>
+
 
         <section>
             <h2>⚡ Goleadores</h2>
@@ -144,14 +206,13 @@
             <h3 id="m-partido"></h3>
             <p><strong>Grupo:</strong> <span id="m-grupo"></span></p>
             <p><strong>Marcador:</strong> <span id="m-marcador"></span></p>
-            <p><strong>Cancha:</strong> <span id="m-cancha"></span></p>
-            <p><strong>Árbitro:</strong> <span id="m-arbitro"></span></p>
             <p><strong>Estado:</strong> <span id="m-estado"></span></p>
         </div>
     </div>
 
 
-    <script src="app.js"></script>
+    <!-- Cargar scripts como módulos -->
+    <script type="module" src="./js/main.js"></script>
 </body>
 
 </html>
