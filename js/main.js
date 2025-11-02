@@ -1,12 +1,16 @@
 // --- main.js ---
 import { loadAllData } from "./data.js";
 import {
-    renderJornadas,
-    renderClasificacion,
-    renderGoleadores,
-    renderSancionados,
+    tablaEquipos,
+    tablaResultadosFaseDeGrupos,
+    tablaResultadosSemifinal,
+    tablaResultadosTercerPuesto,
+    tablaResultadosFinal,
+    tablaClasificacion,
+    tablaLideresGoleadores,
+    tablaSancionados,
     renderNoticias,
-    renderBracket
+    renderClasificacion
 } from "./ui.js";
 
 
@@ -26,15 +30,7 @@ function getWeekRange(offset = 0) {
     return { start, end };
 }
 
-function filtraPorSemana(list) {
-    const { start, end } = getWeekRange(semanaOffset);
-    return list.filter(m => {
-        if (!m.fechaHora) return false;
-        const d = new Date(m.fechaHora.replace(" ", "T"));
-        return !isNaN(d) && d >= start && d <= end;
-    });
-}
-
+init();
 
 // --- carga inicial ---
 async function init() {
@@ -46,31 +42,22 @@ async function init() {
 function updateUI() {
     if (!STATE.data) return;
 
-    const { jornadas, clasificacion, goleadores, sancionados, noticias, bracket } = STATE.data;
-
-    const etapaSel = STATE.filtros.etapa;
-    const jEtapa = etapaSel ? jornadas.filter(j => j.etapa === etapaSel) : jornadas;
-    const semFil = filtraPorSemana(jEtapa);
-
-    // Determinar si la fase de grupos ha terminado
-    const gruposTerminados = jEtapa.every(j => j.estado === "Finalizado");
-
-    // Si todos los partidos están finalizados, congelamos la clasificación
-    if (gruposTerminados && !STATE.gruposCerrados) {
-        console.log("✅ Fase de grupos finalizada — puntos congelados");
-        STATE.gruposCerrados = true;
-    }
-
+    const { CLASIFICACION, EQUIPOS, LIDERES, SANCIONES, NOTICIAS } = STATE.data;
 
     // Jornadas y Clasificación
-    renderJornadas(semFil);
-    renderClasificacion(clasificacion);
-
-    // Goleadores, sancionados, noticias y bracket
-    renderGoleadores(goleadores);
-    renderSancionados(sancionados);
-    renderNoticias(noticias);
-    renderBracket(bracket);
+    tablaEquipos(STATE.data.EQUIPOS);
+    tablaResultadosFaseDeGrupos(STATE.data.CLASIFICACION);
+    tablaResultadosSemifinal(STATE.data.CLASIFICACION);
+    tablaResultadosTercerPuesto(STATE.data.CLASIFICACION);
+    tablaResultadosFinal(STATE.data.CLASIFICACION);
+    tablaClasificacion(STATE.data.CLASIFICACION);
+    renderClasificacion(STATE.data.CLASIFICACION, "ESO");
+    renderClasificacion(STATE.data.CLASIFICACION, "BCH");
+    tablaLideresGoleadores(STATE.data.LIDERES, "ESO");
+    tablaLideresGoleadores(STATE.data.LIDERES, "BCH");
+    tablaSancionados(STATE.data.SANCIONES, "ESO");
+    tablaSancionados(STATE.data.SANCIONES, "BCH");
+    renderNoticias(STATE.data.NOTICIAS);
 
     // Etiqueta de la semana
     const { start, end } = getWeekRange(semanaOffset);
@@ -78,15 +65,5 @@ function updateUI() {
     if (label) {
         label.textContent = `Del ${start.toLocaleDateString("es-ES", { day: "2-digit", month: "short" })} al ${end.toLocaleDateString("es-ES", { day: "2-digit", month: "short" })}`;
     }
-
-    document.getElementById("app-status").textContent = "Datos cargados ✅";
+ 
 }
-
-
-// --- eventos ---
-window.addEventListener("load", () => {
-    document.getElementById("semana-prev").onclick = () => { semanaOffset--; updateUI(); };
-    document.getElementById("semana-next").onclick = () => { semanaOffset++; updateUI(); };
-    document.getElementById("f-etapa").onchange = e => { STATE.filtros.etapa = e.target.value; updateUI(); };
-    init();
-});
