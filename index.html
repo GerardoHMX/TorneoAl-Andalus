@@ -8,11 +8,8 @@
     <!-- Google Fonts Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Titulo -->
     <link href="https://fonts.googleapis.com/css2?family=Pattaya&display=swap" rel="stylesheet">
-    <!-- Contenido -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -21,10 +18,18 @@
                     colors: {
                         'brand': {
                             'red': '#c62828',
+                            'red-100': 'rgb(198 40 41)',
+                            'red-200': '#a82222',
+                            'red-300': 'rgb(143 28 28)',
                             'gold': '#fbc02d',
                             'green': '#2e7d32',
                             'blue': '#1565c0',
+                            'blue-100': 'rgb(211 229 247)',
+                            'blue-200': 'rgb(0 151 206)',
+                            'blue-300': 'rgb(0 93 155)',
                             'white': '#ffffff',
+                            'orange': 'rgb(244 71 6)',
+                            'gray': '#bababa',
                             'text-dark': '#1a1a1a',
                             'text-light': '#6c757d',
                             'bg-light': '#f8f9fa',
@@ -32,7 +37,7 @@
                         }
                     },
                     borderRadius: {
-                        'brand': '16px'
+                        'brand': '0px'
                     },
                     boxShadow: {
                         'brand-sm': '0 2px 8px rgba(0, 0, 0, 0.08)',
@@ -43,176 +48,587 @@
             }
         }
     </script>
-    <style>
-        /* Updated CSS variables and transitions */
-        :root {
-            --brand-red: #c62828;
-            --brand-gold: #fbc02d;
-            --brand-green: #2e7d32;
-            --brand-blue: #1565c0;
-            --brand-white: #ffffff;
-            --text-dark: #1a1a1a;
-            --text-light: #6c757d;
-            --bg-light: #f8f9fa;
-            --bg-dark: #212529;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --border-radius: 8px;
-        }
-
-        .editable-cell {
-            min-width: 40px;
-            padding: 6px 8px;
-            border: 1px solid transparent;
-            transition: var(--transition);
-            border-radius: 8px;
-        }
-
-        .editable-cell:focus {
-            outline: none;
-            border-color: var(--brand-gold);
-            background-color: #fffbeb;
-        }
-
-        .editable-cell:hover {
-            background-color: #fef3c7;
-        }
-
-        * {
-            font-family: 'Roboto', sans-serif;
-        }
-
-        h1, h2, .font-family\: Pattaya {
-            font-family: 'Pattaya', sans-serif;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-brand-bg-light text-brand-text-dark">
-    <!-- Header/Navigation -->
-    <!-- Removed gradient, using solid brand-red color -->
-    <header class="bg-brand-red text-white shadow-brand-lg">
-        <nav class="container mx-auto px-4 py-2">
-            <div class="flex items-center justify-between">
-                <h3 class="text-2xl md:text-3xl font-bold">Torneo Escolar</h3>                
+<body class="bg-white min-h-screen flex flex-col">
+
+    <!-- Header / Navegación -->
+    <header class="w-full bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <img src="img/logoColegio.png" alt="Al-Ándalus" class="h-full w-full md:w-16 md:h-16">
+                </div>
+                <!-- Navegación Desktop -->
+                <nav class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                    <a href="#inicio" class="text-sm lg:text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">INICIO</a>
+                    <!-- <a href="#competicion" class="text-sm lg:text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">BASES</a> -->
+                    <a href="#equipos" class="text-sm lg:text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">EQUIPOS</a>
+                    <a href="#jornadas" class="text-sm lg:text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">JORNADAS</a>                    
+                    <a href="#clasificacion" class="text-sm lg:text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">CLASIFICACIÓN</a>
+                    <a href="#bracket" class="text-sm lg:text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">BRACKET</a>
+                    <a href="#goleadoresSection" class="text-sm lg:text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">LÍDERES</a>
+                    <a href="#resultadosSection" class="text-sm lg:text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">RESULTADOS</a>
+                    <a href="#noticias" class="text-sm lg:text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">NOTICIAS</a>
+                </nav>
+                <!-- Iconos Sociales -->
+                <div class="flex items-center space-x-4 md:space-x-5">
+                    <a href="#" class="text-brand-text-dark hover:text-brand-red transition-colors" aria-label="Instagram">
+                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                    </a>
+                    <!-- Menú móvil -->
+                    <button id="mobileMenuButton" class="md:hidden text-brand-text-dark hover:text-brand-red transition-colors" aria-label="Menú">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
             </div>
-        </nav>
+
+            <!-- Menú móvil desplegable -->
+            <div id="mobileMenu" class="hidden md:hidden pb-4 border-t border-gray-100 mt-2">
+                <nav class="flex flex-col space-y-3 pt-4">
+                    <a href="#inicio" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">INICIO</a>
+                    <!-- <a href="#competicion" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">BASES</a> -->
+                    <a href="#equipos" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">EQUIPOS</a>
+                    <a href="#jornadas" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">JORNADAS</a>                    
+                    <a href="#clasificacion" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">CLASIFICACIÓN</a>
+                    <a href="#bracket" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">BRACKET</a>
+                    <a href="#goleadoresSection" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">LÍDERES</a>
+                    <a href="#sancionadosSection" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">SANCIONADOS</a>
+                    <a href="#resultadosSection" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">RESULTADOS</a>
+                    <a href="#noticias" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">NOTICIAS</a>
+                </nav>
+            </div>
+        </div>
     </header>
 
     <!-- Hero Section -->
-    <!-- Removed gradient, using solid brand-red color -->
-    <section class="bg-brand-red text-white py-4">
-        <div class="mx-auto px-4 text-center">
-            <h1 class="text-8xl md:text-8xl font-bold">Al-Ándalus</h1>
-            <p class="text-xl md:text-2xl opacity-90 mb-4">Sigue el desempeño del Torneo Escolar</p>
-            <div class="flex flex-wrap gap-4 justify-center">
-                <a href="#equipos"
-                    class="bg-brand-gold text-brand-text-dark px-8 py-3 rounded-brand font-bold hover:opacity-90 transition-colors">
-                    Equipos
-                </a>
-                <a href="#clasificacion"
-                    class="bg-white text-brand-red px-8 py-3 rounded-brand font-bold hover:bg-brand-bg-light transition-colors">
-                    Clasificación
-                </a>
+    <section id="inicio" class="w-full h-full flex items-center overflow-hidden fondo lg:bg-fill md:bg-cover px-6 py-6">
+        <div class="w-full flex items-center">
+            <div class="w-full flex flex-col items-center gap-1 justify-center">
+
+                <h3 class="text-2xl md:text-3xl lg:text-4xl font-bold text-brand-gold mb-3">
+                    TORNEO DE FÚTBOL SALA
+                </h3>
+                <div class="flex flex-col gap-0">
+                    <h1 class="text-6xl sm:text-7xl lg:text-8xl font-bold text-brand-white ">
+                        Al-Ándalus
+                    </h1>
+                    <span class="text-2xl font-bold text-brand-white text-right">2025-2026</span>
+                </div>
+
+                <!-- Descripción
+                <div class="text-base sm:text-md md:text-md text-gray-600 leading-relaxed text-center p-4"> Competición escolar que promueve el deporte, la convivencia y el Fair Play. </div>  -->
+
             </div>
         </div>
     </section>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-6 py-6">        
+    <!-- Sección de Bases del Torneo -->
+    <section id="carousel-section" class="w-full py-8">
+        <div class="mx-auto">
+            
+            <!-- Contenedor del carrusel -->
+            <div id="carousel-container" class="relative">
+                <!-- Botón anterior -->
+                <button 
+                    id="carousel-prev" 
+                    class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-brand-md hover:bg-gray-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-blue"
+                    aria-label="Anterior" >
+                    <svg class="w-6 h-6 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
 
-        <!-- Equipos Section Equipos -->
-        <section class="mb-6">
-            <h3 class="text-3xl md:text-4xl font-bold text-brand-red text-center">Equipos Participantes</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6" id="equipos"></div>
-        </section>
+                <!-- Botón siguiente -->
+                <button 
+                    id="carousel-next" 
+                    class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-brand-md hover:bg-gray-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-blue"
+                    aria-label="Siguiente" >
+                    <svg class="w-6 h-6 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
 
-        <!-- Jornadas Section Jornadas -->
-        <section class="mb-6">
-            <h3 class="text-3xl md:text-4xl font-bold text-brand-red text-center">Jornadas</h3>
-            <div class="mb-6 mt-6" id="fase-de-grupos"></div>
-            <div class="mb-6 mt-6" id="semifinal"></div>
-            <div class="mb-6 mt-6" id="tercer-puesto"></div>
-            <div class="mb-6 mt-6" id="final"></div>
-        </section>
+                <!-- Track del carrusel -->
+                <div class="overflow-hidden">
+                    <div 
+                        id="carousel-track" 
+                        class="flex transition-transform duration-500 ease-in-out"
+                        style="transform: translateX(0%)" >
+                        <!-- Las cards se insertarán aquí dinámicamente -->
+                    </div>
+                </div>
 
-        <!-- Clasificación Section Clasificación -->
-        <section class="mb-6">
-            <h3 class="text-3xl md:text-4xl font-bold text-brand-red text-center">Clasificación</h3>
-            <div class="mb-6 mt-6" id="clasificacion"></div> <!--bg-brand-gold-->
-        </section>
-
-        <!-- Clasificación Section ESO -->
-        <section class="mb-6">
-            <div class="mx-auto">
-                <h3 class="text-3xl md:text-4xl font-bold text-brand-red text-center">Clasificación ESO</h3>
-                <div id="clasificacion-ESO" class="overflow-x-auto mb-6 mt-6"></div>
-            </div>
-        </section>
-
-        <!-- Clasificación Section BCH -->
-        <section class="mb-6">
-            <div class="mx-auto">
-                <h3 class="text-3xl md:text-4xl font-bold text-brand-red text-center">Clasificación BCH</h3>
-                <div id="clasificacion-BCH" class="overflow-x-auto mb-6 mt-6"></div>
-            </div>
-        </section>
-
-        <!-- Clasificación Section Goleadores-->
-        <section class="mb-6">
-            <h3 class="text-3xl md:text-4xl font-bold text-brand-red text-center">Lideres Goleadores</h3>
-            <div class="mb-6 mt-6" id="goleadores-ESO"></div>
-            <div class="mb-6 mt-6" id="goleadores-BCH"></div>
-        </section>
-
-        <!-- Clasificación Section Sancionados-->
-        <section class="mb-6">
-            <h3 class="text-3xl md:text-4xl font-bold text-brand-red text-center">Sancionados</h3>
-            <div class="mb-6 mt-6" id="sancionados-ESO"></div>
-            <div class="mb-6 mt-6" id="sancionados-BCH"></div>
-        </section>
-
-        <!-- Clasificación Section Noticias-->
-        <section class="py-12 sm:py-16 bg-gray-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h3 class="text-3xl md:text-4xl font-bold text-brand-red text-center">Noticias</h3>
-                <div id="noticias" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- News items will be loaded here -->
-                    <div class="animate-pulse bg-white rounded-lg p-6 h-64"></div>
-                    <div class="animate-pulse bg-white rounded-lg p-6 h-64"></div>
-                    <div class="animate-pulse bg-white rounded-lg p-6 h-64"></div>
+                <!-- Indicadores -->
+                <div 
+                    id="carousel-indicators" 
+                    class="flex justify-center items-center gap-2 mt-6" >
+                    <!-- Los indicadores se insertarán aquí dinámicamente -->
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-    </main>
+    <!-- Sección de Próximos Partidos -->
+    <section id="proximos-partidos" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6 fondoB">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4 my-8">
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Próximos Partidos</h3>
+            <div class="flex flex-col md:flex-row items-center gap-4">
+                <!-- Selector de semana -->
+                <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-brand px-4 py-2 shadow-sm">
+                    <button id="semana-anterior" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Semana anterior">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <div class="flex items-center w-40 gap-2 px-3">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span id="semana-label" class="text-sm font-bold text-gray-800">Cargando...</span>
+                    </div>
+                    <button id="semana-siguiente" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Semana siguiente">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+                <!-- Selector de ciclo --> 
+                <ul class="nav nav-tabs w-80" id="selector-proximos-partidos" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Contenedor de próximos partidos -->
+        <div id="proximos-partidos-container" class="w-full"></div>
+    </section>
+
+    <!-- Sección de Bases del Torneo 
+    <section id="competicion" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Bases del Torneo</h3>
+        </div>
+        <div class="w-full flex  items-center justify-center px-4 sm:px-6 mx-auto">
+            <div class="flex flex-col xl:flex-row items-start justify-start gap-12">
+                
+                <div class="flex-1 flex flex-col gap-3">
+                    <div class="flex flex-row flex-wrap items-center justify-center gap-3">
+                        <img src="img/logo.png" alt="Al-Ándalus" class="w-40 md:w-60 h-40 md:h-60">
+                        <div class="flex flex-col gap-1 items-end">
+                            <h1 class="text-4xl sm:text-6xl text-brand-blue">Al-Ándalus</h1>
+                            <h3 class="text-brand-gold text-md font-bold">2025-2026</h3>
+                        </div>
+                    </div>
+                    <div class="text-md">
+                        Torneo organizado por el Departamento de Educación Física del <span class="text-brand-red text-md  font-bold">Colegio San Francisco de Asís</span>, dirigido a estudiantes de ESO y Bachillerato.
+                    </div>
+                    <div class="text-md">
+                        Más que una competición, el torneo fomenta la inclusión, el respeto y la práctica deportiva saludable en un ambiente escolar lleno de compañerismo y alegría.
+                    </div>                    
+                    <article class="order-1">
+                        <h3 class="text-xl md:text-2xl text-brand-blue font-bold">Participantes</h3>
+                        <div class="mt-2 text-md">
+                            Abierto a todo el alumnado de <span class="text-brand-blue text-md font-bold">ESO y Bachillerato</span>.
+                            Equipos mixtos sin distinción de género.
+                        </div>
+                    </article>
+                </div>
+                
+                <div class="flex-1 flex flex-col gap-7">                    
+                    <article>
+                        <h3 class="text-xl md:text-2xl text-brand-blue font-bold">Equipos</h3>
+                        <ul class="mt-2 text-md">
+                            <li>
+                                <span class="my-auto inline-block w-2 h-2 rounded-full bg-brand-blue flex-shrink-0"></span>
+                                Hasta <span class="text-brand-blue text-md font-bold">15 jugadores/as</span> por equipo.
+                            </li>
+                            <li>
+                                <span class="my-auto inline-block w-2 h-2 rounded-full bg-brand-blue flex-shrink-0"></span>
+                                <span class="text-brand-blue text-md font-bold">Dos capitanes/as</span> por equipo.
+                            </li>
+                        </ul>
+                    </article>
+                    <article>
+                        <h3 class="text-xl md:text-2xl text-brand-blue font-bold">Inscripción</h3>
+                        <div class="mt-2 text-md">
+                            <div>Fecha límite: <span class="text-brand-blue text-md font-bold">11 de noviembre de 2025</span>.
+                                Entregar hoja de inscripción al profesorado de Educación Física.</div>
+                        </div>
+                    </article>
+                    <article>
+                        <h3 class="text-xl md:text-2xl text-brand-blue font-bold">Calendario</h3>
+                        <div class="mt-2  text-md">
+                            <div><span class="text-brand-blue text-md font-bold">Inicio:</span> 25 de noviembre de 2025.</div>
+                            <div><span class="text-brand-blue text-md font-bold">Final:</span> 19 de febrero de 2026.</div>
+                            <div><span class="text-brand-blue text-md font-bold">Entrega de trofeos:</span> 20 de febrero (Día de Andalucía).</div>
+                            <div>Partidos en los <span class="text-brand-blue text-md font-bold">recreos</span> (nov–feb).</div>
+                            <div class="mt-2 text-md">
+                                *En caso de lluvia, las finales podrán posponerse a la primera semana posterior a Semana Blanca.
+                            </div>
+                    </article>
+                    <article>
+                        <h3 class="text-xl md:text-2xl text-brand-blue font-bold">Sistema de competición</h3>
+                        <div class="mt-2 text-md">
+                            <div>Fase de grupos <span class="text-brand-blue text-md font-bold">(A, B, C y D)</span> a partido único.</div>
+                            <div>Pasan los dos primeros de cada grupo a <span class="text-brand-blue text-md font-bold">cuartos</span>, luego <span class="text-brand-blue text-md font-bold">semifinales</span>, <span
+                                    class="text-brand-blue text-md font-bold">3.º-4.º</span> y <span class="text-brand-blue text-md font-bold">final</span>.
+                            </div>
+                            <div>Puntuación: <span class="text-brand-blue text-md font-bold">3</span> victoria · <span class="text-brand-blue text-md font-bold">1</span> empate · <span
+                                    class="text-brand-blue text-md font-bold">0</span> derrota.</div>
+                            </ul>
+                    </article>
+                </div>
+                
+                <div class="flex-1 flex flex-col gap-7">
+                    <article>
+                        <h3 class="text-2xl text-brand-blue font-bold">Normas de juego</h3>
+                        <ul class="mt-2 text-md">
+                            <li>
+                                <span class="my-auto inline-block w-2 h-2 rounded-full bg-brand-blue flex-shrink-0"></span>
+                                <span>Dos tiempos de <span class="text-brand-blue text-md font-bold">12′</span> (descanso 1′).</span>
+                            </li>
+                            <li>
+                                <span class="my-auto inline-block w-2 h-2 rounded-full bg-brand-blue flex-shrink-0"></span>
+                                <span>Saques de banda y córner <span class="text-brand-blue text-md font-bold">con las manos</span>.</span>
+                            </li>
+                            <li>
+                                <span class="my-auto inline-block w-2 h-2 rounded-full bg-brand-blue flex-shrink-0"></span>
+                                <span>Sin <span class="text-brand-blue text-md font-bold">cesión al portero</span> y sin <span class="text-brand-blue text-md font-bold">fuera de juego</span>.</span>
+                            </li>
+                            <li>
+                                <span class="my-auto inline-block w-2 h-2 rounded-full bg-brand-blue flex-shrink-0"></span>
+                                <span>Faltas directas con <span class="text-brand-blue text-md font-bold">5 pasos</span>; a la 6.ª, <span class="text-brand-blue text-md font-bold">doble penalti</span>.</span>
+                            </li>
+                            <li>
+                                <span class="my-auto inline-block w-2 h-2 rounded-full bg-brand-blue flex-shrink-0"></span>
+                                <span>Equipación: <span class="text-brand-blue text-md font-bold">camiseta blanca</span> y otra de <span class="text-brand-blue text-md font-bold">color</span>. Sin equipación adecuada,
+                                    no se juega.</span>
+                            </li>
+                            <li>
+                                <span class="my-auto inline-block w-2 h-2 rounded-full bg-brand-blue flex-shrink-0"></span>
+                                <span>Partidos arbitrados por profesorado.</span>
+                            </li>
+                        </ul>
+                    </article>
+                    <article>
+                        <h3 class="text-2xl text-brand-blue font-bold">Fair Play y disciplina</h3>
+                        <ul class="mt-2 text-md">
+                            <li class="mb-1">
+                                Se valora respeto al árbitro, rival y normas; evitar simulaciones y pérdida de tiempo.
+                            </li>
+                            <li class="mb-1">
+                                <span class="my-auto inline-block w-2 h-2 rounded-full bg-brand-blue flex-shrink-0"></span>
+                                Conductas antideportivas pueden suponer <span class="text-brand-blue text-md font-bold">0 puntos de Fair Play</span>, <span class="text-brand-blue text-md font-bold">partido por
+                                    0-2</span> o <span class="text-brand-blue text-md font-bold">exclusión</span>.
+                            </li>
+                            <li class="mb-1">
+                                <span class="my-auto inline-block w-2 h-2 rounded-full bg-brand-blue flex-shrink-0"></span>
+                                Acumulación de 2 amarillas o 1 roja: <span class="text-brand-blue text-md font-bold">un partido</span> de sanción. Dos rojas: <span class="text-brand-blue text-md font-bold">expulsión
+                                    del torneo</span>.
+                            </li>
+                            <li>
+                                <span class="my-auto inline-block w-2 h-2 rounded-full bg-brand-blue flex-shrink-0"></span>
+                                Sanciones disciplinarias del centro pueden inhabilitar la participación.
+                            </li>
+                        </ul>
+                    </article>
+                    <article>
+                        <h3 class="text-2xl text-brand-blue font-bold">Premios</h3>
+                        <p class="mt-1 text-md">
+                            🥇 Campeón · 🥈 Subcampeón · 🥉 Tercer puesto · ⚽ Máximo goleador · 🏅 Fair Play
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>-->
+
+    <!-- Sección de Equipos -->
+    <section id="equipos" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6">
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-4 my-8">
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Equipos participantes</h3>
+            <div class="flex flex-col lg:flex-row gap-4 w-full lg:w-auto">
+                <ul class="nav nav-tabs w-full lg:w-80" id="selector-equipos" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                    </li>
+                </ul>
+                <ul class="nav nav-tabs w-full lg:w-80" id="selector-grupos-equipos" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-grupo="TODOS" type="button">TODOS</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-grupo="A" type="button">A</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-grupo="B" type="button">B</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-grupo="C" type="button">C</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-grupo="D" type="button">D</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="w-full" id="equipos-ESO"></div>
+        <div class="w-full" id="equipos-BCH"></div>
+    </section>
+
+    <!-- Section Jornadas -->
+    <section id="jornadas" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Jornadas</h3>
+            <ul class="nav nav-tabs w-80" id="selector-jornadas" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                </li>
+            </ul>
+        </div>
+        <!-- Jornadas Section ESO -->
+        <div id="fase-de-grupos-ESO"></div>
+        <div id="semifinal-ESO"></div>
+        <div id="tercer-final-puesto-ESO"></div> 
+        <!-- Jornadas Section BCH -->
+        <div id="fase-de-grupos-BCH"></div>
+        <div id="semifinal-BCH"></div>
+        <div id="tercer-final-puesto-BCH"></div>
+    </section>  
+
+    <!-- Sección de Clasificación -->
+    <section id="clasificacion" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6 bg-brand-bg-light">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Clasificación</h3>
+            <ul class="nav nav-tabs w-80" id="selector-clasificacion" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                </li>
+            </ul>
+        </div>
+        <!-- Clasificación Section ESO -->
+        <div id="clasificacion-ESO" ></div>
+        <!-- Clasificación Section BCH -->
+        <div id="clasificacion-BCH"></div>
+    </section>
+
+    <!-- Sección de Bracket -->
+    <section id="bracket" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Bracket</h3>
+            <ul class="nav nav-tabs w-80" id="selector-bracket" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                </li>
+            </ul>
+        </div>
+        <div id="bracket-ESO"></div>
+        <div id="bracket-BCH"></div>
+    </section>
+
+    <!-- Sección de Lideres Goleadores -->
+    <section id="goleadoresSection" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6 bg-brand-bg-light">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Líderes Goleadores</h3>
+            <ul class="nav nav-tabs w-80" id="selector-goleadores" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                </li>
+            </ul>
+        </div>
+        <div id="goleadores-ESO"></div>
+        <div id="goleadores-BCH"></div>
+    </section>
+
+    <!-- Sección de Sancionados -->
+    <section id="sancionadosSection" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Sancionados</h3>
+            <ul class="nav nav-tabs w-80" id="selector-sancionados" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                </li>
+            </ul>
+        </div>
+        <div id="sancionados-ESO"></div>
+        <div id="sancionados-BCH"></div>
+    </section>
+
+    <!-- Sección de Resultados -->
+    <section id="resultadosSection" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6 bg-brand-bg-light">        
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Resultados</h3>
+            <ul class="nav nav-tabs w-80" id="selector-resultados" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                </li>
+            </ul>
+        </div>
+        <!-- Resultados Section ESO -->
+        <div id="resultados-ESO"></div>
+        <!-- Resultados Section BCH -->
+        <div id="resultados-BCH"></div>
+    </section>
+
+    <!-- Sección de Noticias -->
+    <section id="resultadosSection" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6">        
+        <div class="flex flex-col gap-4 my-8">
+            <h3 class="text-3xl md:text-4xl text-brand-blue font-bold">Noticias</h3>
+            <div id="noticias" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6 mt-6"></div>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="bg-brand-red text-white py-8 mt-16">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-white">© 2025 Torneo Escolar. Todos los derechos reservados.</p>
+    <footer class="masthead text-brand-dark py-4 flex-shrink-0">
+        <div class="mx-auto px-4 text-center">
+            <!-- <div class="flex flex-row flex-wrap items-center justify-center gap-x-6 gap-y-1">
+                <img src="https://colegiosanfranciscodeasis.com/wp-content/uploads/2023/03/logo-ColegioSanFranciscodeAsis.png" alt="Al-Ándalus" class="w-8 h-8"> 
+                <span class="text-1xl">Colegio San Francisco de Asís</span>
+                <span class="text-1xl"><a href="tel:+34952473424">952 47 34 24</a> – <a href="tel:+34952663717">952 66 37 17</a></span>
+                <span class="text-1xl"><a href="mailto:administracion@colegiosanfranciscodeasis.com">administracion@colegiosanfranciscodeasis.com</a></span>
+                <span class="text-1xl"><a href="https://goo.gl/maps/Z9XU1Uv5AAixNX2s6">Plaza Maite Alcázar Zambrano, Urbanización El Coto. Mijas – Costa (Málaga)</a></span>
+            </div> -->
+            <div class="flex flex-row flex-wrap items-center justify-center gap-x-6 gap-y-1">
+                <img src="img/logo.png" alt="Al-Ándalus" class="w-8 h-8">
+                <span class="text-1xl">Torneo escolar de Fútbol Sala</span>
+                <span class="text-1xl">Al-Ándalus</span>
+                <span class="text-1xl text-brand-gold ">2025-2026</span>
+            </div>
         </div>
     </footer>
 
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/carousel-init.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        // Smooth scroll for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+        // Control del menú móvil
+        document.addEventListener('DOMContentLoaded', function () {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function () {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Cerrar menú al hacer clic en un enlace
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', function () {
+                        mobileMenu.classList.add('hidden');
                     });
-                }
+                });
+            }
+
+            // Smooth scroll para los enlaces de navegación
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href !== '#' && href !== '') {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            const headerOffset = 80;
+                            const elementPosition = target.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
             });
-        });  
+        });
+
+        // Función para ajustar la altura disponible según el hero
+        function adjustLayoutHeight() {
+            const heroSection = document.getElementById('inicio');
+            if (heroSection) {
+                const heroHeight = heroSection.offsetHeight;
+                const totalTopHeight = heroHeight;
+                // Establecer variable CSS para la altura del hero
+                document.documentElement.style.setProperty('--hero-height', `${totalTopHeight}px`);
+            }
+        }
+
+        // Inicializar layout
+        function initLayout() {
+            adjustLayoutHeight();
+        }
+
+        // Ejecutar al cargar
+        document.addEventListener('DOMContentLoaded', initLayout);
+
+        // Ajustar al redimensionar ventana
+        window.addEventListener('resize', adjustLayoutHeight);
+
+        // Ajustar después de que las imágenes se carguen (si hay alguna)
+        window.addEventListener('load', adjustLayoutHeight);
     </script>
 
-    <script type="module" src="js/main.js"></script>
 </body>
 
 </html>
