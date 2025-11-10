@@ -349,7 +349,7 @@ export function tablaClasificacion(list, ciclo) {
                             ${m.LOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.LOGO))}" alt="${m.EQUIPOS}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
                             <div class="text-lg font-bold flex-1">${m.EQUIPOS}</div>
                         </div>
-                        <div class="grid grid-cols-2 gap-8 gap-x-8">
+                        <div class="grid grid-cols-2 gap-y-4 gap-x-8">
                             <div class="flex justify-between">
                                 <span class="text-gray-500 text-lg">PTS:</span>
                                 <div class="text-gray-900 font-bold text-lg">${m.PUNTOS}</div>
@@ -537,14 +537,14 @@ export function tablaLideresGoleadores(list, ciclo) {
                 ${ciclo}
             </h4>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6" id="lideres-${ciclo}">        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="lideres-${ciclo}">        
     `;
 
     list.forEach((lider) => {
         if (lider.CICLO === ciclo) {
             html += `
             <div class="flex flex-col bg-white shadow-lg overflow-hidden rounded-brand hover:shadow-brand-lg transition-shadow">
-                <div class="w-full h-48 md:h-56 lg:h-64 flex items-center justify-center overflow-hidden">
+                <div class="w-full h-16 md:h-28 lg:h-32 flex items-center justify-center overflow-hidden">
                     ${lider.AVATAR ? `
                         <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(lider.AVATAR))}" alt="${lider.JUGADOR}" class="h-full object-cover object-center">
                     ` : `
@@ -595,7 +595,7 @@ export function tablaSancionados(list, ciclo) {
                 ${ciclo}
             </h4>
         </div>
-        <div class="grid grid-cols-3 gap-4" id="lideres-${ciclo}">        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="lideres-${ciclo}">        
     `;
 
     list.forEach((sancionado) => {
