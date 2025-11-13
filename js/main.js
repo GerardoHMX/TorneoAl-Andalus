@@ -141,6 +141,9 @@ function filtrarProximosPartidos(clasificacion, semanaOffset, ciclo) {
 
 // --- carga inicial ---
 async function init() {
+
+    preloader();
+    
     STATE.data = await loadAllData();
     
     // Encontrar la semana con el partido más cercano y establecer el offset inicial
@@ -148,7 +151,7 @@ async function init() {
         semanaOffsetProximosPartidos = encontrarSemanaPartidoMasCercano(STATE.data.CLASIFICACION);
     }
     
-    requestAnimationFrame(() => {
+    requestAnimationFrame(() => {        
         initCicloSelectors();
         updateUI();
     });
@@ -423,4 +426,20 @@ function initCicloSelectors() {
             updateUI();
         });
     }
+}
+
+function preloader() {
+    const preloader = document.getElementById("preloader");
+    preloader.style.display = "flex";
+
+    // preloader.classList.add("animate-spin");  
+    // preloader.style.transformOrigin = "center center";
+    // preloader.style.transform = "rotate(0deg)";
+    // preloader.style.transition = "transform 3s linear infinite";
+
+    // Oculta el loader después de 3s
+    setTimeout(() => {
+        preloader.style.opacity = "0";
+        setTimeout(() => preloader.style.display = "none", 500);
+    }, 3000);
 }

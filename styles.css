@@ -317,3 +317,41 @@ div:has(#menuMovil) {
         height: 1.25rem;
     }
 }
+
+
+/* Preloader fondo y centrado */
+#preloader {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.8);
+    z-index: 9999;
+  }
+  
+  /* Animaciones del balón */
+  .loader svg {
+    width: 150px;
+    height: 150px;
+    animation: spin 2s linear infinite, bounce 1s ease-in-out infinite, moveX 4s ease-in-out infinite;
+    transform-origin: center bottom;
+  }
+  
+  /* Rotación constante */
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Rebote vertical */
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-30px); }
+  }
+  
+  /* Movimiento horizontal */
+  @keyframes moveX {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(50px); }
+  }

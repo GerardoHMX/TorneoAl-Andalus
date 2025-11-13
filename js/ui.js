@@ -52,9 +52,9 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
                 html += `
                     <div class="w-full mb-6">
                         <div class="text-3xl font-bold py-3 font-bold mb-6">
-                            <div class="flex items-center justify-between gap-2">
-                                <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${grupo}</h4>
+                            <div class="flex items-center gap-2">
                                 <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${ciclo}</h4>
+                                <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${grupo}</h4>                                
                             </div>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -90,9 +90,9 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
             html += `
                 <div class="w-full mb-6">
                     <div class="text-3xl font-bold px-4 py-3 font-bold mb-6">
-                        <div class="flex items-center justify-between gap-2">
-                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${data.grupo}</h4>
-                            <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${data.ciclo}</h4>
+                        <div class="flex items-center gap-2">
+                            <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${data.ciclo}</h4>    
+                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${data.grupo}</h4>                            
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -171,9 +171,9 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
             const html = `
                 <div class="w-full mb-6">
                     <div class="text-3xl font-bold py-3 font-bold mb-6">
-                        <div class="flex items-center justify-between gap-2">
-                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${m.GRUPO}</h4>
+                        <div class="flex items-center gap-2">
                             <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${m.CICLO}</h4>
+                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${m.GRUPO}</h4>                            
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="cards-per-group-${m.GRUPO}">
@@ -237,11 +237,11 @@ export function tablaResultadosSemifinal(list, ciclo) {
         if (cardsPerGroup.length === juegos && grupos.includes(m.GRUPO)) {
             const html = `
                 <div class="mb-6" >
-                    <div class="flex flex-row justify-between items-center">
+                    <div class="flex flex-row items-center gap-2">
+                        <h4 class="text-3xl font-bold text-brand-gold mb-6 flex items-center gap-2">${m.CICLO}</h4>
                         <h4 class="text-3xl font-bold text-brand-red mb-6 flex items-center gap-2">
                             Semifinal
-                        </h4>
-                        <h4 class="text-3xl font-bold text-brand-gold mb-6 flex items-center gap-2">${m.CICLO}</h4>
+                        </h4> 
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6" id="cards-per-group-${m.GRUPO}">
                         ${cardsPerGroup.map(card => card).join("")}
@@ -309,11 +309,11 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
         if (cardsPerGroup.length > 0) {
             const html = `
                 <div class="mb-6" >
-                    <div class="flex flex-row justify-between items-center">
+                    <div class="flex flex-row items-center gap-2">
+                        <h4 class="text-3xl font-bold text-brand-gold mb-6 flex items-center gap-2">${ciclo}</h4>
                         <h4 class="text-3xl font-bold text-brand-red mb-6 flex items-center gap-2">
                             ${tipoGrupo === "3RPUESTO" ? "Tercer Puesto" : "Primer Puesto"}
-                        </h4>
-                        <h4 class="text-3xl font-bold text-brand-gold mb-6 flex items-center gap-2">${ciclo}</h4>
+                        </h4>                        
                     </div>
                     <div class="grid grid-cols-1" id="cards-per-group-${tipoGrupo}">
                         ${cardsPerGroup.map(card => card).join("")}
@@ -394,9 +394,9 @@ export function tablaClasificacion(list, ciclo) {
                 const html = `
                 <div class="mb-6">
                     <div class="text-3xl font-bold py-3 font-bold mb-6">
-                        <div class="flex items-center justify-between gap-2">
-                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${m.GRUPO}</h4>
-                            <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${m.CICLO}</h4>
+                        <div class="flex items-center gap-2">
+                            <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${m.CICLO}</h4>    
+                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${m.GRUPO}</h4> 
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="points-per-team-${m.GRUPO}">
@@ -540,8 +540,18 @@ export function tablaLideresGoleadores(list, ciclo) {
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="lideres-${ciclo}">        
     `;
 
-    list.forEach((lider) => {
-        if (lider.CICLO === ciclo) {
+    //Ordenar la lista por goles de forma descendente
+    const listOrdered = list.sort((a, b) => b.GOLES - a.GOLES);
+    let liderCiclo = "";
+    let index = 0;
+
+    listOrdered.forEach((lider) => {                
+        //Restablecer el index de la lista cada vez que se cambia el ciclo
+        if (lider.CICLO !== liderCiclo) {
+            index = 0;
+            liderCiclo = lider.CICLO;
+        }
+        if (lider.CICLO === ciclo) {            
             html += `
             <div class="flex flex-col bg-white shadow-lg overflow-hidden rounded-brand hover:shadow-brand-lg transition-shadow">
                 <div class="w-full h-16 md:h-28 lg:h-32 flex items-center justify-center overflow-hidden">
@@ -563,13 +573,14 @@ export function tablaLideresGoleadores(list, ciclo) {
                             ${lider.EQUIPO || ''}
                         </p>
                         <p class="text-sm text-gray-600 text-center">
-                            ${lider.GOLES || 0} Goles
+                            ${index == 0 ? 'Primer' : index == 1 ? 'Segundo' : index == 2 ? 'Tercero' : ''} Puesto  ${lider.GOLES ? lider.GOLES + ' Goles' : '' } 
                         </p>
                     </div> 
                     <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-gold"></div>
                 </div>
             </div> 
             `;
+            index++;
         }
     });
 
@@ -583,11 +594,6 @@ export function tablaSancionados(list, ciclo) {
     if (!div) return;
     div.classList.add("mb-6", "mt-6");
 
-    if (list.length === 0) {
-        div.innerHTML = '<p class="text-gray-700 text-center">No hay datos de sancionados.</p>'
-        return
-    }
-
     let html = `                
     <div class="mb-6">
         <div class="flex items-center justify-between gap-2">                
@@ -597,6 +603,15 @@ export function tablaSancionados(list, ciclo) {
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="lideres-${ciclo}">        
     `;
+
+    //filtrar de list los que no tengan CICLO
+    const listWithoutCiclo = list.filter(sancionado => sancionado.CICLO !== undefined && sancionado.CICLO !== "");
+    if (listWithoutCiclo.length === 0) {
+        html += `<p class="text-gray-700 text-center">${ciclo === "ESO" ? "Parece que el juego limpio va ganando, no hay sanciones registradas." : "Todo en orden, ningún jugador ha sido sancionado hasta el momento."}</p>`;
+        html += '</div> </div>';
+        div.innerHTML = html;
+        return
+    }
 
     list.forEach((sancionado) => {
         if (sancionado.CICLO === ciclo) {
@@ -625,7 +640,7 @@ export function tablaSancionados(list, ciclo) {
         }
     });
 
-    html += '</ul></div>';
+    html += '</div>';
     div.innerHTML = html;
 }
 
@@ -634,14 +649,14 @@ export function renderNoticias(noticias) {
     const div = document.getElementById("noticias");
     if (!div) return;
 
-    if (noticias.length === 0) {
-        div.innerHTML = '<p class="text-gray-500 col-span-full text-center">No hay noticias disponibles</p>'
+    if (noticias.length === 0 || noticias.every(noticia => noticia.PUBLICAR !== "SI")) {
+        div.innerHTML = '<p class="text-gray-700 col-span-full text-center">Parece que el Torneo Escolar todavía no da titulares… ¡pero pronto los habrá!</p>'
         return
     }
 
     div.innerHTML = noticias
         .map(
-            (noticia, index) => `
+            (noticia, index) => noticia.PUBLICAR === "SI" ? `
             <article class="bg-transparent shadow-lg ring-1 ring-black/5 rounded-brand overflow-hidden hover:shadow-xl transition-shadow duration-300 ${index === -1 ? "md:col-span-2 lg:col-span-3" : ""}">
                 <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(noticia.IMAGEN))}" class="w-full h-64 sm:h-96 object-cover" loading="lazy" alt="${noticia.TITULO}" onerror="this.style.display='none'" />
                 <div class="p-6">
@@ -653,7 +668,7 @@ export function renderNoticias(noticias) {
                     <p class="mb-4 text-md leading-relaxed">${noticia.CONTENIDO}</p>
                 </div>
             </article>
-        `,
+        ` : '',
         )
         .join("");
 }
