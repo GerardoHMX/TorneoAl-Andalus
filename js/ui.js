@@ -3,6 +3,8 @@
 const grupos = ["A", "B", "C", "D"];
 const ciclos = ['ESO', 'BCH'];
 const brandColors = ["brand-red", "brand-orange", "brand-gold", "brand-green", "brand-blue"];
+const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+const diasSemana = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 const maxTeamsPerGroups = 4;
 const juegos = 6;
 const temsPerGroup = 4;
@@ -140,7 +142,6 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
         }
         if (grupos.includes(m.GRUPO) && m.GRUPO === grupo && m.CICLO === ciclo) {
             // Formatear fecha
-            const meses = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
             const mesNombre = meses[parseInt(m.MES) - 1] || m.MES;
             const diaFormateado = String(m.DIA).padStart(2, '0');
             const fechaFormateada = `${diaFormateado} ${mesNombre}`;
@@ -276,7 +277,6 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
             // Filtrar por ciclo y tipo de grupo específico
             if (m.GRUPO === tipoGrupo && m.CICLO === ciclo) {
                 // Formatear fecha
-                const meses = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
                 const mesNombre = meses[parseInt(m.MES) - 1] || m.MES;
                 const diaFormateado = String(m.DIA).padStart(2, '0');
                 const fechaFormateada = `${diaFormateado} ${mesNombre}`;
@@ -913,14 +913,13 @@ export function renderProximosPartidos(partidos) {
 
     fechasOrdenadas.forEach(fechaKey => {
         const [dia, mes, anio] = fechaKey.split('-').map(Number);
-        const meses = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
         const mesNombre = meses[mes - 1] || mes;
         const diaFormateado = String(dia).padStart(2, '0');
         const fechaFormateada = `${diaFormateado} ${mesNombre}`;
         
         // Obtener día de la semana
         const fecha = new Date(anio, mes - 1, dia);
-        const diasSemana = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"];
+        
         const diaSemana = diasSemana[fecha.getDay()];
 
         const partidosDelDia = partidosPorFecha[fechaKey];

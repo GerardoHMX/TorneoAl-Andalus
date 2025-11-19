@@ -40,7 +40,7 @@ export function initCarousel(cards = []) {
     // Crear elemento de card
     function createCardElement(card, index) {
         const cardDiv = document.createElement('div');
-        cardDiv.className = 'carousel-card flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-4';
+        cardDiv.className = 'carousel-card flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-2 md:px-3';
         cardDiv.setAttribute('data-index', index);
 
         const bgColor = card.bgColor || 'bg-brand-blue';
@@ -58,7 +58,7 @@ export function initCarousel(cards = []) {
         cardDiv.innerHTML = `
             <div class="${bgColor} ${textColor} rounded-brand shadow-brand-lg overflow-hidden h-full flex flex-col">
                 ${imageHTML}
-                <div class="p-8 flex-1 flex flex-col justify-center">
+                <div class="p-14 flex-1 flex flex-col justify-center">
                     <div class="text-center">
                         ${card.title ? `<h3 class="text-2xl font-bold mb-3">${card.title}</h3>` : ''}
                     </div>
@@ -90,25 +90,42 @@ export function initCarousel(cards = []) {
 
     // Ir a slide específico (con soporte infinito)
     function goToSlide(index) {
+        const maxIndex = carouselCards.length - 1;
+        
         // Hacer el carrusel infinito: si el índice es negativo, ir al último
-        // Si es mayor que el total, volver al primero
+        // Si es mayor que el máximo permitido, volver al primero
         if (index < 0) {
-            currentIndex = carouselCards.length - 1;
-        } else if (index >= carouselCards.length) {
+            currentIndex = maxIndex;
+        } else if (index > maxIndex) {
             currentIndex = 0;
         } else {
             currentIndex = index;
         }
         updateCarousel();
+        
+        // Reiniciar autoplay cuando se cambia manualmente de slide
+        restartAutoPlayAfterDelay(4000);
     }
 
     // Actualizar carrusel
     function updateCarousel() {
         const visibleCards = getVisibleCardsCount();
-        // Calcular el desplazamiento basado en el número de cards visibles
+        // Calcular el ancho de cada card como porcentaje del contenedor
         // En móvil: 100% por card, en tablet: 50% por card, en desktop: 33.33% por card
         const cardWidth = 100 / visibleCards;
-        const offset = -currentIndex * cardWidth;
+        
+        // Asegurar que el índice esté dentro de los límites válidos
+        const maxIndex = Math.max(0, carouselCards.length - 1);
+        const clampedIndex = Math.min(Math.max(0, currentIndex), maxIndex);
+        
+        // Calcular la posición de la card activa en el track (como porcentaje)
+        const activeCardPosition = clampedIndex * cardWidth;
+        
+        // Calcular el offset para centrar la card activa
+        // Queremos que la card activa esté en el 50% del contenedor
+        // offset = 50% - posición_de_la_card - mitad_del_ancho_de_la_card
+        const offset = 50 - activeCardPosition - (cardWidth / 2);
+        
         carouselTrack.style.transform = `translateX(${offset}%)`;
 
         // Actualizar indicadores
@@ -139,17 +156,29 @@ export function initCarousel(cards = []) {
 
     // Navegación anterior (infinito: si está en el primero, va al último)
     function prevSlide() {
-        goToSlide(currentIndex - 1);
+        const maxIndex = carouselCards.length - 1;
+        if (currentIndex <= 0) {
+            goToSlide(maxIndex);
+        } else {
+            goToSlide(currentIndex - 1);
+        }
     }
 
     // Navegación siguiente (infinito: si está en el último, va al primero)
     function nextSlide() {
-        goToSlide(currentIndex + 1);
+        const maxIndex = carouselCards.length - 1;
+        if (currentIndex >= maxIndex) {
+            goToSlide(0);
+        } else {
+            goToSlide(currentIndex + 1);
+        }
     }
 
-    // Auto-play opcional (comentado por defecto)
+    // Auto-play con intervalo predeterminado de 4000ms
     let autoPlayInterval = null;
-    function startAutoPlay(interval = 5000) {
+    let autoPlayRestartTimeout = null;
+    
+    function startAutoPlay(interval = 4000) {
         stopAutoPlay();
         autoPlayInterval = setInterval(() => {
             // En modo infinito, siempre puede avanzar
@@ -162,6 +191,18 @@ export function initCarousel(cards = []) {
             clearInterval(autoPlayInterval);
             autoPlayInterval = null;
         }
+        if (autoPlayRestartTimeout) {
+            clearTimeout(autoPlayRestartTimeout);
+            autoPlayRestartTimeout = null;
+        }
+    }
+    
+    function restartAutoPlayAfterDelay(delay = 4000) {
+        stopAutoPlay();
+        autoPlayRestartTimeout = setTimeout(() => {
+            startAutoPlay(4000);
+            autoPlayRestartTimeout = null;
+        }, delay);
     }
 
     // Event listeners
@@ -177,8 +218,7 @@ export function initCarousel(cards = []) {
     if (carouselContainer) {
         carouselContainer.addEventListener('mouseenter', stopAutoPlay);
         carouselContainer.addEventListener('mouseleave', () => {
-            // Descomentar para activar auto-play
-            // startAutoPlay();
+            startAutoPlay(4000);
         });
     }
 
@@ -201,6 +241,9 @@ export function initCarousel(cards = []) {
     renderCards();
     renderIndicators();
     updateCarousel();
+    
+    // Iniciar autoplay automáticamente con intervalo de 4000ms
+    startAutoPlay(4000);
 
     // Manejar redimensionamiento de ventana
     let resizeTimeout;

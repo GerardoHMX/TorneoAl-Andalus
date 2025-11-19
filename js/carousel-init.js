@@ -47,11 +47,11 @@ function initializeCarousel() {
                     </div> 
                     <div class="text-md font-bold leading-5">
                         <h3 class="text-xl md:text-2xl font-bold text-center mb-3 leading-5">Equipos</h3>
-                        <ul class="mt-2 text-md leading-5">
-                            <li>                                
+                        <ul class="mt-2">
+                            <li class="text-md font-bold leading-5">                                
                                 Hasta <span class="text-brand-blue text-md font-bold">seis jugadores</span> por equipo.
                             </li>
-                            <li>                                
+                            <li class="text-md font-bold leading-5">                                
                                 Hasta <span class="text-brand-blue text-md font-bold">dos capitanes</span> por equipo.
                             </li>
                         </ul>
@@ -99,7 +99,7 @@ function initializeCarousel() {
                             class="text-brand-white text-md font-blue">0</span> derrota.
                     </div>
                     <div class="text-md font-bold leading-5">
-                        <span>Partidos arbitrados por profesorado.</span>
+                        Partidos arbitrados por profesorado.
                     </div> 
                 </div>
             `,
@@ -111,19 +111,19 @@ function initializeCarousel() {
             text: `
                 <div class="flex-1 flex flex-col gap-6">  
                     <div class="text-md font-bold leading-5">
-                        <span>Dos tiempos de <span class="text-brand-blue text-md font-bold leading-5">12′</span> (descanso 1′).</span>
+                        <span class="text-md font-bold leading-5">Dos tiempos de <span class="text-brand-blue text-md font-bold leading-5">12′</span> (descanso 1′).</span>
                     </div>
                     <div class="text-md font-bold leading-5">
-                        <span>Saques de banda y córner <span class="text-brand-blue text-md font-bold leading-5">con las manos</span>.</span>
+                        <span class="text-md font-bold leading-5">Saques de banda y córner <span class="text-brand-blue text-md font-bold leading-5">con las manos</span>.</span>
                     </div>
                     <div class="text-md font-bold leading-5">
-                        <span>Sin <span class="text-brand-blue text-md font-bold leading-5">cesión al portero</span> y sin <span class="text-brand-blue text-md font-bold leading-5">fuera de juego</span>.</span>
+                        <span class="text-md font-bold leading-5">Sin <span class="text-brand-blue text-md font-bold leading-5">cesión al portero</span> y sin <span class="text-brand-blue text-md font-bold leading-5">fuera de juego</span>.</span>
                     </div>
                     <div class="text-md font-bold leading-5">
-                        <span>Faltas directas con <span class="text-brand-blue text-md font-bold leading-5">5 pasos</span>; a la 6.ª, <span class="text-brand-blue text-md font-bold leading-5">doble penalti</span>.</span>
+                        <span class="text-md font-bold leading-5">Faltas directas con <span class="text-brand-blue text-md font-bold leading-5">5 pasos</span>; a la 6.ª, <span class="text-brand-blue text-md font-bold leading-5">doble penalti</span>.</span>
                     </div>
                     <div class="text-md font-bold leading-5">
-                        <span>Equipación: <span class="text-brand-blue text-md font-bold leading-5">camiseta blanca</span> y otra de <span class="text-brand-blue text-md font-bold leading-5">color</span>. Sin equipación adecuada,
+                        <span class="text-md font-bold leading-5">Equipación: <span class="text-brand-blue text-md font-bold leading-5">camiseta blanca</span> y otra de <span class="text-brand-blue text-md font-bold leading-5">color</span>. Sin equipación adecuada,
                             no se juega.</span>
                     </div>
                 </div>
