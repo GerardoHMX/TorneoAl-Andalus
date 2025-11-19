@@ -59,20 +59,20 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
                                 <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${grupo}</h4>                                
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
                             ${data.equipos.map((equipo, index) => `
                                 <div class="p-6 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden">
                                     <div class="flex flex-col items-center text-center">
                                         ${equipo.LOGO ? `
-                                            <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.LOGO))}" alt="${equipo.EQUIPO}" class="w-20 h-20 object-contain mb-4" onerror="this.style.display='none'">
+                                            <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.LOGO))}" alt="${equipo.EQUIPO}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-4" onerror="this.style.display='none'">
                                         ` : `
-                                            <div class="w-20 h-20 bg-${brandColors[index]} rounded-full flex items-center justify-center mb-4">                                                
+                                            <div class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-${brandColors[index]} rounded-full flex items-center justify-center mb-4">                                                
                                             </div>
                                         `}
-                                        <h5 class="text-xl font-bold text-brand-text-dark mb-3 uppercase">
+                                        <h5 class="text-sm sm:text-md md:text-lg font-bold text-brand-text-dark mb-3 uppercase">
                                             ${equipo.EQUIPO}
                                         </h5>
-                                        <p class="text-sm text-gray-600 leading-relaxed">
+                                        <p class="text-xs md:text-sm text-gray-600 leading-relaxed">
                                             Equipo participante del Grupo ${grupo} en la categoría ${ciclo}.
                                         </p>
                                     </div>
@@ -97,21 +97,21 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
                             <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${data.grupo}</h4>                            
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
                         ${data.equipos.map(equipo => `
                             <div class="bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand p-6 hover:shadow-brand-lg transition-all duration-300 hover:scale-105">
                                 <div class="flex flex-col items-center text-center">
                                     ${equipo.LOGO ? `
-                                        <img src="${equipo.LOGO}" alt="${equipo.EQUIPO}" class="w-20 h-20 object-contain mb-4" onerror="this.style.display='none'">
+                                        <img src="${equipo.LOGO}" alt="${equipo.EQUIPO}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-4" onerror="this.style.display='none'">
                                     ` : `
-                                        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                        <div class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                                             <span class="text-4xl">⚽</span>
                                         </div>
                                     `}
-                                    <h5 class="text-xl font-bold text-brand-text-dark mb-3 uppercase">
+                                    <h5 class="text-sm sm:text-md md:text-lg font-bold text-brand-text-dark mb-3 uppercase">
                                         ${equipo.EQUIPO}
                                     </h5>
-                                    <p class="text-sm text-gray-600 leading-relaxed">
+                                    <p class="text-xs md:text-sm text-gray-600 leading-relaxed">
                                         Equipo participante del Grupo ${data.grupo} en la categoría ${data.ciclo}. 
                                         Compitiendo en el Torneo Al-Ándalus 2025-2026.
                                     </p>
@@ -148,21 +148,21 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
 
             cardsPerGroup.push(`                
                 <!-- Match Card ${i} -->
-                <div class="rounded-brand p-8 bg-gray-100 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden ">
-                    <div class="flex flex-col lg:flex-row items-center justify-between gap-6 mb-6">
+                <div class="rounded-brand p-2 sm:p-6 md:p-8 bg-gray-100 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden ">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-6 mb-6">
                         <div class="flex flex-col items-center flex-1">
-                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.LLOGO))}" alt="${m.LOCAL}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
-                            <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
+                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.LLOGO))}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16  object-contain mb-2 md:mb-3" onerror="this.style.display='none'">` : ''}
+                            <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
                         </div>
-                        <div class="text-5xl font-bold text-gray-800 flex items-center gap-2">
+                        <div class="text-5xl font-bold text-gray-800 flex justify-center items-center gap-2 flex-shrink-0">
                            <span class="text-3xl">${m.LSCORE || '0'}</span> <span class="text-3xl text-brand-gold">:</span> <span class="text-3xl">${m.VSCORE || '0'}</span>
                         </div>
                         <div class="flex flex-col items-center flex-1">
-                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.VLOGO))}" alt="${m.VISITANTE}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
-                            <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
+                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.VLOGO))}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16  object-contain mb-2 md:mb-3" onerror="this.style.display='none'">` : ''}
+                            <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
                         </div>
                     </div>
-                    <div class="text-center text-xs text-gray-600 mt-6">
+                    <div class="text-center text-xs md:text-sm text-gray-600 mt-6">
                         GRUPO ${m.GRUPO} - ${fechaFormateada}, ${m.HORA + 'am' || '00:00pm'}
                     </div>
                 </div>
@@ -177,7 +177,7 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
                             <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${m.GRUPO}</h4>                            
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="cards-per-group-${m.GRUPO}">
+                    <div class="grid grid grid-cols-2 lg:grid-cols-3 gap-6" id="cards-per-group-${m.GRUPO}">
                         ${cardsPerGroup.map(card => card).join("")}
                     </div>
                 </div>
@@ -229,7 +229,7 @@ export function tablaResultadosSemifinal(list, ciclo) {
                             <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
                         </div>
                     </div>
-                    <div class="text-center text-xs text-gray-600 mt-6">
+                    <div class="text-center text-xs md:text-sm text-gray-600 mt-6">
                        Semifinal - ${fechaFormateada}, ${m.HORA + 'am' || '00:00pm'}
                     </div>
                 </div>
@@ -287,17 +287,17 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
                         <div class="flex items-center justify-between gap-6 mb-6">
                             <div class="flex flex-col items-center flex-1">
                                 ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.LLOGO))}" alt="${m.LOCAL}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
-                                <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
+                                <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
                             </div>
                             <div class="text-3xl font-bold text-gray-800">
                                 ${m.LSCORE || '0'} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'}
                             </div>
                             <div class="flex flex-col items-center flex-1">
                                 ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.VLOGO))}" alt="${m.VISITANTE}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
-                                <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
+                                <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
                             </div>
                         </div>
-                        <div class="text-center text-xs text-gray-600 mt-6">
+                        <div class="text-center text-xs md:text-sm text-gray-600 mt-6">
                            ${m.GRUPO === "3RPUESTO" ? "Tercer Puesto" : "Primer Puesto"} - ${fechaFormateada}, ${m.HORA + 'am' || '00:00pm'}
                         </div>
                     </div>
@@ -344,48 +344,48 @@ export function tablaClasificacion(list, ciclo) {
             if (grupos.includes(m.GRUPO) && m.GRUPO === grupo) {
                 cardsPerGroup.push(`                
                     <!-- Team Card ${i} -->
-                    <div class="p-6 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden">
-                        <div class="flex items-center mb-6">
-                            ${m.LOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.LOGO))}" alt="${m.EQUIPOS}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
-                            <div class="text-lg font-bold flex-1">${m.EQUIPOS}</div>
+                    <div class="p-3 md:p-6 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden">
+                        <div class="flex items-center justify-center mb-6 gap-1">
+                            ${m.LOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.LOGO))}" alt="${m.EQUIPOS}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain" onerror="this.style.display='none'">` : ''}
+                            <div class="text-xs sm:text-sm md:text-md lg:text-lg font-bold flex-1">${m.EQUIPOS}</div>
                         </div>
-                        <div class="grid grid-cols-2 gap-y-4 gap-x-8">
+                        <div class="grid grid-cols-2 gap-y-2 md:gap-y-4 gap-x-6 md:gap-x-8">
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-lg">PTS:</span>
-                                <div class="text-gray-900 font-bold text-lg">${m.PUNTOS}</div>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg lg:text-lg">PTS:</span>
+                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.PUNTOS}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-lg">G:</span>
-                                <div class="text-gray-900 font-bold text-lg">${m.GANADOS}</div>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">G:</span>
+                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.GANADOS}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-lg">E:</span>
-                                <div class="text-gray-900 font-bold text-lg">${m.EMPATADOS}</div>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">E:</span>
+                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.EMPATADOS}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-lg">P:</span>
-                                <div class="text-gray-900 font-bold text-lg">${m.PERDIDOS}</div>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">P:</span>
+                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.PERDIDOS}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-lg">GF:</span>
-                                <div class="ttext-gray-900 font-bold text-lg">${m.GOLESAFAVOR}</div>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">GF:</span>
+                                <div class="ttext-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.GOLESAFAVOR}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-lg">GC:</span>
-                                <div class="text-gray-900 font-bold text-lg">${m.GOLESENCONTRA}</div>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">GC:</span>
+                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.GOLESENCONTRA}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-lg">DIF:</span>
-                                <div class="text-gray-900 font-bold text-lg">${m.DIFERENCIADEGOLES}</div>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">DIF:</span>
+                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.DIFERENCIADEGOLES}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-lg">FP:</span>
-                                <div class="text-gray-900 font-bold text-lg">${m.FAIRPLAY}</div>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">FP:</span>
+                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.FAIRPLAY}</div>
                             </div>
                         </div>
                         <div class="mt-4 pt-3 border-t border-brand-blue flex justify-between items-center">
-                            <span class="text-gray-900 font-bold text-lg">Total:</span>
-                            <div class="text-gray-900 font-bold text-lg">${m.TOTAL}</div>
+                            <span class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">Total:</span>
+                            <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.TOTAL}</div>
                         </div>
                     </div> 
                 `);
@@ -399,7 +399,7 @@ export function tablaClasificacion(list, ciclo) {
                             <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${m.GRUPO}</h4> 
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="points-per-team-${m.GRUPO}">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6" id="points-per-team-${m.GRUPO}">
                         ${cardsPerGroup.map(card => card).join("")}
                     </div>
                 </div>
@@ -457,16 +457,16 @@ export function tablaResultados(list, ciclo) {
                 <table class="w-full min-w-full" style="border-collapse: collapse;">
                     <thead>
                         <tr style="background-color: #B30000; color: white;">
-                            <th class="font-bold uppercase py-4 px-4 text-sm" style="text-align: left; padding-left: 1rem;">POS</th>
-                            <th class="font-bold uppercase py-4 px-4 text-sm" style="text-align: left; padding-left: 1rem;">Equipo</th>
-                            <th class="font-bold uppercase py-4 px-4 text-sm" style="text-align: center;">PJ</th> <!-- Partidos Jugados -->
-                            <th class="font-bold uppercase py-4 px-4 text-sm" style="text-align: center;">PG</th> <!-- Partidos Ganados -->
-                            <th class="font-bold uppercase py-4 px-4 text-sm" style="text-align: center;">PE</th> <!-- Empates -->
-                            <th class="font-bold uppercase py-4 px-4 text-sm" style="text-align: center;">PP</th> <!-- Partidos Perdidos -->
-                            <th class="font-bold uppercase py-4 px-4 text-sm" style="text-align: center;">GF</th> <!-- Goles a favor -->
-                            <th class="font-bold uppercase py-4 px-4 text-sm" style="text-align: center;">GC</th> <!-- Goles en contra -->
-                            <th class="font-bold uppercase py-4 px-4 text-sm" style="text-align: center;">DG</th> <!-- Diferencia de goles -->
-                            <th class="font-bold uppercase py-4 px-4 text-sm" style="text-align: center; padding-right: 1rem;">PTS</th> <!-- Puntos -->
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">POS</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">Equipo</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PJ</th> <!-- Partidos Jugados -->
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PG</th> <!-- Partidos Ganados -->
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PE</th> <!-- Empates -->
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PP</th> <!-- Partidos Perdidos -->
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">GF</th> <!-- Goles a favor -->
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">GC</th> <!-- Goles en contra -->
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">DG</th> <!-- Diferencia de goles -->
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-right: 1rem;">PTS</th> <!-- Puntos -->
                         </tr>
                     </thead>
                     <tbody>
@@ -478,21 +478,21 @@ export function tablaResultados(list, ciclo) {
 
         html += `
             <tr class="bg-white bg-white border-gray-100 border border-b">
-                <td class="py-4 px-4 font-medium" style="text-align: left; padding-left: 1rem; color: #333333;">${pos}</td>
-                <td class="py-4 px-4" style="text-align: left; padding-left: 1rem;">
+                <td class="py-2 px-2 md:py-4 md:px-4 font-medium" style="text-align: left; padding-left: 1rem; color: #333333;">${pos}</td>
+                <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
                     <div class="flex items-center gap-3">
                         ${equipo.LOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.LOGO))}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain" style="min-width: 32px; min-height: 32px;" onerror="this.style.display='none'">` : ''}
-                        <span class="font-medium uppercase" style="color: #333333;">${equipo.EQUIPOS}</span>
+                        <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.EQUIPOS}</span>
                     </div>
                 </td>
-                <td class="py-4 px-4 text-center font-medium" style="color: #333333;">${equipo.PJ}</td> <!-- Partidos Jugados -->
-                <td class="py-4 px-4 text-center font-medium" style="color: #333333;">${equipo.PG}</td> <!-- Partidos Ganados -->
-                <td class="py-4 px-4 text-center font-medium" style="color: #333333;">${equipo.PE}</td> <!-- Empates -->
-                <td class="py-4 px-4 text-center font-medium" style="color: #333333;">${equipo.PP}</td> <!-- Partidos Perdidos -->
-                <td class="py-4 px-4 text-center font-medium" style="color: #333333;">${equipo.GF}</td> <!-- Goles a favor -->
-                <td class="py-4 px-4 text-center font-medium" style="color: #333333;">${equipo.GC}</td> <!-- Goles en contra -->
-                <td class="py-4 px-4 text-center font-medium" style="color: #333333;">${dgFormatted}</td> <!-- Diferencia de goles -->
-                <td class="py-4 px-4 text-center font-medium" style="color: #333333; padding-right: 1rem;">${equipo.PTS}</td> <!-- Puntos -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.PJ}</td> <!-- Partidos Jugados -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.PG}</td> <!-- Partidos Ganados -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.PE}</td> <!-- Empates -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.PP}</td> <!-- Partidos Perdidos -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.GF}</td> <!-- Goles a favor -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.GC}</td> <!-- Goles en contra -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${dgFormatted}</td> <!-- Diferencia de goles -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333; padding-right: 1rem;">${equipo.PTS}</td> <!-- Puntos -->
             </tr>
         `;
     });
@@ -501,7 +501,7 @@ export function tablaResultados(list, ciclo) {
                     </tbody>
                 </table>
             </div>
-            <div class="bg-gray-100 px-4 py-4 border-t border-gray-300">
+            <div class="bg-gray-100 py-2 px-2 md:py-4 md:px-4 border-t border-gray-300">
                 <div class="flex flex-wrap gap-x-6 gap-y-1 justify-center">
                     <span class="text-xs text-gray-600"><strong class="text-xs">Pos:</strong> Posición</span>
                     <span class="text-xs text-gray-600"><strong class="text-xs">PJ:</strong> Partidos Jugados</span>
@@ -593,6 +593,7 @@ export function tablaSancionados(list, ciclo) {
     const div = document.getElementById("sancionados-" + ciclo);
     if (!div) return;
     div.classList.add("mb-6", "mt-6");
+    const listWithoutCiclo = list.filter(sancionado => sancionado.CICLO !== undefined && sancionado.CICLO !== "");
 
     let html = `                
     <div class="mb-6">
@@ -601,11 +602,11 @@ export function tablaSancionados(list, ciclo) {
                 ${ciclo}
             </h4>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="lideres-${ciclo}">        
+        <div class="grid ${listWithoutCiclo.length > 1 ? 'grid-cols-3' : 'grid-cols-1'} gap-6" id="lideres-${ciclo}">        
     `;
 
     //filtrar de list los que no tengan CICLO
-    const listWithoutCiclo = list.filter(sancionado => sancionado.CICLO !== undefined && sancionado.CICLO !== "");
+    
     if (listWithoutCiclo.length === 0) {
         html += `<p class="text-gray-700 text-center">${ciclo === "ESO" ? "Parece que el juego limpio va ganando, no hay sanciones registradas." : "Todo en orden, ningún jugador ha sido sancionado hasta el momento."}</p>`;
         html += '</div> </div>';
@@ -677,7 +678,7 @@ export function renderNoticias(noticias) {
 export function renderBracket(clasificacion, ciclo) {
     const div = document.getElementById("bracket-" + ciclo);
     if (!div) return;
-    div.classList.add("mb-6", "mt-6");
+    div.classList.add("mb-10", "mt-6", "overflow-x-auto");
     if (clasificacion.length === 0) {
         div.innerHTML = '<p class="text-gray-500 text-center">No hay datos de clasificación disponibles</p>'
         return
@@ -694,7 +695,7 @@ export function renderBracket(clasificacion, ciclo) {
     });
 
     // Create tournament bracket layout
-    let html = '<div class="min-w-max">'
+    let html = '<div class="min-w-max py-2">'
 
     // Check if we have bracket data
     const hasBracket = grupos.CUARTOS || grupos.SEMIFINAL || grupos.FINAL || grupos.TERCERPUSTO
@@ -718,14 +719,14 @@ export function renderBracket(clasificacion, ciclo) {
                 .sort()
                 .forEach((grupo) => {
                     html += `
-            <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
-                <div class="text-center font-bold text-xl mb-4 tracking-wide">Grupo ${grupo} - <span class="text-brand-gold text-xl">${ciclo}</span></div>
-                <div class="space-y-2">
+            <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-3 lg:p-4 min-w-[240px] w-[300px]">
+                <div class="text-center font-bold text-xl mb-3 lg:mb-4 tracking-wide">Grupo ${grupo} - <span class="text-brand-gold text-xl">${ciclo}</span></div>
+                <div class="lg:space-y-2">
             `;
                     gruposOrganizados[grupo].forEach((equipo) => {
                         if (equipo && equipo.EQUIPOS !== undefined && equipo.EQUIPOS !== "") {
                             html += `
-                    <div class="flex items-center justify-between py-3 px-2 border-b border-brand-red last:border-0">
+                    <div class="flex items-center justify-between py-2 lg:py-3 px-2 border-b border-brand-red last:border-0">
                         <div class="flex items-center gap-3">
                          ${equipo.LOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.LOGO))}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain">` : ''}
                         <span class="font-semibold text-sm">${equipo.EQUIPOS}</span>
@@ -752,36 +753,36 @@ export function renderBracket(clasificacion, ciclo) {
                 const equipos = grupos.SEMIFINAL[i];
 
                 html += `
-          <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
-            <div class="text-center font-bold text-xl mb-4 tracking-wide">Semifinal - <span class="text-brand-gold text-xl">${ciclo}</span></div>
-            <div class="space-y-2">
-        `;
+                <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
+                    <div class="text-center font-bold text-xl mb-4 tracking-wide">Semifinal - <span class="text-brand-gold text-xl">${ciclo}</span></div>
+                    <div class="space-y-2">
+                `;
 
                 if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) {
                     html += `
-              <div class="flex items-center justify-between py-2 px-2">
-                <div class="flex items-center gap-2">
-                  ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-6 h-6 object-contain">` : ''}
-                  <span class="font-medium text-sm">${equipos.LOCAL}</span>
-                </div>
-                <span class="font-bold text-sm">${equipos.LSCORE}</span>
-              </div>
-            `;
+                    <div class="flex items-center justify-between py-2 px-2">
+                        <div class="flex items-center gap-2">
+                        ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-6 h-6 object-contain">` : ''}
+                        <span class="font-medium text-sm">${equipos.LOCAL}</span>
+                        </div>
+                        <span class="font-bold text-sm">${equipos.LSCORE}</span>
+                    </div>
+                    `;
                     html += `
-              <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
-                <div class="flex items-center gap-2">
-                  ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-6 h-6 object-contain">` : ''}
-                  <span class="font-medium text-sm">${equipos.VISITANTE}</span>
-                </div>
-                <span class="font-bold text-sm">${equipos.VSCORE}</span>
-              </div>
-            `;
+                    <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
+                        <div class="flex items-center gap-2">
+                        ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-6 h-6 object-contain">` : ''}
+                        <span class="font-medium text-sm">${equipos.VISITANTE}</span>
+                        </div>
+                        <span class="font-bold text-sm">${equipos.VSCORE}</span>
+                    </div>
+                    `;
                 }
 
                 html += `
-            </div>            
-          </div>
-        `;
+                    </div>            
+                </div>
+                `;
             }
 
             for (let i = 0; i < grupos.TERCERPUSTO.length; i += 2) {
@@ -918,21 +919,19 @@ export function renderProximosPartidos(partidos) {
         const fechaFormateada = `${diaFormateado} ${mesNombre}`;
         
         // Obtener día de la semana
-        const fecha = new Date(anio, mes - 1, dia);
-        
+        const fecha = new Date(anio, mes - 1, dia);        
         const diaSemana = diasSemana[fecha.getDay()];
-
         const partidosDelDia = partidosPorFecha[fechaKey];
         
         html += `
-            <div class="container mx-auto mb-8">
+            <div class="md:container mx-auto mb-8">
                 <h4 class="text-2xl font-bold text-brand-blue mb-4 flex items-center gap-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     ${diaSemana} ${fechaFormateada}
                 </h4>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid ${partidosDelDia.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-4 lg:gap-6">
         `;
 
         partidosDelDia.forEach(partido => {
@@ -949,24 +948,24 @@ export function renderProximosPartidos(partidos) {
             }
 
             html += `
-                <div class="rounded-brand p-6 bg-white shadow-lg ring-1 ring-black/5 border border-gray-200 hover:shadow-brand-md transition-shadow overflow-hidden">
-                    <div class="text-center text-lg font-bold text-gray-800 uppercase tracking-wider mb-4">
+                <div class="rounded-brand p-4 lg:p-6 bg-white shadow-lg ring-1 ring-black/5 border border-gray-200 hover:shadow-brand-md transition-shadow overflow-hidden">
+                    <div class="text-center text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase tracking-wider mb-4">
                         ${tipoPartido} ${partido.CICLO ? `- ${partido.CICLO}` : ''}
                     </div>
-                    <div class="flex flex-col lg:flex-row items-center justify-between gap-4 mb-4">
+                    <div class="flex flex-col lg:flex-row items-center justify-between gap-2 lg:gap-4 mb-2 lg:mb-4">
                         <div class="flex flex-col items-center flex-1">
-                            ${partido.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.LLOGO))}" alt="${partido.LOCAL}" class="w-16 h-16 object-contain mb-2" onerror="this.style.display='none'">` : ''}
-                            <div class="text-lg font-bold text-gray-800 uppercase text-center">${partido.LOCAL || 'Por definir'}</div>
+                            ${partido.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.LLOGO))}" alt="${partido.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2" onerror="this.style.display='none'">` : ''}
+                            <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${partido.LOCAL || 'Por definir'}</div>
                         </div>
                         <div class="text-3xl font-bold text-gray-800 flex items-center gap-2">
                             <span class="text-4xl text-brand-gold">VS</span>
                         </div>
                         <div class="flex flex-col items-center flex-1">
-                            ${partido.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.VLOGO))}" alt="${partido.VISITANTE}" class="w-16 h-16 object-contain mb-2" onerror="this.style.display='none'">` : ''}
-                            <div class="text-lg font-bold text-gray-800 uppercase text-center">${partido.VISITANTE || 'Por definir'}</div>
+                            ${partido.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.VLOGO))}" alt="${partido.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2" onerror="this.style.display='none'">` : ''}
+                            <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${partido.VISITANTE || 'Por definir'}</div>
                         </div>
                     </div>
-                    <div class="text-center text-lg text-gray-600 mt-4 pt-4 border-t border-gray-200">
+                    <div class="text-center text-sm sm:text-md md:text-lg text-gray-600 mt-4 pt-4 border-t border-gray-200">
                         ${partido.HORA ? `${partido.HORA}` : 'Hora por confirmar'}
                     </div>
                 </div>

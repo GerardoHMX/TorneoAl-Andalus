@@ -244,8 +244,8 @@ function updateUI() {
         const otroCiclo = ciclos.bracket === "ESO" ? "BCH" : "ESO";
         const otroDiv = document.getElementById("bracket-" + otroCiclo);
         if (otroDiv) {
-            otroDiv.innerHTML = "";
-            otroDiv.classList.remove("mb-6", "mt-6");
+            otroDiv.innerHTML = "";            
+            otroDiv.classList.remove("overflow-x-auto", "mb-6", "mt-6");
         }
     }
 
