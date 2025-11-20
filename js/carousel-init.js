@@ -3,24 +3,18 @@
 
 import { initCarousel } from './carousel.js';
 
-// Esperar a que el DOM esté completamente cargado
 function initializeCarousel() {
     const carouselCards = [
         {
             text: `
-                <div class="flex-1 flex flex-col gap-3">
-                    <h3 class="text-2xl md:text-3xl text-brand-blue font-bold text-center mb-3">Torneo escolar de Fútbol Sala</h3>
-                    <div class="flex flex-row flex-wrap items-center justify-center gap-3">
-                        <img src="img/logo.png" alt="Al-Ándalus" class="w-40 md:w-50 h-40 md:h-50">
-                        <div class="flex flex-col gap-1 items-end">
-                            <h1 class="text-4xl sm:text-5xl text-brand-red">Al-Ándalus</h1>
-                            <h3 class="text-brand-gold text-md font-bold">2025-2026</h3>
-                        </div>
-                    </div>             
+                <div class="flex-1 flex flex-col gap-3 items-center justify-center"> 
+                    <img src="img/logoTorneo.png" alt="Al-Ándalus" class="w-60 md:w-80 object-contain"> 
+                    <h3 class="text-brand-gold text-md font-bold">2025-2026</h3>  
                 </div>
             `,
             bgColor: 'bg-brand-white',
-            textColor: 'text-brand-blue'
+            textColor: 'text-brand-blue',
+            title: 'Torneo escolar',
         },
         {
             text: `

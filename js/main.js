@@ -6,6 +6,7 @@ import {
     tablaResultadosSemifinal,
     tablaResultadosTercerFinalPuesto, 
     tablaClasificacion,
+    tablaClasificacionGrupal,
     tablaResultados,
     tablaLideresGoleadores,
     tablaSancionados,
@@ -23,6 +24,7 @@ let STATE = {
         equipos: "TODOS",
         jornadas: "TODOS",
         clasificacion: "TODOS",
+        clasificacionGrupal: "TODOS",
         bracket: "TODOS",
         goleadores: "TODOS",
         sancionados: "TODOS",
@@ -139,6 +141,192 @@ function filtrarProximosPartidos(clasificacion, semanaOffset, ciclo) {
     });
 }
 
+// --- Función para validar valor booleano ---
+function esVerdadero(valor) {
+    const valorStr = (valor || '').toString().trim().toUpperCase();
+    return valorStr === 'SI';
+}
+
+// --- Función para encontrar elemento por ID ---
+function encontrarElementoPorId(id) {
+    if (!id) return null;
+    
+    // Buscar directamente con el ID proporcionado
+    const elemento = document.getElementById(id);
+    return elemento;
+}
+
+// --- Función para generar navegación dinámica ---
+function generarNavegacion(otros = []) {
+    if (!otros || otros.length === 0) {
+        console.warn('No hay datos de OTROS para generar la navegación');
+        return;
+    }
+
+    console.log('🔍 Generando navegación desde OTROS:', otros);
+
+    // Filtrar secciones que deben aparecer en el menú (MENU = "SI")
+    const seccionesEnMenu = otros.filter((item, index) => {
+        // Intentar diferentes variaciones de nombres de columnas (case-insensitive)
+        const keys = Object.keys(item);
+        const menuKey = keys.find(k => k.toUpperCase() === 'MENU') || keys.find(k => k.toLowerCase() === 'menu');
+        const seccionKey = keys.find(k => k.toUpperCase() === 'SECCION') || keys.find(k => k.toLowerCase() === 'seccion');
+        const nombreKey = keys.find(k => k.toUpperCase() === 'NOMBRE') || keys.find(k => k.toLowerCase() === 'nombre');
+        
+        const menu = menuKey ? (item[menuKey] || '').toString().trim() : '';
+        const seccion = seccionKey ? (item[seccionKey] || '').toString().trim() : '';
+        const nombre = nombreKey ? (item[nombreKey] || '').toString().trim() : '';
+        
+        const estaEnMenu = esVerdadero(menu);
+        console.log(`  [${index}] SECCION: "${seccion}", NOMBRE: "${nombre}", MENU: "${menu}" → ${estaEnMenu ? 'SI' : 'NO'}`);
+        
+        return estaEnMenu && seccion && nombre && nombre !== '-';
+    });
+
+    console.log(`📋 Secciones en menú: ${seccionesEnMenu.length}`, seccionesEnMenu);
+
+    // Ordenar por algún campo si existe (por ejemplo, ORDEN), o mantener el orden original
+    seccionesEnMenu.sort((a, b) => {
+        const keysA = Object.keys(a);
+        const keysB = Object.keys(b);
+        const ordenKeyA = keysA.find(k => k.toUpperCase() === 'ORDEN') || keysA.find(k => k.toLowerCase() === 'orden');
+        const ordenKeyB = keysB.find(k => k.toUpperCase() === 'ORDEN') || keysB.find(k => k.toLowerCase() === 'orden');
+        
+        const ordenA = ordenKeyA ? parseInt(a[ordenKeyA] || '0') || 0 : 0;
+        const ordenB = ordenKeyB ? parseInt(b[ordenKeyB] || '0') || 0 : 0;
+        return ordenA - ordenB;
+    });
+
+    // Generar navegación Desktop
+    const desktopNav = document.getElementById('desktopNav');
+    if (desktopNav) {
+        desktopNav.innerHTML = seccionesEnMenu.map(item => {
+            // Obtener las keys de cada item individualmente
+            const keys = Object.keys(item);
+            const seccionKey = keys.find(k => k.toUpperCase() === 'SECCION') || keys.find(k => k.toLowerCase() === 'seccion');
+            const nombreKey = keys.find(k => k.toUpperCase() === 'NOMBRE') || keys.find(k => k.toLowerCase() === 'nombre');
+            
+            const seccion = seccionKey ? (item[seccionKey] || '').toString().trim() : '';
+            const nombre = nombreKey ? (item[nombreKey] || '').toString().trim() : '';
+            
+            if (!seccion || !nombre || nombre === '-') return '';
+            
+            const href = seccion.startsWith('#') ? seccion : '#' + seccion;
+            console.log(`  ➜ Desktop: "${nombre}" → ${href}`);
+            return `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors">${nombre.toUpperCase()}</a>`;
+        }).join('');
+        
+        console.log(`✅ Navegación Desktop generada: ${desktopNav.innerHTML.length} caracteres`);
+    } else {
+        console.error('❌ No se encontró el elemento desktopNav');
+    }
+
+    // Generar navegación móvil
+    const mobileNav = document.getElementById('mobileNav');
+    if (mobileNav) {
+        mobileNav.innerHTML = seccionesEnMenu.map(item => {
+            // Obtener las keys de cada item individualmente
+            const keys = Object.keys(item);
+            const seccionKey = keys.find(k => k.toUpperCase() === 'SECCION') || keys.find(k => k.toLowerCase() === 'seccion');
+            const nombreKey = keys.find(k => k.toUpperCase() === 'NOMBRE') || keys.find(k => k.toLowerCase() === 'nombre');
+            
+            const seccion = seccionKey ? (item[seccionKey] || '').toString().trim() : '';
+            const nombre = nombreKey ? (item[nombreKey] || '').toString().trim() : '';
+            
+            if (!seccion || !nombre || nombre === '-') return '';
+            
+            const href = seccion.startsWith('#') ? seccion : '#' + seccion;
+            console.log(`  ➜ Móvil: "${nombre}" → ${href}`);
+            return `<a href="${href}" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">${nombre.toUpperCase()}</a>`;
+        }).join('');
+        
+        console.log(`✅ Navegación Móvil generada: ${mobileNav.innerHTML.length} caracteres`);
+    } else {
+        console.error('❌ No se encontró el elemento mobileNav');
+    }
+
+    // Re-inicializar los event listeners para smooth scroll después de generar la navegación
+    inicializarSmoothScroll();
+}
+
+// --- Función para controlar visibilidad de secciones en la UI ---
+function controlarVisibilidadSecciones(otros = []) {
+    if (!otros || otros.length === 0) {
+        console.warn('No hay datos de OTROS para controlar la visibilidad');
+        return;
+    }
+
+    console.log('📋 Datos OTROS recibidos:', otros);
+
+    // Crear un mapa de secciones con su estado de visibilidad
+    const mapaSecciones = {};
+    otros.forEach((item, index) => {
+        // Intentar diferentes variaciones de nombres de columnas (case-insensitive)
+        const keys = Object.keys(item);
+        const seccionKey = keys.find(k => k.toUpperCase() === 'SECCION') || keys.find(k => k.toLowerCase() === 'seccion');
+        const visibleKey = keys.find(k => k.toUpperCase() === 'VISIBLE') || keys.find(k => k.toLowerCase() === 'visible');
+        
+        const seccion = seccionKey ? (item[seccionKey] || '').toString().trim() : '';
+        const visible = visibleKey ? (item[visibleKey] || '').toString().trim() : '';
+        
+        if (seccion) {
+            // Normalizar el ID de la sección (quitar # si existe, espacios y comillas)
+            let seccionId = seccion.startsWith('#') ? seccion.substring(1) : seccion;
+            seccionId = seccionId.trim().replace(/^["']|["']$/g, ''); // Quitar comillas al inicio/final
+            
+            if (seccionId) {
+                mapaSecciones[seccionId] = esVerdadero(visible);
+                console.log(`  [${index}] SECCION: "${seccion}" → ID: "${seccionId}", VISIBLE: "${visible}" → ${mapaSecciones[seccionId] ? 'SI' : 'NO'}`);
+            }
+        }
+    });
+
+    console.log('🗺️ Mapa de secciones:', mapaSecciones);
+
+    // Mostrar u ocultar cada sección según su estado VISIBLE
+    Object.keys(mapaSecciones).forEach(seccionId => {
+        const elemento = encontrarElementoPorId(seccionId);
+        if (elemento) {
+            const debeSerVisible = mapaSecciones[seccionId];
+            if (debeSerVisible) {
+                // Mostrar la sección: remover clase hidden
+                elemento.classList.remove('hidden');
+                console.log(`✓ Sección visible: ${seccionId}`);
+            } else {
+                // Ocultar la sección: agregar clase hidden
+                elemento.classList.add('hidden');
+                console.log(`✗ Sección oculta: ${seccionId}`);
+            }
+        } else {
+            // Mostrar warning para ayudar a depurar
+            console.warn(`⚠ No se encontró el elemento con ID: "${seccionId}"`);
+        }
+    });
+}
+
+// --- Función para inicializar smooth scroll ---
+function inicializarSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href !== '#' && href !== '') {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
+}
+
 // --- carga inicial ---
 async function init() {
 
@@ -151,10 +339,25 @@ async function init() {
         semanaOffsetProximosPartidos = encontrarSemanaPartidoMasCercano(STATE.data.CLASIFICACION);
     }
     
-    requestAnimationFrame(() => {        
+    requestAnimationFrame(() => {
+        // Generar navegación dinámica desde la hoja OTROS (basada en MENU)
+        generarNavegacion(STATE.data.OTROS);
+        
+        // Controlar visibilidad de secciones en la UI (basada en VISIBLE)
+        // Se ejecuta después de que el DOM esté listo
+        controlarVisibilidadSecciones(STATE.data.OTROS);
+        
         initCicloSelectors();
         updateUI();
     });
+
+    // Auto recarga cada 5 minutos
+    setInterval(() => {
+        loadAllData().then(d => {
+            STATE.data = d;
+            updateUI();
+        });
+    }, 5 * 60 * 1000);
 }
 
 // Esperar a que el DOM esté completamente cargado
@@ -168,8 +371,15 @@ if (document.readyState === 'loading') {
 function updateUI() {
     if (!STATE.data) return;
 
-    const { CLASIFICACION, EQUIPOS, LIDERES, SANCIONES, NOTICIAS } = STATE.data;
+    const { CLASIFICACION, EQUIPOS, LIDERES, SANCIONES, NOTICIAS, OTROS } = STATE.data;
     const ciclos = STATE.ciclosSeleccionados;
+
+    // Actualizar navegación si hay datos de OTROS (basada en MENU)
+    if (OTROS && OTROS.length > 0) {
+        generarNavegacion(OTROS);
+        // Controlar visibilidad de secciones en la UI (basada en VISIBLE)
+        controlarVisibilidadSecciones(OTROS);
+    }
 
     // Equipos
     const grupoEquipos = STATE.grupoSeleccionado.equipos || "TODOS";
@@ -220,6 +430,20 @@ function updateUI() {
         }
     }
 
+    // Clasificación Grupal
+    if (ciclos.clasificacionGrupal === "TODOS") {
+        tablaClasificacionGrupal(STATE.data.CLASIFICACION, "ESO");
+        tablaClasificacionGrupal(STATE.data.CLASIFICACION, "BCH");
+    } else {
+        tablaClasificacionGrupal(STATE.data.CLASIFICACION, ciclos.clasificacionGrupal);
+        const otroCiclo = ciclos.clasificacionGrupal === "ESO" ? "BCH" : "ESO";
+        const otroDiv = document.getElementById("clasificacion-grupal-" + otroCiclo);
+        if (otroDiv) {
+            otroDiv.innerHTML = "";
+            otroDiv.classList.remove("overflow-x-auto", "mb-6", "mt-6");
+        }
+    }
+
     // Resultados
     if (ciclos.resultados === "TODOS") {
         tablaResultados(STATE.data.CLASIFICACION, "ESO");
@@ -251,10 +475,10 @@ function updateUI() {
 
     // Líderes Goleadores
     if (ciclos.goleadores === "TODOS") {
-        tablaLideresGoleadores(STATE.data.LIDERES, "ESO");
-        tablaLideresGoleadores(STATE.data.LIDERES, "BCH");
+        tablaLideresGoleadores(STATE.data.LIDERES, "ESO", STATE.data.OTROS);
+        tablaLideresGoleadores(STATE.data.LIDERES, "BCH", STATE.data.OTROS);
     } else {
-        tablaLideresGoleadores(STATE.data.LIDERES, ciclos.goleadores);
+        tablaLideresGoleadores(STATE.data.LIDERES, ciclos.goleadores, STATE.data.OTROS);
         const otroCiclo = ciclos.goleadores === "ESO" ? "BCH" : "ESO";
         const otroDiv = document.getElementById("goleadores-" + otroCiclo);
         if (otroDiv) {
@@ -364,11 +588,12 @@ function initCicloSelectors() {
         { id: 'selector-equipos', seccion: 'equipos' },
         { id: 'selector-jornadas', seccion: 'jornadas' },
         { id: 'selector-clasificacion', seccion: 'clasificacion' },
+        { id: 'selector-clasificacion-grupal', seccion: 'clasificacionGrupal' },
         { id: 'selector-bracket', seccion: 'bracket' },
         { id: 'selector-goleadores', seccion: 'goleadores' },
         { id: 'selector-sancionados', seccion: 'sancionados' },
         { id: 'selector-resultados', seccion: 'resultados' },
-        { id: 'selector-proximos-partidos', seccion: 'proximosPartidos' }
+        { id: 'selector-proximosPartidos', seccion: 'proximosPartidos' }
     ];
 
     selectors.forEach(({ id, seccion }) => {

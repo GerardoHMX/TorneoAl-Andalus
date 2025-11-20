@@ -327,7 +327,7 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
     div.innerHTML = cardsGroup.map(card => card).join("");
 }
 
-// --- TABLA DE CLASIFICACIÓN ---
+// --- TABLA DE CLASIFICACIÓN INDIVIDUAL ---
 export function tablaClasificacion(list, ciclo) {
     const div = document.getElementById("clasificacion-" + ciclo);
     if (!div) return;
@@ -413,6 +413,156 @@ export function tablaClasificacion(list, ciclo) {
     div.innerHTML = cardsGroup.map(card => card).join("");
 }
 
+// --- TABLA DE CLASIFICACIÓN GRUPAL ---
+export function tablaClasificacionGrupal(list, ciclo) {
+    const div = document.getElementById("clasificacion-grupal-" + ciclo);
+    if (!div) return;
+    div.classList.add("overflow-x-auto", "mb-6", "mt-6");
+    
+    // Filtrar equipos por ciclo y Ordenar lista por puntos de forma descendente y luego por diferencia de goles de forma descendente
+    const equipos = list
+        .filter(m => m.EQUIPOS !== undefined && m.EQUIPOS.trim() !== "" && m.EQUIPOS !== "EQUIPOS" && m.CICLO === ciclo)
+        .sort((a, b) => {
+            if (b.PUNTOS !== a.PUNTOS) {
+                return b.PUNTOS - a.PUNTOS;
+            }
+            return b.DIFERENCIADEGOLES - a.DIFERENCIADEGOLES;
+        })
+        .map(m => ({
+            ...m,
+            PJ: (parseInt(m.GANADOS) || 0) + (parseInt(m.EMPATADOS) || 0) + (parseInt(m.PERDIDOS) || 0), //PJ
+            PUNTOS: parseInt(m.PUNTOS) || 0, //PTS
+            GANADOS: parseInt(m.GANADOS) || 0, //PG
+            EMPATADOS: parseInt(m.EMPATADOS) || 0, //PE
+            PERDIDOS: parseInt(m.PERDIDOS) || 0, //PP
+            GOLESAFAVOR: parseInt(m.GOLESAFAVOR) || 0, //GF
+            GOLESENCONTRA: parseInt(m.GOLESENCONTRA) || 0, //GC
+            DIFERENCIADEGOLES: parseInt(m.DIFERENCIADEGOLES) || 0, //DG
+            FAIRPLAY: parseInt(m.FAIRPLAY) || 0, //FPY
+            TOTAL: parseInt(m.TOTAL) || 0,//TOTAL
+        })); 
+
+    if (equipos.length === 0) {
+        div.innerHTML = '<p class="text-gray-500 text-center">No hay datos de clasificación grupal disponibles</p>';
+        return;
+    }
+
+    // Agrupar equipos por grupo
+    const equiposPorGrupo = {};
+    equipos.forEach(equipo => {
+        if (grupos.includes(equipo.GRUPO)) {
+            if (!equiposPorGrupo[equipo.GRUPO]) {
+                equiposPorGrupo[equipo.GRUPO] = [];
+            }
+            equiposPorGrupo[equipo.GRUPO].push(equipo);
+        }
+    });
+
+    // Ordenar equipos dentro de cada grupo por puntos (descendente) y luego por diferencia de goles (descendente)
+    Object.keys(equiposPorGrupo).forEach(grupo => {
+        equiposPorGrupo[grupo].sort((a, b) => {
+            if (b.PUNTOS !== a.PUNTOS) {
+                return b.PUNTOS - a.PUNTOS;
+            }
+            return b.DIFERENCIADEGOLES - a.DIFERENCIADEGOLES;
+        });
+    });
+
+    // Construir HTML para cada grupo
+    let html = '';
+    
+    grupos.forEach(grupo => {
+        if (!equiposPorGrupo[grupo] || equiposPorGrupo[grupo].length === 0) {
+            return;
+        }
+
+        html += `
+            <div class="mb-8">
+                <div class="flex items-center justify-between gap-2 mb-4">                
+                    <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">
+                        ${ciclo} - Grupo ${grupo}
+                    </h4>
+                </div>
+                <div class="rounded-brand overflow-hidden shadow-lg">
+                    <div class="overflow-x-auto">
+                        <table class="w-full min-w-full" style="border-collapse: collapse;">
+                            <thead>
+                                <tr style="background-color: #B30000; color: white;">
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">POS</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">EQUIPO</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PJ</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PTS</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PG</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PE</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PP</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">GF</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">GC</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">DG</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">FPY</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-right: 1rem;">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+        `;
+
+        equiposPorGrupo[grupo].forEach((equipo, index) => {
+            const pos = equipo.PJ > 0 ? String(index + 1).padStart(2, '0') : '';
+            const dgFormatted = equipo.DIFERENCIADEGOLES >= 0 ? `+${equipo.DIFERENCIADEGOLES}` : `${equipo.DIFERENCIADEGOLES}`;
+
+            html += `
+                <tr class="bg-white border-gray-100 border border-b">
+                    <td class="py-2 px-2 md:py-4 md:px-4 font-medium" style="text-align: left; padding-left: 1rem; color: #333333;">${pos}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
+                        <div class="flex items-center gap-3">
+                            ${equipo.LOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.LOGO))}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain" style="min-width: 32px; min-height: 32px;" onerror="this.style.display='none'">` : ''}
+                            <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg">${equipo.EQUIPOS}</span>
+                        </div>
+                    </td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.PJ}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.PUNTOS}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.GANADOS}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.EMPATADOS}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.PERDIDOS}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.GOLESAFAVOR}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.GOLESENCONTRA}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${dgFormatted}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.FAIRPLAY}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333; padding-right: 1rem;">${equipo.TOTAL}</td>
+                </tr>
+            `;
+        });
+
+        html += `
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="bg-gray-100 py-2 px-2 md:py-4 md:px-4 border-t border-gray-300">
+                        <div class="flex flex-wrap gap-x-6 gap-y-1 justify-center">
+                            <span class="text-xs text-gray-600"><strong class="text-xs">Pos:</strong> Posición</span>
+                            <span class="text-xs text-gray-600"><strong class="text-xs">PJ:</strong> Partidos Jugados</span>
+                            <span class="text-xs text-gray-600"><strong class="text-xs">PTS:</strong> Puntos</span>
+                            <span class="text-xs text-gray-600"><strong class="text-xs">PG:</strong> Partidos Ganados</span>
+                            <span class="text-xs text-gray-600"><strong class="text-xs">PE:</strong> Partidos Empatados</span>
+                            <span class="text-xs text-gray-600"><strong class="text-xs">PP:</strong> Partidos Perdidos</span>
+                            <span class="text-xs text-gray-600"><strong class="text-xs">GF:</strong> Goles a Favor</span>
+                            <span class="text-xs text-gray-600"><strong class="text-xs">GC:</strong> Goles en Contra</span>
+                            <span class="text-xs text-gray-600"><strong class="text-xs">DG:</strong> Diferencia de Goles</span>
+                            <span class="text-xs text-gray-600"><strong class="text-xs">FPY:</strong> Fair Play</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    if (html === '') {
+        div.innerHTML = '<p class="text-gray-500 text-center">No hay datos de clasificación grupal disponibles</p>';
+        return;
+    }
+
+    div.innerHTML = html;
+}
+
 // --- TABLA DE RESULTADOS ---
 export function tablaResultados(list, ciclo) {
     const div = document.getElementById("resultados-" + ciclo);
@@ -473,7 +623,7 @@ export function tablaResultados(list, ciclo) {
     `;
 
     equipos.forEach((equipo, index) => {
-        const pos = String(index + 1).padStart(2, '0');
+        const pos = equipo.PJ > 0 ? String(index + 1).padStart(2, '0') : '';
         const dgFormatted = equipo.DG >= 0 ? `+${equipo.DG}` : `${equipo.DG}`;
 
         html += `
@@ -482,16 +632,16 @@ export function tablaResultados(list, ciclo) {
                 <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
                     <div class="flex items-center gap-3">
                         ${equipo.LOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.LOGO))}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain" style="min-width: 32px; min-height: 32px;" onerror="this.style.display='none'">` : ''}
-                        <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.EQUIPOS}</span>
+                        <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.EQUIPOS}</span>
                     </div>
                 </td>
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.PJ}</td> <!-- Partidos Jugados -->
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.PG}</td> <!-- Partidos Ganados -->
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.PE}</td> <!-- Empates -->
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.PP}</td> <!-- Partidos Perdidos -->
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.GF}</td> <!-- Goles a favor -->
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${equipo.GC}</td> <!-- Goles en contra -->
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333;">${dgFormatted}</td> <!-- Diferencia de goles -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.PJ}</td> <!-- Partidos Jugados -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.PG}</td> <!-- Partidos Ganados -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.PE}</td> <!-- Empates -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.PP}</td> <!-- Partidos Perdidos -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.GF}</td> <!-- Goles a favor -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.GC}</td> <!-- Goles en contra -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${dgFormatted}</td> <!-- Diferencia de goles -->
                 <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333; padding-right: 1rem;">${equipo.PTS}</td> <!-- Puntos -->
             </tr>
         `;
@@ -521,15 +671,48 @@ export function tablaResultados(list, ciclo) {
 }
 
 // --- TABLA DE LIDERES GOLEADORES ---
-export function tablaLideresGoleadores(list, ciclo) {
+export function tablaLideresGoleadores(list, ciclo, otros = []) {
     const div = document.getElementById("goleadores-" + ciclo);
     if (!div) return;
     div.classList.add("mb-6", "mt-6");
-    if (list.length === 0) {
-        div.innerHTML = '<p class="text-gray-500 text-center">No hay datos de líderes de goleo.</p>'
-        return
-    }
+    
+    console.log(`[DEBUG] tablaLideresGoleadores - Ciclo: ${ciclo}, OTROS recibidos:`, otros);
 
+    // Filtrar lideres para no mostrar registros incompletos
+    const lideres = list.filter(lider => 
+        lider.CICLO === ciclo && 
+        lider.CICLO !== undefined && 
+        lider.CICLO !== "" &&
+        lider.JUGADOR !== undefined && 
+        lider.JUGADOR !== ""
+    );
+
+    // Función auxiliar para obtener la imagen según CICLO y POSICION
+    const obtenerImagenPorPosicion = (ciclo, posicion) => {
+        if (!otros || otros.length === 0) {
+            return null;
+        }
+        
+        // Buscar la imagen - verificar diferentes formatos posibles de los nombres de columnas
+        const imagenData = otros.find(item => {
+            const cicloMatch = (item.CICLO || item.ciclo || '').trim().toUpperCase() === ciclo.toUpperCase();
+            const posicionMatch = parseInt(item.POSICION || item.posicion || item.POSICION || 0) === posicion;
+            return cicloMatch && posicionMatch;
+        });
+        
+        if (imagenData) {
+            const urlImagen = imagenData.AVATARPOSICIONES || imagenData.avatarposiciones || imagenData.AVATARPOSICION || imagenData.avatarposicion;
+            return urlImagen || null;
+        }
+        return null;
+    };
+
+    //Ordenar la lista por goles de forma descendente
+    const listOrdered = lideres.sort((a, b) => (parseInt(b.GOLES) || 0) - (parseInt(a.GOLES) || 0));
+    let liderCiclo = "";
+    let index = 0;
+
+    // Primera parte: Top 3 goleadores en tarjetas (siempre se muestran)
     let html = `                
     <div>
         <div class="flex items-center justify-between gap-2">                
@@ -537,29 +720,23 @@ export function tablaLideresGoleadores(list, ciclo) {
                 ${ciclo}
             </h4>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="lideres-${ciclo}">        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="lideres-${ciclo}">        
     `;
 
-    //Ordenar la lista por goles de forma descendente
-    const listOrdered = list.sort((a, b) => b.GOLES - a.GOLES);
-    let liderCiclo = "";
-    let index = 0;
-
-    listOrdered.forEach((lider) => {                
-        //Restablecer el index de la lista cada vez que se cambia el ciclo
-        if (lider.CICLO !== liderCiclo) {
-            index = 0;
-            liderCiclo = lider.CICLO;
-        }
-        if (lider.CICLO === ciclo) {            
+    // Mostrar hasta 3 tarjetas, incluso si no hay datos
+    for (let i = 0; i < 3; i++) {
+        const lider = listOrdered[i];
+        const imagenAvatar = obtenerImagenPorPosicion(ciclo, i + 1);
+        
+        if (lider) {
             html += `
-            <div class="flex flex-col bg-white shadow-lg overflow-hidden rounded-brand hover:shadow-brand-lg transition-shadow">
+            <div class="flex flex-col bg-white shadow-lg overflow-hidden rounded-brand hover:shadow-brand-lg transition-shadow border-b-2" style="border-bottom-color: var(--brand-gold);">
                 <div class="w-full h-16 md:h-28 lg:h-32 flex items-center justify-center overflow-hidden">
-                    ${lider.AVATAR ? `
-                        <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(lider.AVATAR))}" alt="${lider.JUGADOR}" class="h-full object-cover object-center">
+                    ${imagenAvatar ? `
+                        <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenAvatar))}" alt="${lider.JUGADOR}" class="h-full object-cover object-center">
                     ` : `
                         <div class="w-full h-full flex items-center justify-center">
-                            <span class="text-gray-400 text-lg">${lider.JUGADOR}</span>
+                            <span class="text-gray-400 text-lg">${lider.JUGADOR || ''}</span>
                         </div>
                     `}
                 </div> 
@@ -567,24 +744,108 @@ export function tablaLideresGoleadores(list, ciclo) {
                     <div class="absolute top-0 left-0 right-0 h-0.5 bg-brand-blue"></div>
                     <div class="flex flex-col items-center gap-1">
                         <h5 class="text-lg font-bold text-brand-blue text-center">
-                            ${lider.JUGADOR}
+                            ${lider.JUGADOR || ''}
                         </h5>
                         <p class="text-sm text-gray-600 text-center">
                             ${lider.EQUIPO || ''}
                         </p>
                         <p class="text-sm text-gray-600 text-center">
-                            ${index == 0 ? 'Primer' : index == 1 ? 'Segundo' : index == 2 ? 'Tercero' : ''} Puesto  ${lider.GOLES ? lider.GOLES + ' Goles' : '' } 
+                            ${i == 0 ? 'Primer' : i == 1 ? 'Segundo' : i == 2 ? 'Tercero' : ''} Puesto  ${lider.GOLES ? lider.GOLES + ' Goles' : '0 Goles'} 
                         </p>
-                    </div> 
-                    <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-gold"></div>
+                    </div>                    
                 </div>
             </div> 
             `;
-            index++;
+        } else {
+            // Mostrar tarjeta vacía si no hay datos para esta posición
+            html += `
+            <div class="flex flex-col bg-white shadow-lg overflow-hidden rounded-brand border-b-2" style="border-bottom-color: var(--brand-gold); opacity: 0.5;">
+                <div class="w-full h-16 md:h-28 lg:h-32 flex items-center justify-center overflow-hidden">
+                    ${imagenAvatar ? `
+                        <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenAvatar))}" alt="Posición ${i + 1}" class="h-full object-cover object-center">
+                    ` : `
+                        <div class="w-full h-full flex items-center justify-center">
+                            <span class="text-gray-400 text-lg">-</span>
+                        </div>
+                    `}
+                </div> 
+                <div class="relative flex flex-col items-center justify-center py-2 px-3" >                    
+                    <div class="absolute top-0 left-0 right-0 h-0.5 bg-brand-blue"></div>
+                    <div class="flex flex-col items-center gap-1">
+                        <h5 class="text-lg font-bold text-brand-blue text-center">
+                            -
+                        </h5>
+                        <p class="text-sm text-gray-600 text-center">
+                            -
+                        </p>
+                        <p class="text-sm text-gray-600 text-center">
+                            ${i == 0 ? 'Primer' : i == 1 ? 'Segundo' : i == 2 ? 'Tercero' : ''} Puesto
+                        </p>
+                    </div>                    
+                </div>
+            </div> 
+            `;
         }
-    });
+    }
 
-    html += '</div></div>';
+    html += '</div>';
+
+    // Segunda parte: Tabla completa con todos los goleadores o mensaje si no hay datos
+    const goleadoresCiclo = listOrdered.filter(lider => lider.CICLO === ciclo);
+
+    if (goleadoresCiclo.length > 0) {
+        html += `
+            <div class="rounded-brand overflow-hidden shadow-lg mt-8">
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-full" style="border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color: #B30000; color: white;">
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">CICLO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">EQUIPO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">CURSO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">JUGADOR</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-right: 1rem;">GOLES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+
+        goleadoresCiclo.forEach((lider) => {
+            html += `
+                <tr class="bg-white border-gray-100 border border-b">
+                    <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
+                        <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg">${lider.CICLO || ''}</span>
+                    </td>
+                    <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
+                        <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg">${lider.EQUIPO || ''}</span>
+                    </td>
+                    <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
+                        <span class="font-medium text-xs sm:text-sm md:text-md lg:text-lg">${lider.CURSO || ''}</span>
+                    </td>
+                    <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
+                        <span class="font-medium text-xs sm:text-sm md:text-md lg:text-lg">${lider.JUGADOR || ''}</span>
+                    </td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="padding-right: 1rem;">${lider.GOLES || 0}</td>
+                </tr>
+            `;
+        });
+
+        html += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+    } else {
+        // Mostrar mensaje solo en lugar de la tabla cuando no hay datos
+        html += `
+            <div class="mt-8">
+                <p class="text-gray-700 text-center py-8">${ciclo === "ESO" ? "Aún no hay partidos jugados, pronto conoceremos a los primeros líderes de goleo." : "Todavía no se registran partidos. ¡Los goleadores aparecerán en cuanto ruede el balón!"}</p>
+            </div>
+        `;
+    }
+
+    html += '</div>';
     div.innerHTML = html;
 }
 
@@ -592,56 +853,85 @@ export function tablaLideresGoleadores(list, ciclo) {
 export function tablaSancionados(list, ciclo) {
     const div = document.getElementById("sancionados-" + ciclo);
     if (!div) return;
-    div.classList.add("mb-6", "mt-6");
-    const listWithoutCiclo = list.filter(sancionado => sancionado.CICLO !== undefined && sancionado.CICLO !== "");
-
-    let html = `                
-    <div class="mb-6">
-        <div class="flex items-center justify-between gap-2">                
-            <h4 class="text-3xl font-bold text-brand-gold mb-2 flex items-center gap-2">
-                ${ciclo}
-            </h4>
-        </div>
-        <div class="grid ${listWithoutCiclo.length > 1 ? 'grid-cols-3' : 'grid-cols-1'} gap-6" id="lideres-${ciclo}">        
-    `;
-
-    //filtrar de list los que no tengan CICLO
+    div.classList.add("overflow-x-auto", "mb-6", "mt-6");
     
-    if (listWithoutCiclo.length === 0) {
-        html += `<p class="text-gray-700 text-center">${ciclo === "ESO" ? "Parece que el juego limpio va ganando, no hay sanciones registradas." : "Todo en orden, ningún jugador ha sido sancionado hasta el momento."}</p>`;
-        html += '</div> </div>';
-        div.innerHTML = html;
-        return
+    // Filtrar sancionados para no mostrar registros incompletos
+    const sancionados = list.filter(sancionado => 
+        sancionado.CICLO === ciclo && 
+        sancionado.CICLO !== undefined && 
+        sancionado.CICLO !== "" &&
+        sancionado.JUGADOR === ciclo && 
+        sancionado.JUGADOR !== undefined && 
+        sancionado.JUGADOR !== ""
+    );
+
+    if (sancionados.length === 0) {
+        div.innerHTML = `
+            <div class="mb-6">
+                <div class="flex items-center justify-between gap-2">
+                    <h4 class="text-3xl font-bold text-brand-gold mb-2 flex items-center gap-2">
+                        ${ciclo}
+                    </h4>
+                </div>
+                <p class="text-gray-700 text-center py-8">${ciclo === "ESO" ? "Parece que el juego limpio va ganando, no hay sanciones registradas." : "Todo en orden, ningún jugador ha sido sancionado hasta el momento."}</p>
+            </div>
+        `;
+        return;
     }
 
-    list.forEach((sancionado) => {
-        if (sancionado.CICLO === ciclo) {
-            html += `
-            <div class="p-6 flex flex-col gap-4 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-lg transition-shadow">            
-                <div class="flex flex-col gap-2">
-                    <div class="text-gray-600 font-bold text-md">${sancionado.JUGADOR}</div>                    
-                    <div class="text-gray-600 text-sm">${sancionado.EQUIPO}</div>                     
-                </div>
-                <div class="grid grid-cols-3 items-center justify-center gap-4 gap-x-8">  
-                    <div class="flex items-center justify-center gap-1 ">
-                        <span class="text-sm bg-gray-500 text-white w-4">&nbsp;</span>  
-                        <div class="text-gray-600 font-bold text-sm">${sancionado.FALTAS || 0}</div>
-                    </div>
-                    <div class="flex items-center justify-center gap-1">
-                        <span class="text-sm bg-red-500 w-4">&nbsp;</span> 
-                        <div class="text-gray-600 font-bold text-sm">${sancionado.TROJAS || 0}</div>
-                    </div>
-                    <div class="flex items-center justify-center gap-1">
-                        <span class="text-sm bg-yellow-500 w-4">&nbsp;</span>
-                        <div class="text-gray-600 font-bold text-sm">${sancionado.TAMARILLAS || 0}</div>
-                    </div>
-                </div>
-            </div> 
-            `;
-        }
+    // Construir la tabla
+    let html = `
+        <div class="mb-6">
+            <div class="flex items-center justify-between gap-2">                
+                <h4 class="text-3xl font-bold text-brand-gold mb-2 flex items-center gap-2">
+                    ${ciclo}
+                </h4>
+            </div>
+            <div class="rounded-brand overflow-hidden shadow-lg">
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-full" style="border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color: #B30000; color: white;">
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">EQUIPO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">CURSO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">JUGADOR</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">ROJAS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">AMARILLAS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-left: 1rem; padding-right: 1rem;">P. SUSPENDIDOS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+    `;
+
+    sancionados.forEach((sancionado) => {
+        html += `
+            <tr class="bg-white border-gray-100 border border-b">
+                <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
+                    <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.EQUIPO || '-'}</span>
+                </td>
+                <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
+                    <span class="font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.CURSO || '-'}</span>
+                </td>
+                <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
+                    <span class="font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.JUGADOR || '-'}</span>
+                </td>
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.TROJAS || 0}</td>
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.TAMARILLAS || 0}</td>
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >
+                    <span class="text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.JUSTIFICACION || '-'}</span>
+                </td>
+            </tr>
+        `;
     });
 
-    html += '</div>';
+    html += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+
     div.innerHTML = html;
 }
 
@@ -878,7 +1168,7 @@ export function renderBracket(clasificacion, ciclo) {
 
 // --- RENDER PRÓXIMOS PARTIDOS ---
 export function renderProximosPartidos(partidos) {
-    const div = document.getElementById("proximos-partidos-container");
+    const div = document.getElementById("proximosPartidos-container");
     if (!div) return;
     div.classList.add("mb-6", "mt-6");
 

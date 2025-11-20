@@ -491,20 +491,20 @@ div:has(#menuMovil) {
 }
 
 /* Responsive: mostrar accordion en móviles, carousel en pantallas grandes */
-#carousel-section {
+#carouselSection {
     display: none;
 }
 
-#accordion-section {
+#accordionSection {
     display: block;
 }
 
 @media (min-width: 768px) {
-    #carousel-section {
+    #carouselSection {
         display: block;
     }
     
-    #accordion-section {
+    #accordionSection {
         display: none;
     }
 }
