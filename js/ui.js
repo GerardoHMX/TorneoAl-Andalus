@@ -11,7 +11,7 @@ const temsPerGroup = 4;
 
 // --- TABLA DE EQUIPOS ---
 export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
-    const div = document.getElementById("equipos-" + ciclo);
+    const div = document.getElementById("equipos" + ciclo);
     if (!div) return;
 
     // Organizar equipos por ciclo y grupo
@@ -129,7 +129,7 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
 
 // --- TABLA DE RESULTADOS FASE DE GRUPOS RONDA INICIAL---
 export function tablaResultadosFaseDeGrupos(list, ciclo) {
-    const div = document.getElementById("fase-de-grupos-" + ciclo);
+    const div = document.getElementById("faseDeGrupos" + ciclo);
     if (!div) return;
     div.classList.add("mb-6", "mt-6");
     let grupo = "A";
@@ -193,7 +193,7 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
 
 // --- TABLA DE RESULTADOS SEMIFINAL ---
 export function tablaResultadosSemifinal(list, ciclo) {
-    const div = document.getElementById("semifinal-" + ciclo);
+    const div = document.getElementById("semifinal" + ciclo);
     if (!div) return;
     div.classList.add("mb-6", "mt-6");
     const grupos = ["SEMIFINAL"];
@@ -260,7 +260,7 @@ export function tablaResultadosSemifinal(list, ciclo) {
 
 // --- TABLA DE RESULTADOS TERCER PUESTO ---
 export function tablaResultadosTercerFinalPuesto(list, ciclo) {
-    const div = document.getElementById("tercer-final-puesto-" + ciclo);
+    const div = document.getElementById("tercerFinalPuesto" + ciclo);
     if (!div) return;
     div.classList.add("mb-6", "mt-6");
     const grupos = ["3RPUESTO", "1RPUESTO"];
@@ -329,7 +329,7 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
 
 // --- TABLA DE CLASIFICACIÓN INDIVIDUAL ---
 export function tablaClasificacion(list, ciclo) {
-    const div = document.getElementById("clasificacion-" + ciclo);
+    const div = document.getElementById("clasificacion" + ciclo);
     if (!div) return;
     div.classList.add("overflow-x-auto", "mb-6", "mt-6");
     let grupo = "A";
@@ -415,7 +415,7 @@ export function tablaClasificacion(list, ciclo) {
 
 // --- TABLA DE CLASIFICACIÓN GRUPAL ---
 export function tablaClasificacionGrupal(list, ciclo) {
-    const div = document.getElementById("clasificacion-grupal-" + ciclo);
+    const div = document.getElementById("clasificacionGrupal" + ciclo);
     if (!div) return;
     div.classList.add("overflow-x-auto", "mb-6", "mt-6");
     
@@ -565,7 +565,7 @@ export function tablaClasificacionGrupal(list, ciclo) {
 
 // --- TABLA DE RESULTADOS ---
 export function tablaResultados(list, ciclo) {
-    const div = document.getElementById("resultados-" + ciclo);
+    const div = document.getElementById("resultados" + ciclo);
     if (!div) return;
     div.classList.add("overflow-x-auto", "mb-6", "mt-6");
     const equipos = list
@@ -672,11 +672,9 @@ export function tablaResultados(list, ciclo) {
 
 // --- TABLA DE LIDERES GOLEADORES ---
 export function tablaLideresGoleadores(list, ciclo, otros = []) {
-    const div = document.getElementById("goleadores-" + ciclo);
+    const div = document.getElementById("goleadores" + ciclo);
     if (!div) return;
     div.classList.add("mb-6", "mt-6");
-    
-    console.log(`[DEBUG] tablaLideresGoleadores - Ciclo: ${ciclo}, OTROS recibidos:`, otros);
 
     // Filtrar lideres para no mostrar registros incompletos
     const lideres = list.filter(lider => 
@@ -720,7 +718,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
                 ${ciclo}
             </h4>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="lideres-${ciclo}">        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="lideres${ciclo}">        
     `;
 
     // Mostrar hasta 3 tarjetas, incluso si no hay datos
@@ -837,10 +835,29 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
             </div>
         `;
     } else {
-        // Mostrar mensaje solo en lugar de la tabla cuando no hay datos
+        // Mostrar tabla con encabezados y mensaje como celda con colspan
         html += `
-            <div class="mt-8">
-                <p class="text-gray-700 text-center py-8">${ciclo === "ESO" ? "Aún no hay partidos jugados, pronto conoceremos a los primeros líderes de goleo." : "Todavía no se registran partidos. ¡Los goleadores aparecerán en cuanto ruede el balón!"}</p>
+            <div class="rounded-brand overflow-hidden shadow-lg mt-8">
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-full" style="border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color: #B30000; color: white;">
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">CICLO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">EQUIPO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">CURSO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">JUGADOR</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-right: 1rem;">GOLES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-white border-gray-100 border border-b">
+                                <td colspan="5" class="py-8 px-4 text-center">
+                                    <p class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg">${ciclo === "ESO" ? "Aún no hay partidos jugados, pronto conoceremos a los primeros líderes de goleo." : "Todavía no se registran partidos. ¡Los goleadores aparecerán en cuanto ruede el balón!"}</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         `;
     }
@@ -851,7 +868,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
 
 // --- TABLA DE SANCIONADOS ---
 export function tablaSancionados(list, ciclo) {
-    const div = document.getElementById("sancionados-" + ciclo);
+    const div = document.getElementById("sancionados" + ciclo);
     if (!div) return;
     div.classList.add("overflow-x-auto", "mb-6", "mt-6");
     
@@ -865,21 +882,7 @@ export function tablaSancionados(list, ciclo) {
         sancionado.JUGADOR !== ""
     );
 
-    if (sancionados.length === 0) {
-        div.innerHTML = `
-            <div class="mb-6">
-                <div class="flex items-center justify-between gap-2">
-                    <h4 class="text-3xl font-bold text-brand-gold mb-2 flex items-center gap-2">
-                        ${ciclo}
-                    </h4>
-                </div>
-                <p class="text-gray-700 text-center py-8">${ciclo === "ESO" ? "Parece que el juego limpio va ganando, no hay sanciones registradas." : "Todo en orden, ningún jugador ha sido sancionado hasta el momento."}</p>
-            </div>
-        `;
-        return;
-    }
-
-    // Construir la tabla
+    // Construir la tabla siempre, con o sin datos
     let html = `
         <div class="mb-6">
             <div class="flex items-center justify-between gap-2">                
@@ -903,26 +906,38 @@ export function tablaSancionados(list, ciclo) {
                         <tbody>
     `;
 
-    sancionados.forEach((sancionado) => {
+    if (sancionados.length === 0) {
+        // Mostrar mensaje como celda con colspan cuando no hay datos
         html += `
-            <tr class="bg-white border-gray-100 border border-b">
-                <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
-                    <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.EQUIPO || '-'}</span>
-                </td>
-                <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
-                    <span class="font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.CURSO || '-'}</span>
-                </td>
-                <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
-                    <span class="font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.JUGADOR || '-'}</span>
-                </td>
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.TROJAS || 0}</td>
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.TAMARILLAS || 0}</td>
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >
-                    <span class="text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.JUSTIFICACION || '-'}</span>
-                </td>
-            </tr>
+                            <tr class="bg-white border-gray-100 border border-b">
+                                <td colspan="6" class="py-8 px-4 text-center">
+                                    <p class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg">${ciclo === "ESO" ? "Parece que el juego limpio va ganando, no hay sanciones registradas." : "Todo en orden, ningún jugador ha sido sancionado hasta el momento."}</p>
+                                </td>
+                            </tr>
         `;
-    });
+    } else {
+        // Mostrar datos de sancionados
+        sancionados.forEach((sancionado) => {
+            html += `
+                <tr class="bg-white border-gray-100 border border-b">
+                    <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
+                        <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.EQUIPO || '-'}</span>
+                    </td>
+                    <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
+                        <span class="font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.CURSO || '-'}</span>
+                    </td>
+                    <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
+                        <span class="font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.JUGADOR || '-'}</span>
+                    </td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.TROJAS || 0}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.TAMARILLAS || 0}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >
+                        <span class="text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.JUSTIFICACION || '-'}</span>
+                    </td>
+                </tr>
+            `;
+        });
+    }
 
     html += `
                         </tbody>
@@ -966,7 +981,7 @@ export function renderNoticias(noticias) {
 
 // --- RENDER BRACKET --- 
 export function renderBracket(clasificacion, ciclo) {
-    const div = document.getElementById("bracket-" + ciclo);
+    const div = document.getElementById("bracket" + ciclo);
     if (!div) return;
     div.classList.add("mb-10", "mt-6", "overflow-x-auto");
     if (clasificacion.length === 0) {
@@ -1175,7 +1190,8 @@ export function renderProximosPartidos(partidos) {
     if (!partidos || partidos.length === 0) {
         div.innerHTML = `
             <div class="text-center py-12">
-                <p class="text-gray-900 text-lg">No hay partidos programados para esta semana.</p>
+                <p class="text-gray-900 text-lg mb-2">No hay partidos programados para esta semana.</p>
+                <p class="text-gray-600 text-sm">Intenta cambiar la semana o el filtro de ciclo.</p>
             </div>
         `;
         return;

@@ -72,7 +72,7 @@ function encontrarSemanaPartidoMasCercano(clasificacion) {
 
         // Construir fecha del partido
         const anio = partido.ANIO ? parseInt(partido.ANIO) : new Date().getFullYear();
-        const mes = parseInt(partido.MES) - 1; // Los meses en JS son 0-indexed
+        const mes = parseInt(partido.MES) - 1;
         const dia = parseInt(partido.DIA);
         const fechaPartido = new Date(anio, mes, dia);
         fechaPartido.setHours(0, 0, 0, 0);
@@ -110,6 +110,9 @@ function filtrarProximosPartidos(clasificacion, semanaOffset, ciclo) {
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
 
+    // Normalizar el ciclo del filtro para comparación
+    const cicloFiltro = ciclo ? ciclo.toString().trim().toUpperCase() : "TODOS";
+
     // Filtrar partidos que:
     // 1. Tengan fecha válida (DIA, MES, ANIO)
     // 2. Estén en el futuro o sean de la semana seleccionada
@@ -133,10 +136,13 @@ function filtrarProximosPartidos(clasificacion, semanaOffset, ciclo) {
         const sinMarcador = (!partido.LSCORE || partido.LSCORE === '0' || partido.LSCORE === '') && 
                            (!partido.VSCORE || partido.VSCORE === '0' || partido.VSCORE === '');
 
-        // Verificar ciclo
-        const coincideCiclo = ciclo === "TODOS" || partido.CICLO === ciclo;
+        // Verificar ciclo - normalizar ambos valores para comparación robusta
+        const cicloPartido = partido.CICLO ? partido.CICLO.toString().trim().toUpperCase() : '';
+        const coincideCiclo = cicloFiltro === "TODOS" || cicloPartido === cicloFiltro;
+        
         // Verificar que tenga equipos definidos
         const tieneEquipos = partido.LOCAL && partido.VISITANTE;
+        
         return estaEnSemana && sinMarcador && coincideCiclo && tieneEquipos;
     });
 }
@@ -163,8 +169,6 @@ function generarNavegacion(otros = []) {
         return;
     }
 
-    console.log('🔍 Generando navegación desde OTROS:', otros);
-
     // Filtrar secciones que deben aparecer en el menú (MENU = "SI")
     const seccionesEnMenu = otros.filter((item, index) => {
         // Intentar diferentes variaciones de nombres de columnas (case-insensitive)
@@ -178,12 +182,9 @@ function generarNavegacion(otros = []) {
         const nombre = nombreKey ? (item[nombreKey] || '').toString().trim() : '';
         
         const estaEnMenu = esVerdadero(menu);
-        console.log(`  [${index}] SECCION: "${seccion}", NOMBRE: "${nombre}", MENU: "${menu}" → ${estaEnMenu ? 'SI' : 'NO'}`);
         
         return estaEnMenu && seccion && nombre && nombre !== '-';
     });
-
-    console.log(`📋 Secciones en menú: ${seccionesEnMenu.length}`, seccionesEnMenu);
 
     // Ordenar por algún campo si existe (por ejemplo, ORDEN), o mantener el orden original
     seccionesEnMenu.sort((a, b) => {
@@ -209,14 +210,11 @@ function generarNavegacion(otros = []) {
             const seccion = seccionKey ? (item[seccionKey] || '').toString().trim() : '';
             const nombre = nombreKey ? (item[nombreKey] || '').toString().trim() : '';
             
-            if (!seccion || !nombre || nombre === '-') return '';
-            
-            const href = seccion.startsWith('#') ? seccion : '#' + seccion;
-            console.log(`  ➜ Desktop: "${nombre}" → ${href}`);
+            if (!seccion || !nombre || nombre === '-') return '';                        
+            const href = '#' + seccion;
             return `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors">${nombre.toUpperCase()}</a>`;
         }).join('');
         
-        console.log(`✅ Navegación Desktop generada: ${desktopNav.innerHTML.length} caracteres`);
     } else {
         console.error('❌ No se encontró el elemento desktopNav');
     }
@@ -233,14 +231,11 @@ function generarNavegacion(otros = []) {
             const seccion = seccionKey ? (item[seccionKey] || '').toString().trim() : '';
             const nombre = nombreKey ? (item[nombreKey] || '').toString().trim() : '';
             
-            if (!seccion || !nombre || nombre === '-') return '';
-            
-            const href = seccion.startsWith('#') ? seccion : '#' + seccion;
-            console.log(`  ➜ Móvil: "${nombre}" → ${href}`);
+            if (!seccion || !nombre || nombre === '-') return '';            
+            const href = '#' + seccion;
             return `<a href="${href}" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">${nombre.toUpperCase()}</a>`;
         }).join('');
         
-        console.log(`✅ Navegación Móvil generada: ${mobileNav.innerHTML.length} caracteres`);
     } else {
         console.error('❌ No se encontró el elemento mobileNav');
     }
@@ -256,8 +251,6 @@ function controlarVisibilidadSecciones(otros = []) {
         return;
     }
 
-    console.log('📋 Datos OTROS recibidos:', otros);
-
     // Crear un mapa de secciones con su estado de visibilidad
     const mapaSecciones = {};
     otros.forEach((item, index) => {
@@ -270,18 +263,12 @@ function controlarVisibilidadSecciones(otros = []) {
         const visible = visibleKey ? (item[visibleKey] || '').toString().trim() : '';
         
         if (seccion) {
-            // Normalizar el ID de la sección (quitar # si existe, espacios y comillas)
-            let seccionId = seccion.startsWith('#') ? seccion.substring(1) : seccion;
-            seccionId = seccionId.trim().replace(/^["']|["']$/g, ''); // Quitar comillas al inicio/final
-            
+            let seccionId = seccion.trim().replace(/^["']|["']$/g, '');            
             if (seccionId) {
                 mapaSecciones[seccionId] = esVerdadero(visible);
-                console.log(`  [${index}] SECCION: "${seccion}" → ID: "${seccionId}", VISIBLE: "${visible}" → ${mapaSecciones[seccionId] ? 'SI' : 'NO'}`);
             }
         }
     });
-
-    console.log('🗺️ Mapa de secciones:', mapaSecciones);
 
     // Mostrar u ocultar cada sección según su estado VISIBLE
     Object.keys(mapaSecciones).forEach(seccionId => {
@@ -291,11 +278,9 @@ function controlarVisibilidadSecciones(otros = []) {
             if (debeSerVisible) {
                 // Mostrar la sección: remover clase hidden
                 elemento.classList.remove('hidden');
-                console.log(`✓ Sección visible: ${seccionId}`);
             } else {
                 // Ocultar la sección: agregar clase hidden
                 elemento.classList.add('hidden');
-                console.log(`✗ Sección oculta: ${seccionId}`);
             }
         } else {
             // Mostrar warning para ayudar a depurar
@@ -343,11 +328,8 @@ async function init() {
         // Generar navegación dinámica desde la hoja OTROS (basada en MENU)
         generarNavegacion(STATE.data.OTROS);
         
-        // Controlar visibilidad de secciones en la UI (basada en VISIBLE)
-        // Se ejecuta después de que el DOM esté listo
-        controlarVisibilidadSecciones(STATE.data.OTROS);
-        
         initCicloSelectors();
+        // updateUI se encargará de controlar la visibilidad al final, después de renderizar todas las secciones
         updateUI();
     });
 
@@ -377,8 +359,6 @@ function updateUI() {
     // Actualizar navegación si hay datos de OTROS (basada en MENU)
     if (OTROS && OTROS.length > 0) {
         generarNavegacion(OTROS);
-        // Controlar visibilidad de secciones en la UI (basada en VISIBLE)
-        controlarVisibilidadSecciones(OTROS);
     }
 
     // Equipos
@@ -406,8 +386,8 @@ function updateUI() {
         tablaResultadosSemifinal(STATE.data.CLASIFICACION, ciclos.jornadas);
         tablaResultadosTercerFinalPuesto(STATE.data.CLASIFICACION, ciclos.jornadas);
         const otroCiclo = ciclos.jornadas === "ESO" ? "BCH" : "ESO";
-        ["fase-de-grupos", "semifinal", "tercer-final-puesto"].forEach(tipo => {
-            const otroDiv = document.getElementById(`${tipo}-${otroCiclo}`);
+        ["faseDeGrupos", "semifinal", "tercerFinalPuesto"].forEach(tipo => {
+            const otroDiv = document.getElementById(`${tipo}${otroCiclo}`);
             if (otroDiv) {
                 otroDiv.innerHTML = "";
                 // Quitar clases que se agregan para mostrar la sección
@@ -423,7 +403,7 @@ function updateUI() {
     } else {
         tablaClasificacion(STATE.data.CLASIFICACION, ciclos.clasificacion);
         const otroCiclo = ciclos.clasificacion === "ESO" ? "BCH" : "ESO";
-        const otroDiv = document.getElementById("clasificacion-" + otroCiclo);
+        const otroDiv = document.getElementById("clasificacion" + otroCiclo);
         if (otroDiv) {
             otroDiv.innerHTML = "";
             otroDiv.classList.remove("overflow-x-auto", "mb-6", "mt-6");
@@ -437,7 +417,7 @@ function updateUI() {
     } else {
         tablaClasificacionGrupal(STATE.data.CLASIFICACION, ciclos.clasificacionGrupal);
         const otroCiclo = ciclos.clasificacionGrupal === "ESO" ? "BCH" : "ESO";
-        const otroDiv = document.getElementById("clasificacion-grupal-" + otroCiclo);
+        const otroDiv = document.getElementById("clasificacionGrupal" + otroCiclo);
         if (otroDiv) {
             otroDiv.innerHTML = "";
             otroDiv.classList.remove("overflow-x-auto", "mb-6", "mt-6");
@@ -452,7 +432,7 @@ function updateUI() {
         tablaResultados(STATE.data.CLASIFICACION, ciclos.resultados);
         // Limpiar el otro contenedor
         const otroCiclo = ciclos.resultados === "ESO" ? "BCH" : "ESO";
-        const otroDiv = document.getElementById("resultados-" + otroCiclo);
+        const otroDiv = document.getElementById("resultados" + otroCiclo);
         if (otroDiv) {
             otroDiv.innerHTML = "";
             otroDiv.classList.remove("overflow-x-auto", "mb-6", "mt-6");
@@ -466,7 +446,7 @@ function updateUI() {
     } else {
         renderBracket(STATE.data.CLASIFICACION, ciclos.bracket);
         const otroCiclo = ciclos.bracket === "ESO" ? "BCH" : "ESO";
-        const otroDiv = document.getElementById("bracket-" + otroCiclo);
+        const otroDiv = document.getElementById("bracket" + otroCiclo);
         if (otroDiv) {
             otroDiv.innerHTML = "";            
             otroDiv.classList.remove("overflow-x-auto", "mb-6", "mt-6");
@@ -480,7 +460,7 @@ function updateUI() {
     } else {
         tablaLideresGoleadores(STATE.data.LIDERES, ciclos.goleadores, STATE.data.OTROS);
         const otroCiclo = ciclos.goleadores === "ESO" ? "BCH" : "ESO";
-        const otroDiv = document.getElementById("goleadores-" + otroCiclo);
+        const otroDiv = document.getElementById("goleadores" + otroCiclo);
         if (otroDiv) {
             otroDiv.innerHTML = "";
             otroDiv.classList.remove("mb-6", "mt-6");
@@ -494,7 +474,7 @@ function updateUI() {
     } else {
         tablaSancionados(STATE.data.SANCIONES, ciclos.sancionados);
         const otroCiclo = ciclos.sancionados === "ESO" ? "BCH" : "ESO";
-        const otroDiv = document.getElementById("sancionados-" + otroCiclo);
+        const otroDiv = document.getElementById("sancionados" + otroCiclo);
         if (otroDiv) {
             otroDiv.innerHTML = "";
             otroDiv.classList.remove("mb-6", "mt-6");
@@ -522,6 +502,27 @@ function updateUI() {
         const dia = String(start.getDate()).padStart(2, '0');
         const mes = String(start.getMonth() + 1).padStart(2, '0');
         label.textContent = `${dia}/${mes} ${diaSemana}`;
+    }
+
+    // Controlar visibilidad de secciones después de que todas se hayan renderizado
+    // Usar requestAnimationFrame para asegurar que el DOM se haya actualizado
+    if (OTROS && OTROS.length > 0) {
+        requestAnimationFrame(() => {
+            controlarVisibilidadSecciones(OTROS);
+            // Ocultar preloader solo después de que todo esté completamente actualizado
+            if (esCargaInicial) {
+                ocultarPreloader();
+                esCargaInicial = false;
+            }
+        });
+    } else {
+        // Si no hay datos de OTROS, ocultar preloader igualmente
+        if (esCargaInicial) {
+            requestAnimationFrame(() => {
+                ocultarPreloader();
+                esCargaInicial = false;
+            });
+        }
     }
  
 }
@@ -653,18 +654,23 @@ function initCicloSelectors() {
     }
 }
 
+// Variable para controlar si es la carga inicial
+let esCargaInicial = true;
+
 function preloader() {
     const preloader = document.getElementById("preloader");
-    preloader.style.display = "flex";
+    if (preloader) {
+        preloader.style.display = "flex";
+        preloader.style.opacity = "1";
+    }
+}
 
-    // preloader.classList.add("animate-spin");  
-    // preloader.style.transformOrigin = "center center";
-    // preloader.style.transform = "rotate(0deg)";
-    // preloader.style.transition = "transform 3s linear infinite";
-
-    // Oculta el loader después de 3s
-    setTimeout(() => {
+function ocultarPreloader() {
+    const preloader = document.getElementById("preloader");
+    if (preloader) {
         preloader.style.opacity = "0";
-        setTimeout(() => preloader.style.display = "none", 500);
-    }, 3000);
+        setTimeout(() => {
+            preloader.style.display = "none";
+        }, 500);
+    }
 }

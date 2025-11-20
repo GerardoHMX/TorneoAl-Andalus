@@ -12,7 +12,6 @@ async function testURLs() {
     for (const [k, url] of Object.entries(URLS)) {
         try {
             const r = await fetch(url, { cache: 'no-store' });
-            console.log(`${k}: ${r.status} → ${r.ok ? "✅ OK" : "❌ FALLA"}`);
             if (!r.ok) {
                 const txt = await r.text();
                 console.warn("Respuesta:", txt.slice(0, 150));
