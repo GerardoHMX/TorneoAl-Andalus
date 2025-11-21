@@ -32,12 +32,61 @@ export async function fetchCSV(url) {
     return csvToObjects(text);
 }
 
-// Convierte CSV a array de objetos
+// Convierte CSV a array de objetos, respetando comillas y saltos de línea dentro de campos
 function csvToObjects(csv) {
-    const rows = csv
-        .trim()
-        .split(/\r?\n/)
-        .map(r => r.split(",").map(c => c.trim()));
+    const rows = [];
+    let currentRow = [];
+    let currentField = '';
+    let insideQuotes = false;
+    
+    // Recorrer el texto carácter por carácter
+    for (let i = 0; i < csv.length; i++) {
+        const char = csv[i];
+        const nextChar = csv[i + 1];
+        const prevChar = csv[i - 1];
+        
+        if (char === '"') {
+            if (insideQuotes && nextChar === '"') {
+                // Comilla escapada (dobles comillas)
+                currentField += '"';
+                i++; // Saltar la siguiente comilla
+            } else {
+                // Toggle del estado de comillas
+                insideQuotes = !insideQuotes;
+            }
+        } else if (char === ',' && !insideQuotes) {
+            // Separador de campo (solo si no estamos dentro de comillas)
+            currentRow.push(currentField.trim());
+            currentField = '';
+        } else if ((char === '\n' || (char === '\r' && nextChar !== '\n')) && !insideQuotes) {
+            // Salto de línea que marca el final de una fila (solo si no estamos dentro de comillas)
+            // Si es \r\n, el siguiente carácter será \n y lo saltaremos
+            if (char === '\r' && nextChar === '\n') {
+                i++; // Saltar el \n siguiente
+            }
+            // Agregar el último campo de la fila
+            currentRow.push(currentField.trim());
+            currentField = '';
+            // Agregar la fila completa al array de filas
+            if (currentRow.length > 0 && currentRow.some(field => field !== '')) {
+                rows.push(currentRow);
+            }
+            currentRow = [];
+        } else {
+            // Cualquier otro carácter (incluyendo saltos de línea dentro de comillas)
+            currentField += char;
+        }
+    }
+    
+    // Agregar la última fila si hay contenido pendiente
+    if (currentField.trim() !== '' || currentRow.length > 0) {
+        currentRow.push(currentField.trim());
+        if (currentRow.length > 0 && currentRow.some(field => field !== '')) {
+            rows.push(currentRow);
+        }
+    }
+    
+    // Obtener headers y datos según la estructura esperada
     const headers = rows[2]; // tercera fila = fila 3 (index 2)
     const dataRows = rows.slice(3); // desde la fila 4 en adelante
 

@@ -216,7 +216,7 @@ function generarNavegacion(otros = []) {
         }).join('');
         
     } else {
-        console.error('❌ No se encontró el elemento desktopNav');
+        console.error('No se encontró el elemento desktopNav');
     }
 
     // Generar navegación móvil
@@ -237,7 +237,7 @@ function generarNavegacion(otros = []) {
         }).join('');
         
     } else {
-        console.error('❌ No se encontró el elemento mobileNav');
+        console.error(' No se encontró el elemento mobileNav');
     }
 
     // Re-inicializar los event listeners para smooth scroll después de generar la navegación

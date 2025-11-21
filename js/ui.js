@@ -39,8 +39,8 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
     let html = '';
 
     // Si hay un filtro de grupo específico, solo mostrar ese grupo
-    const gruposAMostrar = grupoFiltro !== "TODOS" 
-        ? [grupoFiltro] 
+    const gruposAMostrar = grupoFiltro !== "TODOS"
+        ? [grupoFiltro]
         : grupos.filter(g => {
             const key = `${ciclo}_${g}`;
             return equiposPorCicloGrupo[key] && equiposPorCicloGrupo[key].equipos.length > 0;
@@ -272,7 +272,7 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
     // Procesar cada tipo de partido por separado
     grupos.forEach(tipoGrupo => {
         let cardsPerGroup = [];
-        
+
         list.forEach((m, i) => {
             // Filtrar por ciclo y tipo de grupo específico
             if (m.GRUPO === tipoGrupo && m.CICLO === ciclo) {
@@ -418,7 +418,7 @@ export function tablaClasificacionGrupal(list, ciclo) {
     const div = document.getElementById("clasificacionGrupal" + ciclo);
     if (!div) return;
     div.classList.add("overflow-x-auto", "mb-6", "mt-6");
-    
+
     // Filtrar equipos por ciclo y Ordenar lista por puntos de forma descendente y luego por diferencia de goles de forma descendente
     const equipos = list
         .filter(m => m.EQUIPOS !== undefined && m.EQUIPOS.trim() !== "" && m.EQUIPOS !== "EQUIPOS" && m.CICLO === ciclo)
@@ -440,7 +440,7 @@ export function tablaClasificacionGrupal(list, ciclo) {
             DIFERENCIADEGOLES: parseInt(m.DIFERENCIADEGOLES) || 0, //DG
             FAIRPLAY: parseInt(m.FAIRPLAY) || 0, //FPY
             TOTAL: parseInt(m.TOTAL) || 0,//TOTAL
-        })); 
+        }));
 
     if (equipos.length === 0) {
         div.innerHTML = '<p class="text-gray-500 text-center">No hay datos de clasificación grupal disponibles</p>';
@@ -470,7 +470,7 @@ export function tablaClasificacionGrupal(list, ciclo) {
 
     // Construir HTML para cada grupo
     let html = '';
-    
+
     grupos.forEach(grupo => {
         if (!equiposPorGrupo[grupo] || equiposPorGrupo[grupo].length === 0) {
             return;
@@ -677,11 +677,11 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
     div.classList.add("mb-6", "mt-6");
 
     // Filtrar lideres para no mostrar registros incompletos
-    const lideres = list.filter(lider => 
-        lider.CICLO === ciclo && 
-        lider.CICLO !== undefined && 
+    const lideres = list.filter(lider =>
+        lider.CICLO === ciclo &&
+        lider.CICLO !== undefined &&
         lider.CICLO !== "" &&
-        lider.JUGADOR !== undefined && 
+        lider.JUGADOR !== undefined &&
         lider.JUGADOR !== ""
     );
 
@@ -690,14 +690,14 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
         if (!otros || otros.length === 0) {
             return null;
         }
-        
+
         // Buscar la imagen - verificar diferentes formatos posibles de los nombres de columnas
         const imagenData = otros.find(item => {
             const cicloMatch = (item.CICLO || item.ciclo || '').trim().toUpperCase() === ciclo.toUpperCase();
             const posicionMatch = parseInt(item.POSICION || item.posicion || item.POSICION || 0) === posicion;
             return cicloMatch && posicionMatch;
         });
-        
+
         if (imagenData) {
             const urlImagen = imagenData.AVATARPOSICIONES || imagenData.avatarposiciones || imagenData.AVATARPOSICION || imagenData.avatarposicion;
             return urlImagen || null;
@@ -725,7 +725,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
     for (let i = 0; i < 3; i++) {
         const lider = listOrdered[i];
         const imagenAvatar = obtenerImagenPorPosicion(ciclo, i + 1);
-        
+
         if (lider) {
             html += `
             <div class="flex flex-col bg-white shadow-lg overflow-hidden rounded-brand hover:shadow-brand-lg transition-shadow border-b-2" style="border-bottom-color: var(--brand-gold);">
@@ -871,14 +871,14 @@ export function tablaSancionados(list, ciclo) {
     const div = document.getElementById("sancionados" + ciclo);
     if (!div) return;
     div.classList.add("overflow-x-auto", "mb-6", "mt-6");
-    
+
     // Filtrar sancionados para no mostrar registros incompletos
-    const sancionados = list.filter(sancionado => 
-        sancionado.CICLO === ciclo && 
-        sancionado.CICLO !== undefined && 
+    const sancionados = list.filter(sancionado =>
+        sancionado.CICLO === ciclo &&
+        sancionado.CICLO !== undefined &&
         sancionado.CICLO !== "" &&
-        sancionado.JUGADOR === ciclo && 
-        sancionado.JUGADOR !== undefined && 
+        sancionado.JUGADOR === ciclo &&
+        sancionado.JUGADOR !== undefined &&
         sancionado.JUGADOR !== ""
     );
 
@@ -960,23 +960,273 @@ export function renderNoticias(noticias) {
         return
     }
 
-    div.innerHTML = noticias
+    // Filtrar noticias publicadas primero
+    const noticiasPublicadas = noticias.filter(n => n.PUBLICAR === "SI");
+
+    div.innerHTML = noticiasPublicadas
         .map(
-            (noticia, index) => noticia.PUBLICAR === "SI" ? `
-            <article class="bg-transparent shadow-lg ring-1 ring-black/5 rounded-brand overflow-hidden hover:shadow-xl transition-shadow duration-300 ${index === -1 ? "md:col-span-2 lg:col-span-3" : ""}">
-                <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(noticia.IMAGEN))}" class="w-full h-64 sm:h-96 object-cover" loading="lazy" alt="${noticia.TITULO}" onerror="this.style.display='none'" />
+            (noticia, index) => `
+            <article class="noticia-card bg-transparent shadow-lg ring-1 ring-black/5 rounded-brand overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer ${index === -1 ? "md:col-span-2 lg:col-span-3" : ""}" data-noticia-index="${index}">
+                <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(noticia.IMAGEN))}" class="w-full h-64 md:h-90 lg:h-96 object-cover" loading="lazy" alt="${noticia.TITULO}" onerror="this.style.display='none'" />
                 <div class="p-6">
                     <div class="flex items-center justify-between">
-                        <span class="text-sm font-medium bg-gray-100 px-3 py-1 rounded-brand">${noticia.FECHA}</span>
-                        <span class="text-sm font-medium bg-gray-100 px-3 py-1 rounded-brand">${noticia.CREDITOS}</span>
+                        <span class="text-xs sm:text-sm font-medium bg-gray-100 px-3 py-1 rounded-brand">${noticia.FECHA}</span>
+                        <span class="text-xs sm:text-sm font-medium bg-gray-100 px-3 py-1 rounded-brand">${noticia.CREDITOS}</span>
                     </div>
-                    <h3 class="text-xl font-bold mt-3 mb-3">${noticia.TITULO}</h3>
-                    <p class="mb-4 text-md leading-relaxed">${noticia.CONTENIDO}</p>
+                    <h3 class="text-sm md:text-lg lg:text-xl font-bold mt-3 mb-3">${noticia.TITULO}</h3>
+                    ${(() => {
+                    const contenidoLimpio = (noticia.CONTENIDO || '').replace(/^"/, '').replace(/"$/, '').replace(/\n/g, ' ');
+                    const contenidoTruncado = contenidoLimpio.length > 80
+                        ? contenidoLimpio.substring(0, 80) + '...'
+                        : contenidoLimpio;
+                    const necesitaTruncar = contenidoLimpio.length > 80;
+                    return `
+                            <p class="mb-4 text-xs sm:text-sm leading-relaxed">${contenidoTruncado}</p>
+                            ${necesitaTruncar ? '<div class="flex justify-end mt-2"><span class="text-xs sm:text-sm font-medium bg-gray-100 px-3 py-1 rounded-brand text-brand-blue hover:text-brand-red">Continuar leyendo →</span></div>' : ''}
+                        `;
+                })()}
                 </div>
             </article>
-        ` : '',
+        `
         )
         .join("");
+
+    // Agregar event listeners para abrir el diálogo
+    div.querySelectorAll('.noticia-card').forEach((card, index) => {
+        card.addEventListener('click', () => {
+            mostrarDetalleNoticia(noticiasPublicadas[index]);
+        });
+    });
+}
+
+// --- MOSTRAR DETALLE NOTICIA EN DIALOG ---
+export function mostrarDetalleNoticia(noticia) {
+    console.log('Mostrando detalle de noticia:', noticia);
+
+    // Crear o obtener el diálogo
+    let dialogContainer = document.getElementById('noticia-dialog-container');
+    if (!dialogContainer) {
+        dialogContainer = document.createElement('div');
+        dialogContainer.id = 'noticia-dialog-container';
+        document.body.appendChild(dialogContainer);
+    }
+
+    // Obtener imágenes adicionales (IMAGEN2, IMAGEN3, etc. hasta IMAGEN6)
+    const imagenes = [];
+    if (noticia.IMAGEN) imagenes.push(noticia.IMAGEN);
+    for (let i = 2; i <= 6; i++) {
+        const campoImagen = `IMAGEN${i}`;
+        if (noticia[campoImagen] && noticia[campoImagen].trim() !== '') {
+            imagenes.push(noticia[campoImagen]);
+        }
+    }
+
+    // Limpiar contenido previo
+    const contenidoLimpio = (noticia.CONTENIDO || '').replace(/^"/, '').replace(/"$/, '');
+
+    // Generar HTML de imágenes según la distribución
+    let imagenesHTML = '';
+    if (imagenes.length > 0) {
+        imagenesHTML = '<div class="noticia-imagenes-grid">';
+
+        if (imagenes.length === 1) {
+            // Una sola imagen: ocupar todo el espacio
+            imagenesHTML += `
+                <div class="noticia-imagen-item noticia-imagen-full">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+            `;
+        } else if (imagenes.length === 2) {
+            // Dos imágenes: una arriba, una abajo
+            imagenesHTML += `
+                <div class="noticia-imagen-item noticia-imagen-horizontal">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+                <div class="noticia-imagen-item noticia-imagen-horizontal">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+            `;
+        } else if (imagenes.length === 3) {
+            // Tres imágenes: una arriba, dos abajo
+            imagenesHTML += `
+                <div class="noticia-imagen-item noticia-imagen-horizontal">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+                <div class="noticia-imagen-item noticia-imagen-cuadrada">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+                <div class="noticia-imagen-item noticia-imagen-cuadrada">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+            `;
+        } else if (imagenes.length === 4) {
+            // Cuatro imágenes: una arriba, dos en medio, una abajo
+            imagenesHTML += `
+                <div class="noticia-imagen-item noticia-imagen-horizontal">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+                <div class="noticia-imagen-item noticia-imagen-cuadrada">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+                <div class="noticia-imagen-item noticia-imagen-cuadrada">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+                <div class="noticia-imagen-item noticia-imagen-horizontal">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[3]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+            `;
+        } else if (imagenes.length === 5) {
+            // Cinco imágenes: una arriba, dos en medio, dos abajo
+            imagenesHTML += `
+                <div class="noticia-imagen-item noticia-imagen-horizontal">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+                <div class="noticia-imagen-item noticia-imagen-cuadrada">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+                <div class="noticia-imagen-item noticia-imagen-cuadrada">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+                <div class="noticia-imagen-item noticia-imagen-cuadrada">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[3]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+                <div class="noticia-imagen-item noticia-imagen-cuadrada">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[4]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+            `;
+        } else {
+            // Seis o más imágenes: una arriba, dos en medio, una abajo, y las restantes en fila
+            imagenesHTML += `
+                <div class="noticia-imagen-item noticia-imagen-horizontal">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+                <div class="noticia-imagen-item noticia-imagen-cuadrada">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+                <div class="noticia-imagen-item noticia-imagen-cuadrada">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+                <div class="noticia-imagen-item noticia-imagen-horizontal">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[3]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                </div>
+            `;
+            // Agregar imágenes adicionales si hay más de 4
+            if (imagenes.length > 4) {
+                for (let i = 4; i < Math.min(imagenes.length, 6); i++) {
+                    imagenesHTML += `
+                        <div class="noticia-imagen-item noticia-imagen-cuadrada">
+                            <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[i]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        imagenesHTML += '</div>';
+    }
+
+    // Limpiar cualquier listener previo
+    const existingBackdrop = dialogContainer.querySelector('[data-dialog-backdrop="noticia-dialog"]');
+    if (existingBackdrop) {
+        existingBackdrop.replaceWith(existingBackdrop.cloneNode(true));
+    }
+
+    // Construir el HTML del diálogo con estructura Material Tailwind
+    dialogContainer.innerHTML = `
+        <div id="noticia-dialog-backdrop" data-dialog-backdrop="noticia-dialog"
+            class="fixed inset-0 z-[9999] grid h-screen w-screen place-items-center bg-gray-500 bg-opacity-75 backdrop-blur-sm transition-opacity duration-300"
+            style="opacity: 0; pointer-events: none;" >
+            <div id="noticia-dialog-box" data-dialog="noticia-dialog"
+                class="relative m-4 p-0 w-full max-w-6xl rounded-lg bg-white shadow-lg transition-all duration-300"
+                style="opacity: 0; transform: translateY(-56px); pointer-events: none;" >
+                <div class="noticia-dialog-content overflow-y-auto">
+                    <div class="noticia-dialog-header">
+                        <button data-dialog-close="true"  class="noticia-dialog-close" aria-label="Cerrar" type="button" >
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="noticia-dialog-body p-6 md:p-10">
+                        <div class="flex flex-row items-start justify-center gap-6">
+                            <div class="flex flex-col items-start justify-center gap-10 flex-1">
+                                <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                                    <span class="text-xs sm:text-sm font-medium px-3 py-1 rounded-brand">${noticia.FECHA || ''}</span>
+                                    <span class="text-xs sm:text-sm font-medium px-3 py-1 rounded-brand">${noticia.CREDITOS || ''}</span>
+                                </div>
+                                <h3 class="text-sm md:text-lg lg:text-xl font-bold">${noticia.TITULO || ''}</h3>
+                                <div class="text-xs sm:text-sm leading-relaxed">${contenidoLimpio.replace(/\n/g, '<br>')}</div>
+                            </div>
+                            <div>
+                                ${imagenesHTML}
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Abrir el diálogo directamente aplicando estilos inline
+    requestAnimationFrame(() => {
+        const backdropElement = document.getElementById('noticia-dialog-backdrop');
+        const dialogElement = document.getElementById('noticia-dialog-box');
+
+        if (!dialogElement || !backdropElement) {
+            console.error('No se encontraron los elementos del diálogo');
+            return;
+        }
+
+        // Función para cerrar el diálogo
+        const closeDialog = () => {
+            backdropElement.style.opacity = '0';
+            backdropElement.style.pointerEvents = 'none';
+            dialogElement.style.opacity = '0';
+            dialogElement.style.transform = 'translateY(-56px)';
+            dialogElement.style.pointerEvents = 'none';
+        };
+
+        // Mostrar el backdrop
+        backdropElement.style.opacity = '1';
+        backdropElement.style.pointerEvents = 'auto';
+        backdropElement.style.zIndex = '9999';
+
+        // Mostrar el diálogo
+        dialogElement.style.opacity = '1';
+        dialogElement.style.transform = 'translateY(0)';
+        dialogElement.style.pointerEvents = 'auto';
+        dialogElement.style.zIndex = '10000';
+
+        // Prevenir que el clic en el diálogo cierre el modal
+        dialogElement.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Agregar event listener para cerrar al hacer clic en el backdrop
+        backdropElement.addEventListener('click', (e) => {
+            if (e.target === backdropElement) {
+                closeDialog();
+            }
+        });
+
+        // Agregar event listener para cerrar con el botón
+        const closeButton = dialogElement.querySelector('[data-dialog-close="true"]');
+        if (closeButton) {
+            closeButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeDialog();
+            });
+        }
+
+        // Cerrar con Escape
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') {
+                closeDialog();
+                document.removeEventListener('keydown', handleEscape);
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
+    });
 }
 
 // --- RENDER BRACKET --- 
@@ -1223,12 +1473,12 @@ export function renderProximosPartidos(partidos) {
         const mesNombre = meses[mes - 1] || mes;
         const diaFormateado = String(dia).padStart(2, '0');
         const fechaFormateada = `${diaFormateado} ${mesNombre}`;
-        
+
         // Obtener día de la semana
-        const fecha = new Date(anio, mes - 1, dia);        
+        const fecha = new Date(anio, mes - 1, dia);
         const diaSemana = diasSemana[fecha.getDay()];
         const partidosDelDia = partidosPorFecha[fechaKey];
-        
+
         html += `
             <div class="md:container mx-auto mb-8">
                 <h4 class="text-2xl font-bold text-brand-blue mb-4 flex items-center gap-2">
