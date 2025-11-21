@@ -1027,99 +1027,67 @@ export function mostrarDetalleNoticia(noticia) {
     // Generar HTML de imágenes según la distribución
     let imagenesHTML = '';
     if (imagenes.length > 0) {
-        imagenesHTML = '<div class="noticia-imagenes-grid">';
 
-        if (imagenes.length === 1) {
+        if (imagenes.length > 1) {
+            imagenesHTML = '<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">';
+        } else {
+            imagenesHTML = '<div class="grid grid-cols-1">';
+        }
+
+        if (imagenes.length === 1) { 
             // Una sola imagen: ocupar todo el espacio
             imagenesHTML += `
-                <div class="noticia-imagen-item noticia-imagen-full">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                <div class="grid gap-4">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class=""h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
                 </div>
             `;
         } else if (imagenes.length === 2) {
-            // Dos imágenes: una arriba, una abajo
+            // Dos imágenes
             imagenesHTML += `
-                <div class="noticia-imagen-item noticia-imagen-horizontal">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                <div class="grid gap-4">
+                    <div></div>
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />                
                 </div>
-                <div class="noticia-imagen-item noticia-imagen-horizontal">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                <div class="grid gap-4">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="h-80 max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
                 </div>
             `;
         } else if (imagenes.length === 3) {
-            // Tres imágenes: una arriba, dos abajo
+            // Tres imágenes
             imagenesHTML += `
-                <div class="noticia-imagen-item noticia-imagen-horizontal">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                <div class="grid gap-4">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />                    
                 </div>
-                <div class="noticia-imagen-item noticia-imagen-cuadrada">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                </div>
-                <div class="noticia-imagen-item noticia-imagen-cuadrada">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                <div class="grid gap-4">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="h-60 object-cover rounded-brand" onerror="this.style.display='none'" />                    
                 </div>
             `;
         } else if (imagenes.length === 4) {
-            // Cuatro imágenes: una arriba, dos en medio, una abajo
+            // Cuatro imágenes
             imagenesHTML += `
-                <div class="noticia-imagen-item noticia-imagen-horizontal">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                <div class="grid gap-4">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />               
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
                 </div>
-                <div class="noticia-imagen-item noticia-imagen-cuadrada">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                </div>
-                <div class="noticia-imagen-item noticia-imagen-cuadrada">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                </div>
-                <div class="noticia-imagen-item noticia-imagen-horizontal">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[3]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                <div class="grid gap-4">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />                 
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[3]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />
                 </div>
             `;
         } else if (imagenes.length === 5) {
             // Cinco imágenes: una arriba, dos en medio, dos abajo
             imagenesHTML += `
-                <div class="noticia-imagen-item noticia-imagen-horizontal">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                <div class="grid gap-4 ">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />                 
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />
                 </div>
-                <div class="noticia-imagen-item noticia-imagen-cuadrada">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                </div>
-                <div class="noticia-imagen-item noticia-imagen-cuadrada">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                </div>
-                <div class="noticia-imagen-item noticia-imagen-cuadrada">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[3]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                </div>
-                <div class="noticia-imagen-item noticia-imagen-cuadrada">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[4]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                <div class="grid gap-3">
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="h-40 object-cover rounded-brand" onerror="this.style.display='none'" />                
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[3]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[4]))}" alt="${noticia.TITULO}" class="h-40 object-cover rounded-brand" onerror="this.style.display='none'" />
                 </div>
             `;
-        } else {
-            // Seis o más imágenes: una arriba, dos en medio, una abajo, y las restantes en fila
-            imagenesHTML += `
-                <div class="noticia-imagen-item noticia-imagen-horizontal">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                </div>
-                <div class="noticia-imagen-item noticia-imagen-cuadrada">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                </div>
-                <div class="noticia-imagen-item noticia-imagen-cuadrada">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                </div>
-                <div class="noticia-imagen-item noticia-imagen-horizontal">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[3]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                </div>
-            `;
-            // Agregar imágenes adicionales si hay más de 4
-            if (imagenes.length > 4) {
-                for (let i = 4; i < Math.min(imagenes.length, 6); i++) {
-                    imagenesHTML += `
-                        <div class="noticia-imagen-item noticia-imagen-cuadrada">
-                            <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[i]))}" alt="${noticia.TITULO}" class="w-full h-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                        </div>
-                    `;
-                }
-            }
         }
 
         imagenesHTML += '</div>';
@@ -1147,17 +1115,17 @@ export function mostrarDetalleNoticia(noticia) {
                             </svg>
                         </button>
                     </div>
-                    <div class="noticia-dialog-body p-6 md:p-10">
+                    <div class="noticia-dialog-body p-6 md:p-10">                       
                         <div class="flex flex-row items-start justify-center gap-6">
                             <div class="flex flex-col items-start justify-center gap-10 flex-1">
-                                <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
-                                    <span class="text-xs sm:text-sm font-medium px-3 py-1 rounded-brand">${noticia.FECHA || ''}</span>
-                                    <span class="text-xs sm:text-sm font-medium px-3 py-1 rounded-brand">${noticia.CREDITOS || ''}</span>
+                                <div class="flex flex-col sm:flex-row items-center justify-start gap-6">
+                                    <span class="text-xs sm:text-sm font-medium py-1">${noticia.FECHA || ''}</span>
+                                    <span class="text-xs sm:text-sm font-medium py-1">${noticia.CREDITOS || ''}</span>
                                 </div>
                                 <h3 class="text-sm md:text-lg lg:text-xl font-bold">${noticia.TITULO || ''}</h3>
                                 <div class="text-xs sm:text-sm leading-relaxed">${contenidoLimpio.replace(/\n/g, '<br>')}</div>
                             </div>
-                            <div>
+                            <div class="flex-1 my-auto">
                                 ${imagenesHTML}
                             </div>                            
                         </div>
