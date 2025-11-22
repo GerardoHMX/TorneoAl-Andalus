@@ -199,37 +199,25 @@
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 my-8">
             <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Próximos Partidos</h3>
             <div class="flex flex-col md:flex-row items-center gap-4">
-                <!-- Selector de semana -->
+                <!-- Navegación de días (mostrando el rango de días actual y siguiente) -->
                 <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-brand px-4 py-2 shadow-sm">
-                    <button id="semana-anterior" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Semana anterior">
+                    <button id="semana-anterior" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Día anterior">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
-                    <div class="flex items-center w-40 gap-2 px-3">
+                    <div class="flex items-center gap-2 px-3">
                         <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         <span id="semana-label" class="text-sm font-bold text-gray-800">Cargando...</span>
                     </div>
-                    <button id="semana-siguiente" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Semana siguiente">
+                    <button id="semana-siguiente" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Día siguiente">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
                 </div>
-                <!-- Selector de ciclo --> 
-                <ul class="nav nav-tabs w-80" id="selector-proximosPartidos" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
-                    </li>
-                </ul>
             </div>
         </div>
         <!-- Contenedor de próximos partidos -->

@@ -36,7 +36,7 @@ let STATE = {
     }
 };
 let semanaOffset = 0;
-let semanaOffsetProximosPartidos = 0;
+let diaOffsetProximosPartidos = 0; // Offset en días para navegación día por día
 
 // --- control de semana ---
 function getWeekRange(offset = 0) {
@@ -50,101 +50,338 @@ function getWeekRange(offset = 0) {
     return { start, end };
 }
 
-// --- Encontrar la semana del partido más cercano a la fecha actual ---
-function encontrarSemanaPartidoMasCercano(clasificacion) {
-    if (!clasificacion || clasificacion.length === 0) return 0;
-
+// --- Encontrar los días relevantes para próximos partidos ---
+// Retorna un objeto con { diaInicio, diaFin } que representa el día actual y el siguiente
+// Si es sábado/domingo o no hay partidos, busca el siguiente día más próximo con partidos
+// offsetDias: permite navegar día por día (0 = hoy, 1 = mañana, -1 = ayer, etc.)
+function encontrarDiasRelevantes(clasificacion, ciclo, offsetDias = 0) {
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
-
-    let partidoMasCercano = null;
-    let fechaMasCercana = null;
-
-    // Buscar el partido más cercano sin marcador
-    clasificacion.forEach(partido => {
-        // Verificar que tenga fecha y equipos
-        if (!partido.DIA || !partido.MES || !partido.LOCAL || !partido.VISITANTE) return;
+    
+    // Aplicar offset para navegación día por día
+    const fechaBase = new Date(hoy);
+    fechaBase.setDate(hoy.getDate() + offsetDias);
+    fechaBase.setHours(0, 0, 0, 0);
+    
+    const diaSemana = fechaBase.getDay(); // 0 = domingo, 6 = sábado
+    
+    console.log('encontrarDiasRelevantes iniciado:', {
+        hoy: hoy.toLocaleDateString('es-ES'),
+        fechaBase: fechaBase.toLocaleDateString('es-ES'),
+        offsetDias,
+        diaSemana,
+        totalPartidos: clasificacion?.length || 0
+    });
+    
+    // Función auxiliar para verificar si un partido es válido
+    // Único criterio: debe tener equipos definidos (LOCAL y VISITANTE)
+    // NO considera el ciclo para buscar días
+    const esPartidoValido = (partido) => {
+        if (!partido || !partido.DIA || !partido.MES) return false;
         
-        // Verificar que no tenga marcador (es un partido futuro)
-        const sinMarcador = (!partido.LSCORE || partido.LSCORE === '0' || partido.LSCORE === '') && 
-                           (!partido.VSCORE || partido.VSCORE === '0' || partido.VSCORE === '');
-        if (!sinMarcador) return;
-
-        // Construir fecha del partido
-        const anio = partido.ANIO ? parseInt(partido.ANIO) : new Date().getFullYear();
-        const mes = parseInt(partido.MES) - 1;
-        const dia = parseInt(partido.DIA);
-        const fechaPartido = new Date(anio, mes, dia);
-        fechaPartido.setHours(0, 0, 0, 0);
-
-        // Solo considerar partidos futuros o de hoy
-        if (fechaPartido >= hoy) {
-            if (!fechaMasCercana || fechaPartido < fechaMasCercana) {
-                fechaMasCercana = fechaPartido;
-                partidoMasCercano = partido;
+        try {
+            const anio = partido.ANIO ? parseInt(partido.ANIO) : new Date().getFullYear();
+            const mes = parseInt(partido.MES);
+            const dia = parseInt(partido.DIA);
+            
+            // Validar valores numéricos
+            if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+                return false;
+            }
+            
+            const fechaPartido = new Date(anio, mes - 1, dia);
+            fechaPartido.setHours(0, 0, 0, 0);
+            
+            if (isNaN(fechaPartido.getTime())) {
+                return false;
+            }
+            
+            // Único criterio: verificar que tenga equipos definidos
+            const tieneEquipos = partido.LOCAL && String(partido.LOCAL).trim() !== '' &&
+                                 partido.VISITANTE && String(partido.VISITANTE).trim() !== '';
+            
+            return tieneEquipos;
+        } catch (error) {
+            return false;
+        }
+    };
+    
+    // Función para verificar si hay partidos en un día específico (sin considerar ciclo)
+    const hayPartidosEnDia = (fecha) => {
+        return clasificacion.some(partido => {
+            if (!esPartidoValido(partido)) return false;
+            
+            const anio = partido.ANIO ? parseInt(partido.ANIO) : new Date().getFullYear();
+            const mes = parseInt(partido.MES) - 1;
+            const dia = parseInt(partido.DIA);
+            const fechaPartido = new Date(anio, mes, dia);
+            fechaPartido.setHours(0, 0, 0, 0);
+            
+            return fechaPartido.getTime() === fecha.getTime();
+        });
+    };
+    
+    // Función para verificar si un día es sábado o domingo
+    const esFinDeSemana = (fecha) => {
+        const diaSemanaFecha = fecha.getDay();
+        return diaSemanaFecha === 0 || diaSemanaFecha === 6; // 0 = domingo, 6 = sábado
+    };
+    
+    // Función para encontrar el siguiente día laboral (lunes a viernes)
+    const siguienteDiaLaboral = (fecha) => {
+        const siguiente = new Date(fecha);
+        siguiente.setDate(fecha.getDate() + 1);
+        
+        const diaSemana = siguiente.getDay();
+        
+        // Si es sábado (6), saltar al lunes (sumar 2 días)
+        if (diaSemana === 6) {
+            siguiente.setDate(siguiente.getDate() + 2);
+        }
+        // Si es domingo (0), saltar al lunes (sumar 1 día)
+        else if (diaSemana === 0) {
+            siguiente.setDate(siguiente.getDate() + 1);
+        }
+        
+        return siguiente;
+    };
+    
+    // Función para encontrar el siguiente día laboral con partidos hacia adelante
+    const siguienteDiaConPartidos = (fechaInicio) => {
+        let fechaBusqueda = siguienteDiaLaboral(fechaInicio);
+        let diasBuscados = 0;
+        const maxDias = 60; // Buscar hasta 2 meses adelante
+        
+        while (diasBuscados < maxDias) {
+            if (!esFinDeSemana(fechaBusqueda) && hayPartidosEnDia(fechaBusqueda)) {
+                return fechaBusqueda;
+            }
+            fechaBusqueda = siguienteDiaLaboral(fechaBusqueda);
+            diasBuscados++;
+        }
+        
+        // Si no se encuentra, retornar el siguiente día laboral como fallback
+        return siguienteDiaLaboral(fechaInicio);
+    };
+    
+    // Función para encontrar el día laboral anterior con partidos hacia atrás
+    const anteriorDiaConPartidos = (fechaInicio) => {
+        let fechaBusqueda = new Date(fechaInicio);
+        fechaBusqueda.setDate(fechaInicio.getDate() - 1);
+        let diasBuscados = 0;
+        const maxDias = 60; // Buscar hasta 2 meses atrás
+        
+        while (diasBuscados < maxDias) {
+            // Si es fin de semana, retroceder al viernes anterior
+            if (esFinDeSemana(fechaBusqueda)) {
+                const diaSemana = fechaBusqueda.getDay();
+                if (diaSemana === 0) { // Domingo
+                    fechaBusqueda.setDate(fechaBusqueda.getDate() - 2);
+                } else if (diaSemana === 6) { // Sábado
+                    fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
+                }
+            }
+            
+            if (!esFinDeSemana(fechaBusqueda) && hayPartidosEnDia(fechaBusqueda)) {
+                return fechaBusqueda;
+            }
+            
+            fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
+            diasBuscados++;
+        }
+        
+        // Si no se encuentra, retornar el día anterior como fallback
+        fechaBusqueda = new Date(fechaInicio);
+        fechaBusqueda.setDate(fechaInicio.getDate() - 1);
+        if (esFinDeSemana(fechaBusqueda)) {
+            const diaSemana = fechaBusqueda.getDay();
+            if (diaSemana === 0) {
+                fechaBusqueda.setDate(fechaBusqueda.getDate() - 2);
+            } else if (diaSemana === 6) {
+                fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
             }
         }
-    });
-
-    if (!fechaMasCercana) return 0;
-
-    // Calcular en qué semana está el partido más cercano
-    const hoySemana = getWeekRange(0);
-    const fechaPartido = fechaMasCercana;
+        return fechaBusqueda;
+    };
     
-    // Si el partido está en la semana actual o futura
-    if (fechaPartido >= hoySemana.start) {
-        const diffDias = Math.floor((fechaPartido - hoySemana.start) / (1000 * 60 * 60 * 24));
-        const offset = Math.floor(diffDias / 7);
-        return offset;
+    // Si hay offset (navegación manual), buscar días con partidos
+    if (offsetDias !== 0) {
+        let diaInicio;
+        
+        if (offsetDias > 0) {
+            // Avanzar: buscar el siguiente día con partidos
+            // Empezar desde hoy + offset días
+            let fechaBusqueda = new Date(fechaBase);
+            if (esFinDeSemana(fechaBusqueda)) {
+                fechaBusqueda = siguienteDiaLaboral(fechaBusqueda);
+            }
+            
+            // Buscar el día correspondiente al offset
+            for (let i = 0; i < offsetDias; i++) {
+                fechaBusqueda = siguienteDiaConPartidos(fechaBusqueda);
+            }
+            
+            diaInicio = fechaBusqueda;
+            
+            // Si es avanzar, mostrar 2 días: el consultado y el siguiente con partidos
+            const diaFin = siguienteDiaConPartidos(diaInicio);
+            return { diaInicio, diaFin };
+        } else {
+            // Retroceder: buscar el día anterior con partidos
+            let fechaBusqueda = new Date(fechaBase);
+            if (esFinDeSemana(fechaBusqueda)) {
+                fechaBusqueda = anteriorDiaConPartidos(fechaBusqueda);
+            }
+            
+            // Buscar el día correspondiente al offset (negativo)
+            for (let i = 0; i < Math.abs(offsetDias); i++) {
+                fechaBusqueda = anteriorDiaConPartidos(fechaBusqueda);
+            }
+            
+            diaInicio = fechaBusqueda;
+            
+            // Si es retroceder, mostrar solo 1 día: el consultado
+            return { diaInicio, diaFin: diaInicio };
+        }
     }
-
-    return 0;
+    
+    // Si es sábado (6) o domingo (0), buscar el siguiente día laboral más próximo con partidos
+    if (diaSemana === 0 || diaSemana === 6) {
+        let fechaBusqueda = siguienteDiaLaboral(fechaBase);
+        let diasBuscados = 0;
+        const maxDias = 14; // Buscar hasta 2 semanas adelante
+        
+        while (diasBuscados < maxDias) {
+            // Verificar que no sea fin de semana
+            if (!esFinDeSemana(fechaBusqueda) && hayPartidosEnDia(fechaBusqueda)) {
+                // Siempre retornar el día encontrado y el siguiente día laboral
+                const diaFin = siguienteDiaLaboral(fechaBusqueda);
+                return { diaInicio: fechaBusqueda, diaFin };
+            }
+            
+            fechaBusqueda = siguienteDiaLaboral(fechaBusqueda);
+            diasBuscados++;
+        }
+        
+        // Si no se encontró ningún día con partidos, usar el siguiente lunes y martes como fallback
+        const diaInicio = siguienteDiaLaboral(fechaBase);
+        const diaFin = siguienteDiaLaboral(diaInicio);
+        return { diaInicio, diaFin };
+    }
+    
+    // Si es día laboral, verificar si hay partidos en fechaBase
+    if (hayPartidosEnDia(fechaBase)) {
+        const manana = siguienteDiaLaboral(fechaBase);
+        
+        // Siempre retornar fechaBase y el siguiente día laboral
+        return { diaInicio: fechaBase, diaFin: manana };
+    }
+    
+    // Si no hay partidos en fechaBase, buscar el siguiente día laboral más próximo con partidos
+    let fechaBusqueda = siguienteDiaLaboral(fechaBase);
+    let diasBuscados = 0;
+    const maxDias = 14;
+    
+    while (diasBuscados < maxDias) {
+        // Verificar que no sea fin de semana
+        if (!esFinDeSemana(fechaBusqueda) && hayPartidosEnDia(fechaBusqueda)) {
+            // Siempre retornar el día encontrado y el siguiente día laboral
+            const diaFin = siguienteDiaLaboral(fechaBusqueda);
+            return { diaInicio: fechaBusqueda, diaFin };
+        }
+        
+        fechaBusqueda = siguienteDiaLaboral(fechaBusqueda);
+        diasBuscados++;
+    }
+    
+    // Fallback: usar el siguiente lunes y martes
+    const diaInicio = siguienteDiaLaboral(fechaBase);
+    const diaFin = siguienteDiaLaboral(diaInicio);
+    return { diaInicio, diaFin };
 }
 
-// --- Filtrar próximos partidos por semana y ciclo ---
-function filtrarProximosPartidos(clasificacion, semanaOffset, ciclo) {
-    if (!clasificacion || clasificacion.length === 0) return [];
+// --- Filtrar próximos partidos por ciclo, equipos y rango de fechas ---
+function filtrarProximosPartidos(clasificacion, ciclo, diaInicio, diaFin) {
+    if (!clasificacion || !Array.isArray(clasificacion) || clasificacion.length === 0) {
+        console.warn('filtrarProximosPartidos: clasificacion vacía o inválida');
+        return [];
+    }
 
-    const { start, end } = getWeekRange(semanaOffset);
-    const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0);
+    // Si no se proporcionan días, calcularlos
+    if (!diaInicio || !diaFin) {
+        const dias = encontrarDiasRelevantes(clasificacion, ciclo);
+        diaInicio = dias.diaInicio;
+        diaFin = dias.diaFin;
+    }
+    
+    // Asegurar que las fechas estén normalizadas
+    diaInicio.setHours(0, 0, 0, 0);
+    diaFin.setHours(0, 0, 0, 0);
 
-    // Normalizar el ciclo del filtro para comparación
-    const cicloFiltro = ciclo ? ciclo.toString().trim().toUpperCase() : "TODOS";
+    console.log('Filtrando partidos:', {
+        diaInicio: diaInicio.toLocaleDateString('es-ES'),
+        diaFin: diaFin.toLocaleDateString('es-ES'),
+        totalPartidos: clasificacion.length
+    });
 
     // Filtrar partidos que:
     // 1. Tengan fecha válida (DIA, MES, ANIO)
-    // 2. Estén en el futuro o sean de la semana seleccionada
-    // 3. No tengan marcador (LSCORE y VSCORE vacíos o 0)
-    // 4. Coincidan con el ciclo seleccionado (si no es TODOS)
+    // 2. Estén en el rango de días seleccionados (diaInicio y diaFin, inclusive)
+    // 3. Tengan equipos definidos (LOCAL y VISITANTE)
     
-    return clasificacion.filter(partido => {
-        // Verificar que tenga fecha
-        if (!partido.DIA || !partido.MES) return false;
+    const partidosFiltrados = clasificacion.filter(partido => {
+        // Verificar que tenga datos básicos y fecha
+        if (!partido || !partido.DIA || !partido.MES) return false;
         
-        // Construir fecha del partido
-        const anio = partido.ANIO ? parseInt(partido.ANIO) : new Date().getFullYear();
-        const mes = parseInt(partido.MES) - 1; // Los meses en JS son 0-indexed
-        const dia = parseInt(partido.DIA);
-        const fechaPartido = new Date(anio, mes, dia);
-        fechaPartido.setHours(0, 0, 0, 0);
+        try {
+            // Construir fecha del partido
+            const anio = partido.ANIO ? parseInt(partido.ANIO) : new Date().getFullYear();
+            const mes = parseInt(partido.MES);
+            const dia = parseInt(partido.DIA);
+            
+            // Validar que los valores sean números válidos
+            if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+                return false;
+            }
+            
+            const fechaPartido = new Date(anio, mes - 1, dia); // Los meses en JS son 0-indexed
+            fechaPartido.setHours(0, 0, 0, 0);
+            
+            // Validar que la fecha sea válida
+            if (isNaN(fechaPartido.getTime())) {
+                return false;
+            }
 
-        // Verificar que esté en el rango de la semana seleccionada
-        const estaEnSemana = fechaPartido >= start && fechaPartido <= end;
-        // Verificar que no tenga marcador (es un partido futuro)
-        const sinMarcador = (!partido.LSCORE || partido.LSCORE === '0' || partido.LSCORE === '') && 
-                           (!partido.VSCORE || partido.VSCORE === '0' || partido.VSCORE === '');
-
-        // Verificar ciclo - normalizar ambos valores para comparación robusta
-        const cicloPartido = partido.CICLO ? partido.CICLO.toString().trim().toUpperCase() : '';
-        const coincideCiclo = cicloFiltro === "TODOS" || cicloPartido === cicloFiltro;
-        
-        // Verificar que tenga equipos definidos
-        const tieneEquipos = partido.LOCAL && partido.VISITANTE;
-        
-        return estaEnSemana && sinMarcador && coincideCiclo && tieneEquipos;
+            // Verificar que esté en el rango de días seleccionados (inclusive)
+            const estaEnRango = fechaPartido.getTime() >= diaInicio.getTime() && 
+                               fechaPartido.getTime() <= diaFin.getTime();
+            
+            // Verificar que tenga equipos definidos
+            const tieneEquipos = partido.LOCAL && String(partido.LOCAL).trim() !== '' &&
+                                 partido.VISITANTE && String(partido.VISITANTE).trim() !== '';
+            
+            const cumple = estaEnRango && tieneEquipos;
+            
+            // Debug: Log detallado para partidos que están en rango pero no cumplen todos los criterios
+            if (estaEnRango && !cumple) {
+                console.log('Partido descartado:', {
+                    fecha: fechaPartido.toLocaleDateString('es-ES'),
+                    local: partido.LOCAL,
+                    visitante: partido.VISITANTE,
+                    estaEnRango,
+                    tieneEquipos
+                });
+            }
+            
+            return cumple;
+        } catch (error) {
+            console.warn('Error al filtrar partido:', partido, error);
+            return false;
+        }
     });
+
+    console.log('Partidos filtrados encontrados:', partidosFiltrados.length);
+    return partidosFiltrados;
 }
 
 // --- Función para validar valor booleano ---
@@ -319,11 +556,6 @@ async function init() {
     
     STATE.data = await loadAllData();
     
-    // Encontrar la semana con el partido más cercano y establecer el offset inicial
-    if (STATE.data && STATE.data.CLASIFICACION) {
-        semanaOffsetProximosPartidos = encontrarSemanaPartidoMasCercano(STATE.data.CLASIFICACION);
-    }
-    
     requestAnimationFrame(() => {
         // Generar navegación dinámica desde la hoja OTROS (basada en MENU)
         generarNavegacion(STATE.data.OTROS);
@@ -486,22 +718,60 @@ function updateUI() {
     actualizarGruposDisponibles(ciclos.equipos);
 
     // Próximos Partidos
+    // Primero encontrar los días relevantes usando el offset de días
+    // Usar "TODOS" como ciclo ya que no filtramos por ciclo
+    const { diaInicio, diaFin } = encontrarDiasRelevantes(
+        STATE.data.CLASIFICACION, 
+        "TODOS",
+        diaOffsetProximosPartidos
+    );
+    
+    // Debug: Log de los días encontrados
+    console.log('Días encontrados:', {
+        diaInicio: diaInicio.toLocaleDateString('es-ES'),
+        diaFin: diaFin.toLocaleDateString('es-ES'),
+        offsetDias: diaOffsetProximosPartidos,
+        totalPartidos: STATE.data.CLASIFICACION?.length || 0
+    });
+    
+    // Filtrar partidos por equipos definidos y rango de fechas
     const partidosFiltrados = filtrarProximosPartidos(
         STATE.data.CLASIFICACION,
-        semanaOffsetProximosPartidos,
-        ciclos.proximosPartidos
+        null, // No se usa el ciclo para filtrar
+        diaInicio,
+        diaFin
     );
+    
+    // Debug: Log de partidos filtrados
+    console.log('Partidos filtrados:', {
+        cantidad: partidosFiltrados.length,
+        partidos: partidosFiltrados.map(p => ({
+            fecha: `${p.DIA}/${p.MES}/${p.ANIO || new Date().getFullYear()}`,
+            local: p.LOCAL,
+            visitante: p.VISITANTE,
+            ciclo: p.CICLO
+        }))
+    });
+    
     renderProximosPartidos(partidosFiltrados);
 
-    // Etiqueta de la semana para próximos partidos
-    const { start, end } = getWeekRange(semanaOffsetProximosPartidos);
+    // Etiqueta de los días para próximos partidos
     const label = document.getElementById("semana-label");
     if (label) {
-        const diasSemana = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"];
-        const diaSemana = diasSemana[start.getDay()];
-        const dia = String(start.getDate()).padStart(2, '0');
-        const mes = String(start.getMonth() + 1).padStart(2, '0');
-        label.textContent = `${dia}/${mes} ${diaSemana}`;
+        const diaInicioNum = String(diaInicio.getDate()).padStart(2, '0');
+        const mesInicio = String(diaInicio.getMonth() + 1).padStart(2, '0');
+        const anioInicio = diaInicio.getFullYear();
+        
+        // Si es retroceder (offset negativo) o es el mismo día, mostrar solo el día inicial
+        if (diaOffsetProximosPartidos < 0 || diaInicio.getTime() === diaFin.getTime()) {
+            label.textContent = `${diaInicioNum}/${mesInicio}/${anioInicio}`;
+        } else {
+            // Si es avanzar (offset positivo) o modo automático, mostrar rango de 2 días
+            const diaFinNum = String(diaFin.getDate()).padStart(2, '0');
+            const mesFin = String(diaFin.getMonth() + 1).padStart(2, '0');
+            const anioFin = diaFin.getFullYear();
+            label.textContent = `${diaInicioNum}/${mesInicio}/${anioInicio} - ${diaFinNum}/${mesFin}/${anioFin}`;
+        }
     }
 
     // Controlar visibilidad de secciones después de que todas se hayan renderizado
@@ -532,6 +802,10 @@ function actualizarCiclo(seccion, ciclo) {
     STATE.ciclosSeleccionados[seccion] = ciclo;
     if (seccion === "equipos") {
         actualizarGruposDisponibles(ciclo);
+    }
+    // Resetear el offset de días cuando se cambia el ciclo de próximos partidos
+    if (seccion === "proximosPartidos") {
+        diaOffsetProximosPartidos = 0;
     }
     updateUI();
 }
@@ -593,8 +867,7 @@ function initCicloSelectors() {
         { id: 'selector-bracket', seccion: 'bracket' },
         { id: 'selector-goleadores', seccion: 'goleadores' },
         { id: 'selector-sancionados', seccion: 'sancionados' },
-        { id: 'selector-resultados', seccion: 'resultados' },
-        { id: 'selector-proximosPartidos', seccion: 'proximosPartidos' }
+        { id: 'selector-resultados', seccion: 'resultados' }
     ];
 
     selectors.forEach(({ id, seccion }) => {
@@ -635,20 +908,20 @@ function initCicloSelectors() {
         });
     }
     
-    // Event listeners para navegación de semanas en próximos partidos
+    // Event listeners para navegación día por día en próximos partidos
     const semanaAnterior = document.getElementById("semana-anterior");
     const semanaSiguiente = document.getElementById("semana-siguiente");
 
     if (semanaAnterior) {
         semanaAnterior.addEventListener('click', () => {
-            semanaOffsetProximosPartidos--;
+            diaOffsetProximosPartidos--; // Retroceder un día
             updateUI();
         });
     }
 
     if (semanaSiguiente) {
         semanaSiguiente.addEventListener('click', () => {
-            semanaOffsetProximosPartidos++;
+            diaOffsetProximosPartidos++; // Avanzar un día
             updateUI();
         });
     }

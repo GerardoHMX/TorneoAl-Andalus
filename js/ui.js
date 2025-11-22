@@ -798,11 +798,11 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
                     <table class="w-full min-w-full" style="border-collapse: collapse;">
                         <thead>
                             <tr style="background-color: #B30000; color: white;">
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">CICLO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">EQUIPO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">CURSO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">JUGADOR</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-right: 1rem;">GOLES</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">CICLO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">EQUIPO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">CURSO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">JUGADOR</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: center; padding-right: 1rem;">GOLES</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -842,11 +842,11 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
                     <table class="w-full min-w-full" style="border-collapse: collapse;">
                         <thead>
                             <tr style="background-color: #B30000; color: white;">
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">CICLO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">EQUIPO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">CURSO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">JUGADOR</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-right: 1rem;">GOLES</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">CICLO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">EQUIPO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">CURSO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">JUGADOR</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: center; padding-right: 1rem;">GOLES</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -877,7 +877,6 @@ export function tablaSancionados(list, ciclo) {
         sancionado.CICLO === ciclo &&
         sancionado.CICLO !== undefined &&
         sancionado.CICLO !== "" &&
-        sancionado.JUGADOR === ciclo &&
         sancionado.JUGADOR !== undefined &&
         sancionado.JUGADOR !== ""
     );
@@ -896,11 +895,11 @@ export function tablaSancionados(list, ciclo) {
                         <thead>
                             <tr style="background-color: #B30000; color: white;">
                                 <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">EQUIPO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">CURSO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">JUGADOR</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">ROJAS</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">AMARILLAS</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-left: 1rem; padding-right: 1rem;">P. SUSPENDIDOS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 15%; text-align: left; padding-left: 1rem;">CURSO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 10%; text-align: left; padding-left: 1rem;">JUGADOR</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 15%; text-align: center;">ROJAS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 15%; text-align: center;">AMARILLAS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 15%; text-align: center;">SUSPENDIDOS</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -920,20 +919,12 @@ export function tablaSancionados(list, ciclo) {
         sancionados.forEach((sancionado) => {
             html += `
                 <tr class="bg-white border-gray-100 border border-b">
-                    <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
-                        <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.EQUIPO || '-'}</span>
-                    </td>
-                    <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
-                        <span class="font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.CURSO || '-'}</span>
-                    </td>
-                    <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
-                        <span class="font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.JUGADOR || '-'}</span>
-                    </td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 font-medium text-xs sm:text-sm md:text-md lg:text-lg uppercase" >${sancionado.EQUIPO || '-'}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 font-medium text-xs sm:text-sm md:text-md lg:text-lg uppercase" >${sancionado.CURSO || '-'}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg uppercase" >${sancionado.JUGADOR || ''}</td>
                     <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.TROJAS || 0}</td>
                     <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.TAMARILLAS || 0}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >
-                        <span class="text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.JUSTIFICACION || '-'}</span>
-                    </td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.JUSTIFICACION || 0}</td>
                 </tr>
             `;
         });
@@ -1400,14 +1391,33 @@ export function renderBracket(clasificacion, ciclo) {
 // --- RENDER PRÓXIMOS PARTIDOS ---
 export function renderProximosPartidos(partidos) {
     const div = document.getElementById("proximosPartidos-container");
-    if (!div) return;
+    if (!div) {
+        console.warn('No se encontró el elemento proximosPartidos-container');
+        return;
+    }
     div.classList.add("mb-6", "mt-6");
 
-    if (!partidos || partidos.length === 0) {
+    // Validar que partidos sea un array válido
+    if (!Array.isArray(partidos) || partidos.length === 0) {
         div.innerHTML = `
             <div class="text-center py-12">
-                <p class="text-gray-900 text-lg mb-2">No hay partidos programados para esta semana.</p>
-                <p class="text-gray-600 text-sm">Intenta cambiar la semana o el filtro de ciclo.</p>
+                <p class="text-gray-900 text-lg mb-2">No hay partidos programados para los próximos días.</p>
+                <p class="text-gray-600 text-sm">Los partidos se mostrarán automáticamente cuando estén programados.</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Filtrar partidos válidos (que tengan DIA y MES)
+    const partidosValidos = partidos.filter(partido => {
+        return partido && partido.DIA && partido.MES && partido.LOCAL && partido.VISITANTE;
+    });
+
+    if (partidosValidos.length === 0) {
+        div.innerHTML = `
+            <div class="text-center py-12">
+                <p class="text-gray-900 text-lg mb-2">No hay partidos programados para los próximos días.</p>
+                <p class="text-gray-600 text-sm">Los partidos se mostrarán automáticamente cuando estén programados.</p>
             </div>
         `;
         return;
@@ -1415,92 +1425,164 @@ export function renderProximosPartidos(partidos) {
 
     // Agrupar partidos por fecha
     const partidosPorFecha = {};
-    partidos.forEach(partido => {
-        const fechaKey = `${partido.DIA}-${partido.MES}-${partido.ANIO || new Date().getFullYear()}`;
-        if (!partidosPorFecha[fechaKey]) {
-            partidosPorFecha[fechaKey] = [];
+    partidosValidos.forEach(partido => {
+        try {
+            const anio = partido.ANIO ? parseInt(partido.ANIO) : new Date().getFullYear();
+            const mes = parseInt(partido.MES);
+            const dia = parseInt(partido.DIA);
+            
+            // Validar que los valores sean números válidos
+            if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+                console.warn('Fecha inválida en partido:', partido);
+                return;
+            }
+            
+            const fechaKey = `${dia}-${mes}-${anio}`;
+            if (!partidosPorFecha[fechaKey]) {
+                partidosPorFecha[fechaKey] = [];
+            }
+            partidosPorFecha[fechaKey].push(partido);
+        } catch (error) {
+            console.warn('Error al procesar partido:', partido, error);
         }
-        partidosPorFecha[fechaKey].push(partido);
     });
 
+    // Verificar que hay partidos agrupados
+    const fechasKeys = Object.keys(partidosPorFecha);
+    if (fechasKeys.length === 0) {
+        div.innerHTML = `
+            <div class="text-center py-12">
+                <p class="text-gray-900 text-lg mb-2">No hay partidos programados para los próximos días.</p>
+                <p class="text-gray-600 text-sm">Los partidos se mostrarán automáticamente cuando estén programados.</p>
+            </div>
+        `;
+        return;
+    }
+
     // Ordenar fechas
-    const fechasOrdenadas = Object.keys(partidosPorFecha).sort((a, b) => {
-        const [diaA, mesA, anioA] = a.split('-').map(Number);
-        const [diaB, mesB, anioB] = b.split('-').map(Number);
-        const fechaA = new Date(anioA, mesA - 1, diaA);
-        const fechaB = new Date(anioB, mesB - 1, diaB);
-        return fechaA - fechaB;
+    const fechasOrdenadas = fechasKeys.sort((a, b) => {
+        try {
+            const [diaA, mesA, anioA] = a.split('-').map(Number);
+            const [diaB, mesB, anioB] = b.split('-').map(Number);
+            const fechaA = new Date(anioA, mesA - 1, diaA);
+            const fechaB = new Date(anioB, mesB - 1, diaB);
+            return fechaA - fechaB;
+        } catch (error) {
+            console.warn('Error al ordenar fechas:', error);
+            return 0;
+        }
     });
 
     let html = '';
 
+    if(fechasOrdenadas.length > 1){
+        div.classList.add("grid", "grid-cols-2", "gap-4");
+    }
+
     fechasOrdenadas.forEach(fechaKey => {
-        const [dia, mes, anio] = fechaKey.split('-').map(Number);
-        const mesNombre = meses[mes - 1] || mes;
-        const diaFormateado = String(dia).padStart(2, '0');
-        const fechaFormateada = `${diaFormateado} ${mesNombre}`;
+        try {
+            const [dia, mes, anio] = fechaKey.split('-').map(Number);
+            
+            // Validar valores
+            if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12) {
+                console.warn('Fecha inválida:', fechaKey);
+                return;
+            }
+            
+            const mesNombre = meses[mes - 1] || mes;
+            const diaFormateado = String(dia).padStart(2, '0');
+            const fechaFormateada = `${diaFormateado} ${mesNombre}`;
 
-        // Obtener día de la semana
-        const fecha = new Date(anio, mes - 1, dia);
-        const diaSemana = diasSemana[fecha.getDay()];
-        const partidosDelDia = partidosPorFecha[fechaKey];
+            // Obtener día de la semana
+            const fecha = new Date(anio, mes - 1, dia);
+            if (isNaN(fecha.getTime())) {
+                console.warn('Fecha inválida para crear objeto Date:', anio, mes, dia);
+                return;
+            }
+            
+            const diaSemana = diasSemana[fecha.getDay()] || 'Desconocido';
+            const partidosDelDia = partidosPorFecha[fechaKey];
 
-        html += `
-            <div class="md:container mx-auto mb-8">
-                <h4 class="text-2xl font-bold text-brand-blue mb-4 flex items-center gap-2">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    ${diaSemana} ${fechaFormateada}
-                </h4>
-                <div class="grid ${partidosDelDia.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-4 lg:gap-6">
-        `;
-
-        partidosDelDia.forEach(partido => {
-            // Determinar el tipo de partido según el grupo
-            let tipoPartido = "Fase de Grupos";
-            if (partido.GRUPO === "SEMIFINAL") {
-                tipoPartido = "Semifinal";
-            } else if (partido.GRUPO === "3RPUESTO") {
-                tipoPartido = "Tercer Puesto";
-            } else if (partido.GRUPO === "1RPUESTO") {
-                tipoPartido = "Final";
-            } else if (partido.GRUPO && ["A", "B", "C", "D"].includes(partido.GRUPO)) {
-                tipoPartido = `Grupo ${partido.GRUPO}`;
+            if (!partidosDelDia || partidosDelDia.length === 0) {
+                return;
+            }
+            if(partidosDelDia.length > 1){
+                div.classList.remove("grid", "grid-cols-2", "gap-4");
             }
 
             html += `
-                <div class="rounded-brand p-4 lg:p-6 bg-white shadow-lg ring-1 ring-black/5 border border-gray-200 hover:shadow-brand-md transition-shadow overflow-hidden">
-                    <div class="text-center text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase tracking-wider mb-4">
-                        ${tipoPartido} ${partido.CICLO ? `- ${partido.CICLO}` : ''}
+                <div class="md:container mx-auto mb-8">
+                    <h4 class="text-2xl font-bold text-brand-blue mb-4 flex items-center gap-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        ${diaSemana} ${fechaFormateada}
+                    </h4>
+                    <div class="grid ${partidosDelDia.length > 1 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-4 lg:gap-6">
+            `;
+
+            partidosDelDia.forEach(partido => {
+                // Determinar el tipo de partido según el grupo
+                let tipoPartido = "";
+                if (partido.GRUPO === "SEMIFINAL") {
+                    tipoPartido = "Semifinal";
+                } else if (partido.GRUPO === "3RPUESTO") {
+                    tipoPartido = "Tercer Puesto";
+                } else if (partido.GRUPO === "1RPUESTO") {
+                    tipoPartido = "Final";
+                } else if (partido.GRUPO && ["A", "B", "C", "D"].includes(partido.GRUPO)) {
+                    tipoPartido = `Grupo ${partido.GRUPO}`;
+                }
+
+                const local = (partido.LOCAL || 'Por definir').trim();
+                const visitante = (partido.VISITANTE || 'Por definir').trim();
+                const hora = partido.HORA ? String(partido.HORA).trim() : 'Hora por confirmar';
+                const fecha = partido.DIA ? String(partido.DIA).trim() + "/" + String(partido.MES).trim() + "/" + String(partido.ANIO).trim() : '';
+                const ciclo = partido.CICLO ? String(partido.CICLO).trim() : '';
+
+                html += `
+                    <div class="rounded-brand p-2 sm:p-6 md:p-8 bg-white shadow-lg ring-1 ring-black/5 border border-gray-200 hover:shadow-brand-md transition-shadow overflow-hidden">                      
+                        <div class="flex flex-col lg:flex-row items-center justify-between gap-2 lg:gap-4 mb-2 lg:mb-4">
+                            <div class="flex flex-col items-center flex-1">
+                                ${partido.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.LLOGO))}" alt="${local}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2" onerror="this.style.display='none'">` : ''}
+                                <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${local}</div>
+                            </div>
+                            <div class="text-3xl font-bold text-gray-800 flex items-center gap-2">
+                                <span class="text-4xl text-brand-gold">VS</span>
+                            </div>
+                            <div class="flex flex-col items-center flex-1">
+                                ${partido.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.VLOGO))}" alt="${visitante}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2" onerror="this.style.display='none'">` : ''}
+                                <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${visitante}</div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-2 sm:mt-4 pt-2 sm:pt-4 border-t border-gray-200 uppercase flex flex-row flex-wrap justify-center items-center gap-2 lg:gap-4">
+                           <span class="text-xs sm:text-sm md:text-md text-gray-600">${tipoPartido} ${ciclo ? `${ciclo}` : ''}</span>   
+                           <span class="text-xs sm:text-sm md:text-md text-brand-red ">${fecha.length > 0 ? `${fecha}` : ''}</span>   
+                           <span class="text-xs sm:text-sm md:text-md text-gray-600 ">${hora.length > 0 ? `${hora} hrs` : ''}</span>
+                        </div>
                     </div>
-                    <div class="flex flex-col lg:flex-row items-center justify-between gap-2 lg:gap-4 mb-2 lg:mb-4">
-                        <div class="flex flex-col items-center flex-1">
-                            ${partido.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.LLOGO))}" alt="${partido.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2" onerror="this.style.display='none'">` : ''}
-                            <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${partido.LOCAL || 'Por definir'}</div>
-                        </div>
-                        <div class="text-3xl font-bold text-gray-800 flex items-center gap-2">
-                            <span class="text-4xl text-brand-gold">VS</span>
-                        </div>
-                        <div class="flex flex-col items-center flex-1">
-                            ${partido.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.VLOGO))}" alt="${partido.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2" onerror="this.style.display='none'">` : ''}
-                            <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${partido.VISITANTE || 'Por definir'}</div>
-                        </div>
-                    </div>
-                    <div class="text-center text-sm sm:text-md md:text-lg text-gray-600 mt-4 pt-4 border-t border-gray-200">
-                        ${partido.HORA ? `${partido.HORA}` : 'Hora por confirmar'}
+                `;
+            });
+
+            html += `
                     </div>
                 </div>
             `;
-        });
-
-        html += `
-                </div>
-            </div>
-        `;
+        } catch (error) {
+            console.error('Error al renderizar fecha:', fechaKey, error);
+        }
     });
 
-    div.innerHTML = html;
+    if (html.trim() === '') {
+        div.innerHTML = `
+            <div class="text-center py-12">
+                <p class="text-gray-900 text-lg mb-2">No hay partidos programados para los próximos días.</p>
+                <p class="text-gray-600 text-sm">Los partidos se mostrarán automáticamente cuando estén programados.</p>
+            </div>
+        `;
+    } else {
+        div.innerHTML = html;
+    }
 }
 
 // Función para convertir URLs de Google Drive
