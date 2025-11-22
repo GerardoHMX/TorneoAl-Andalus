@@ -17,24 +17,23 @@ import {
 
 
 // Estado general
-let STATE = { 
-    filtros: { etapa: "" }, 
-    data: null,
-    ciclosSeleccionados: {
-        equipos: "TODOS",
-        jornadas: "TODOS",
-        clasificacion: "TODOS",
-        clasificacionGrupal: "TODOS",
-        bracket: "TODOS",
-        goleadores: "TODOS",
-        sancionados: "TODOS",
-        resultados: "TODOS",
-        proximosPartidos: "TODOS"
-    },
-    grupoSeleccionado: {
-        equipos: "TODOS"
-    }
-};
+let     STATE = { 
+        filtros: { etapa: "" }, 
+        data: null,
+        ciclosSeleccionados: {
+            equipos: "TODOS",
+            jornadas: "TODOS",
+            clasificacion: "TODOS",
+            clasificacionGrupal: "TODOS",
+            goleadores: "TODOS",
+            sancionados: "TODOS",
+            resultados: "TODOS",
+            proximosPartidos: "TODOS"
+        },
+        grupoSeleccionado: {
+            equipos: "TODOS"
+        }
+    };
 let semanaOffset = 0;
 let diaOffsetProximosPartidos = 0; // Offset en días para navegación día por día
 
@@ -671,19 +670,8 @@ function updateUI() {
         }
     }
 
-    // Bracket
-    if (ciclos.bracket === "TODOS") {
-        renderBracket(STATE.data.CLASIFICACION, "ESO");
-        renderBracket(STATE.data.CLASIFICACION, "BCH");
-    } else {
-        renderBracket(STATE.data.CLASIFICACION, ciclos.bracket);
-        const otroCiclo = ciclos.bracket === "ESO" ? "BCH" : "ESO";
-        const otroDiv = document.getElementById("bracket" + otroCiclo);
-        if (otroDiv) {
-            otroDiv.innerHTML = "";            
-            otroDiv.classList.remove("overflow-x-auto", "mb-6", "mt-6");
-        }
-    }
+    // Bracket - mostrar todo sin filtrar por ciclo
+    renderBracket(STATE.data.CLASIFICACION);
 
     // Líderes Goleadores
     if (ciclos.goleadores === "TODOS") {
@@ -864,7 +852,6 @@ function initCicloSelectors() {
         { id: 'selector-jornadas', seccion: 'jornadas' },
         { id: 'selector-clasificacion', seccion: 'clasificacion' },
         { id: 'selector-clasificacion-grupal', seccion: 'clasificacionGrupal' },
-        { id: 'selector-bracket', seccion: 'bracket' },
         { id: 'selector-goleadores', seccion: 'goleadores' },
         { id: 'selector-sancionados', seccion: 'sancionados' },
         { id: 'selector-resultados', seccion: 'resultados' }

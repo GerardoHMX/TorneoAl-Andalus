@@ -23,10 +23,10 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
             if (grupoFiltro !== "TODOS" && m.GRUPO !== grupoFiltro) {
                 return;
             }
-            const key = `${m.CICLO || 'SIN_CICLO'}_${m.GRUPO}`;
+            const key = `${m.CICLO || ''}_${m.GRUPO}`;
             if (!equiposPorCicloGrupo[key]) {
                 equiposPorCicloGrupo[key] = {
-                    ciclo: m.CICLO || 'SIN_CICLO',
+                    ciclo: m.CICLO || '',
                     grupo: m.GRUPO,
                     equipos: []
                 };
@@ -1187,8 +1187,8 @@ export function mostrarDetalleNoticia(noticia) {
 }
 
 // --- RENDER BRACKET --- 
-export function renderBracket(clasificacion, ciclo) {
-    const div = document.getElementById("bracket" + ciclo);
+export function renderBracket(clasificacion) {
+    const div = document.getElementById("bracket-container");
     if (!div) return;
     div.classList.add("mb-10", "mt-6", "overflow-x-auto");
     if (clasificacion.length === 0) {
@@ -1196,14 +1196,12 @@ export function renderBracket(clasificacion, ciclo) {
         return
     }
 
-    // Group teams by round and ciclo
+    // Group teams by round (sin filtrar por ciclo)
     const grupos = {};
     clasificacion.forEach((equipo) => {
         const key = equipo.RONDA;
         if (!grupos[key]) grupos[key] = [];
-        if (equipo.CICLO === ciclo) {
-            grupos[key].push(equipo);
-        }
+        grupos[key].push(equipo);
     });
 
     // Create tournament bracket layout
@@ -1230,154 +1228,239 @@ export function renderBracket(clasificacion, ciclo) {
             Object.keys(gruposOrganizados)
                 .sort()
                 .forEach((grupo) => {
-                    html += `
+                    // Agrupar por ciclo dentro de cada grupo
+                    const equiposPorCiclo = {};
+                    gruposOrganizados[grupo].forEach((equipo) => {
+                        const ciclo = equipo.CICLO || '';
+                        if (!equiposPorCiclo[ciclo]) equiposPorCiclo[ciclo] = [];
+                        equiposPorCiclo[ciclo].push(equipo);
+                    });
+
+                    Object.keys(equiposPorCiclo).forEach((ciclo) => {
+                        html += `
             <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-3 lg:p-4 min-w-[240px] w-[300px]">
                 <div class="text-center font-bold text-xl mb-3 lg:mb-4 tracking-wide">Grupo ${grupo} - <span class="text-brand-gold text-xl">${ciclo}</span></div>
                 <div class="lg:space-y-2">
             `;
-                    gruposOrganizados[grupo].forEach((equipo) => {
-                        if (equipo && equipo.EQUIPOS !== undefined && equipo.EQUIPOS !== "") {
-                            html += `
+                        equiposPorCiclo[ciclo].forEach((equipo) => {
+                            if (equipo && equipo.EQUIPOS !== undefined && equipo.EQUIPOS !== "") {
+                                html += `
                     <div class="flex items-center justify-between py-2 lg:py-3 px-2 border-b border-brand-red last:border-0">
                         <div class="flex items-center gap-3">
-                         ${equipo.LOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.LOGO))}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain">` : ''}
+                         ${equipo.GLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.GLOGO))}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain">` : ''}
                         <span class="font-semibold text-sm">${equipo.EQUIPOS}</span>
                         </div>
                         <span class="font-bold text-tournament-red">${equipo.PUNTOS}</span>
                     </div>
                     `;
-                        }
-                    })
-                    html += `
+                            }
+                        })
+                        html += `
               </div>
             </div>
             `;
+                    });
                 })
 
             html += "</div>"
         }
 
-        // Column 2: SEMIFINAL y TERCER PUESTO
-        if (grupos.SEMIFINAL || grupos.TERCERPUSTO) {
+        // Column 2: CUARTOS DE FINAL
+        if (grupos.CUARTOS) {
             html += '<div class="flex flex-col gap-12 justify-center">'
 
-            for (let i = 0; i < grupos.SEMIFINAL.length; i += 2) {
-                const equipos = grupos.SEMIFINAL[i];
+            // Agrupar cuartos de final por ciclo
+            const cuartosPorCiclo = {};
+            grupos.CUARTOS?.forEach((equipo) => {
+                const ciclo = equipo.CICLO || '';
+                if (!cuartosPorCiclo[ciclo]) cuartosPorCiclo[ciclo] = [];
+                cuartosPorCiclo[ciclo].push(equipo);
+            });
 
-                html += `
+            Object.keys(cuartosPorCiclo).forEach((ciclo) => {
+                cuartosPorCiclo[ciclo].forEach((equipos) => {
+                    html += `
                 <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
-                    <div class="text-center font-bold text-xl mb-4 tracking-wide">Semifinal - <span class="text-brand-gold text-xl">${ciclo}</span></div>
+                    <div class="text-center font-bold text-xl mb-4 tracking-wide">Cuartos de Final - <span class="text-brand-gold text-xl">${ciclo}</span></div>
                     <div class="space-y-2">
                 `;
 
-                if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) {
-                    html += `
+                    if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) {
+                        html += `
                     <div class="flex items-center justify-between py-2 px-2">
                         <div class="flex items-center gap-2">
-                        ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-6 h-6 object-contain">` : ''}
+                        ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain">` : ''}
                         <span class="font-medium text-sm">${equipos.LOCAL}</span>
                         </div>
                         <span class="font-bold text-sm">${equipos.LSCORE}</span>
                     </div>
                     `;
-                    html += `
+                        html += `
                     <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
                         <div class="flex items-center gap-2">
-                        ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-6 h-6 object-contain">` : ''}
+                        ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain">` : ''}
                         <span class="font-medium text-sm">${equipos.VISITANTE}</span>
                         </div>
                         <span class="font-bold text-sm">${equipos.VSCORE}</span>
                     </div>
                     `;
-                }
+                    }
 
-                html += `
+                    html += `
                     </div>            
                 </div>
                 `;
-            }
+                });
+            });
+ 
+            html += "</div>";
+        }
 
-            for (let i = 0; i < grupos.TERCERPUSTO.length; i += 2) {
-                const equipos = grupos.TERCERPUSTO[i]
+        // Column 2: SEMIFINAL 
+        if (grupos.SEMIFINAL) {
+            html += '<div class="flex flex-col gap-12 justify-center">'
 
-                html += `
-            <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
-              <div class="text-center font-bold text-xl mb-4 tracking-wide">Tercer Puesto - <span class="text-brand-gold text-xl">${ciclo}</span></div>
-              <div class="space-y-2">
-          `;
+            // Agrupar semifinales por ciclo
+            const semifinalesPorCiclo = {};
+            grupos.SEMIFINAL?.forEach((equipo) => {
+                const ciclo = equipo.CICLO || '';
+                if (!semifinalesPorCiclo[ciclo]) semifinalesPorCiclo[ciclo] = [];
+                semifinalesPorCiclo[ciclo].push(equipo);
+            });
 
-                if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) {
+            Object.keys(semifinalesPorCiclo).forEach((ciclo) => {
+                semifinalesPorCiclo[ciclo].forEach((equipos) => {
                     html += `
-                <div class="flex items-center justify-between py-2 px-2">
-                  <div class="flex items-center gap-2">
-                    ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-6 h-6 object-contain">` : ''}
-                    <span class="font-medium text-sm">${equipos.LOCAL}</span>
-                  </div>
-                  <span class="font-bold text-sm">${equipos.LSCORE}</span>
-                </div>
-              `;
+                <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
+                    <div class="text-center font-bold text-xl mb-4 tracking-wide">Semifinal <span class="text-brand-gold text-xl">${ciclo}</span></div>
+                    <div class="space-y-2">
+                `;
+
+                    if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) {
+                        html += `
+                    <div class="flex items-center justify-between py-2 px-2">
+                        <div class="flex items-center gap-2">
+                        ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain">` : ''}
+                        <span class="font-medium text-sm">${equipos.LOCAL}</span>
+                        </div>
+                        <span class="font-bold text-sm">${equipos.LSCORE}</span>
+                    </div>
+                    `;
+                        html += `
+                    <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
+                        <div class="flex items-center gap-2">
+                        ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain">` : ''}
+                        <span class="font-medium text-sm">${equipos.VISITANTE}</span>
+                        </div>
+                        <span class="font-bold text-sm">${equipos.VSCORE}</span>
+                    </div>
+                    `;
+                    }
 
                     html += `
-                <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
-                  <div class="flex items-center gap-2">
-                    ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-6 h-6 object-contain">` : ''}
-                    <span class="font-medium text-sm">${equipos.VISITANTE}</span>
-                  </div>
-                  <span class="font-bold text-sm">${equipos.VSCORE}</span>
+                    </div>            
                 </div>
-              `;
-                }
-
-                html += `
-              </div>            
-            </div>
-          `;
-            }
+                `;
+                });
+            });
 
             html += "</div>";
         }
 
+        // Column 4: FINAL y TERCER PUESTO
+        if (grupos.FINAL || grupos.TERCERPUSTO) {
+            html += '<div class="flex flex-col gap-12 items-center justify-center">'
 
-        // Column 4: FINAL
-        if (grupos.FINAL) {
-            html += '<div class="flex items-center justify-center">'
+            // Agrupar finales por ciclo
+            const finalesPorCiclo = {};
+            grupos.FINAL.forEach((equipo) => {
+                const ciclo = equipo.CICLO || '';
+                if (!finalesPorCiclo[ciclo]) finalesPorCiclo[ciclo] = [];
+                finalesPorCiclo[ciclo].push(equipo);
+            });
 
-            const equipos = grupos.FINAL[0]
-            const fechaFinal = equipos?.DIA + "/" + equipos?.MES + "/" + equipos?.ANIO;
+            Object.keys(finalesPorCiclo).forEach((ciclo) => {
+                finalesPorCiclo[ciclo].forEach((equipos) => {
 
-            html += `
+                    html += `
           <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
-            <div class="text-center font-bold text-xl mb-4 tracking-wide">Final - <span class="text-brand-gold text-xl">${ciclo}</span></div>
+            <div class="text-center font-bold text-xl mb-4 tracking-wide">Final <span class="text-brand-gold text-xl">${ciclo}</span></div>
             <div class="space-y-2">
         `;
 
-            if (equipos) {
-                html += `
+                    if (equipos) {
+                        html += `
               <div class="flex items-center justify-between py-2 px-2">
                 <div class="flex items-center gap-2">
-                  <!--<img src="${equipos.LOGOL}" alt="${equipos.LOCAL}" class="w-6 h-6 object-contain">-->
+                ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain">` : ''}
                   <span class="font-medium text-sm">${equipos.LOCAL}</span>
                 </div>
                 <span class="font-bold text-sm">${equipos.LSCORE}</span>
               </div>
             `;
 
-                html += `
+                        html += `
               <div class="flex items-center justify-between py-2 px-2 border-t border-brand-gold">
                 <div class="flex items-center gap-2">
-                  <!--<img src="${equipos.LOGOV}" alt="${equipos.VISITANTE}" class="w-6 h-6 object-contain">-->
+                ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain">` : ''}
                   <span class="font-medium text-sm">${equipos.VISITANTE}</span>
                 </div>
                 <span class="font-bold text-sm">${equipos.VSCORE}</span>
               </div>
             `;
-            }
+                    }
 
-            html += `
-            </div>
-            <div class="text-center text-sm font-medium mt-4 pt-4 border-t border-brand-gold">${fechaFinal}</div>
+                    html += `
+            </div>            
           </div>
         `;
+                });
+            });
+
+            // Agrupar terceros puestos por ciclo
+            const tercerosPorCiclo = {};
+            grupos.TERCERPUSTO?.forEach((equipo) => {
+                const ciclo = equipo.CICLO || '';
+                if (!tercerosPorCiclo[ciclo]) tercerosPorCiclo[ciclo] = [];
+                tercerosPorCiclo[ciclo].push(equipo);
+            });
+
+            Object.keys(tercerosPorCiclo).forEach((ciclo) => {
+                tercerosPorCiclo[ciclo].forEach((equipos) => {
+                    html += `
+            <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
+              <div class="text-center font-bold text-xl mb-4 tracking-wide">Tercer Puesto <span class="text-brand-gold text-xl">${ciclo}</span></div>
+              <div class="space-y-2">
+          `;
+
+                    if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) {
+                        html += `
+                <div class="flex items-center justify-between py-2 px-2">
+                  <div class="flex items-center gap-2">
+                    ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain">` : ''}
+                    <span class="font-medium text-sm">${equipos.LOCAL}</span>
+                  </div>
+                  <span class="font-bold text-sm">${equipos.LSCORE}</span>
+                </div>
+              `;
+
+                        html += `
+                <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
+                  <div class="flex items-center gap-2">
+                    ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain">` : ''}
+                    <span class="font-medium text-sm">${equipos.VISITANTE}</span>
+                  </div>
+                  <span class="font-bold text-sm">${equipos.VSCORE}</span>
+                </div>
+              `;
+                    }
+
+                    html += `
+              </div>            
+            </div>
+          `;
+                });
+            });
 
             html += "</div>";
         }
