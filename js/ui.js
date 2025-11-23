@@ -64,7 +64,7 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
                                 <div class="p-6 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden">
                                     <div class="flex flex-col items-center text-center">
                                         ${equipo.LOGO ? `
-                                            <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.LOGO))}" alt="${equipo.EQUIPO}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-4" onerror="this.style.display='none'">
+                                            <img src="${convertGoogleDriveUrl(equipo.LOGO)}" alt="${equipo.EQUIPO}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-4" onerror="this.style.display='none'">
                                         ` : `
                                             <div class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-${brandColors[index]} rounded-full flex items-center justify-center mb-4">                                                
                                             </div>
@@ -151,14 +151,14 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
                 <div class="rounded-brand p-2 sm:p-6 md:p-8 bg-gray-100 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden ">
                     <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-6 mb-6">
                         <div class="flex flex-col items-center flex-1">
-                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.LLOGO))}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16  object-contain mb-2 md:mb-3 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
+                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16  object-contain mb-2 md:mb-3 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                             <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
                         </div>
                         <div class="text-5xl font-bold text-gray-800 flex justify-center items-center gap-2 flex-shrink-0">
                            <span class="text-3xl">${m.LSCORE || '0'}</span> <span class="text-3xl text-brand-gold">:</span> <span class="text-3xl">${m.VSCORE || '0'}</span>
                         </div>
                         <div class="flex flex-col items-center flex-1">
-                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.VLOGO))}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16  object-contain mb-2 md:mb-3 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
+                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16  object-contain mb-2 md:mb-3 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                             <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
                         </div>
                     </div>
@@ -218,14 +218,14 @@ export function tablaResultadosSemifinal(list, ciclo) {
                 <div class="p-8 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">                   
                     <div class="flex items-center justify-between gap-6 mb-6">
                         <div class="flex flex-col items-center flex-1">
-                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.LLOGO))}" alt="${m.LOCAL}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
+                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
                             <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
                         </div>
                         <div class="text-3xl font-bold text-gray-800">
                             ${m.LSCORE || '0'} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'}
                         </div>
                         <div class="flex flex-col items-center flex-1">
-                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.VLOGO))}" alt="${m.VISITANTE}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
+                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
                             <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
                         </div>
                     </div>
@@ -286,14 +286,14 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
                     <div class="p-8 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">
                         <div class="flex items-center justify-between gap-6 mb-6">
                             <div class="flex flex-col items-center flex-1">
-                                ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.LLOGO))}" alt="${m.LOCAL}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
+                                ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
                                 <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
                             </div>
                             <div class="text-3xl font-bold text-gray-800">
                                 ${m.LSCORE || '0'} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'}
                             </div>
                             <div class="flex flex-col items-center flex-1">
-                                ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.VLOGO))}" alt="${m.VISITANTE}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
+                                ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
                                 <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
                             </div>
                         </div>
@@ -346,7 +346,7 @@ export function tablaClasificacion(list, ciclo) {
                     <!-- Team Card ${i} -->
                     <div class="p-3 md:p-6 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden">
                         <div class="flex items-center justify-center mb-6 gap-1">
-                            ${m.LOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.LOGO))}" alt="${m.EQUIPOS}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain" onerror="this.style.display='none'">` : ''}
+                            ${m.LOGO ? `<img src="${convertGoogleDriveUrl(m.LOGO)}" alt="${m.EQUIPOS}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain" onerror="this.style.display='none'">` : ''}
                             <div class="text-xs sm:text-sm md:text-md lg:text-lg font-bold flex-1">${m.EQUIPOS}</div>
                         </div>
                         <div class="grid grid-cols-2 gap-y-2 md:gap-y-4 gap-x-6 md:gap-x-8">
@@ -631,7 +631,7 @@ export function tablaResultados(list, ciclo) {
                 <td class="py-2 px-2 md:py-4 md:px-4 font-medium" style="text-align: left; padding-left: 1rem; color: #333333;">${pos}</td>
                 <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
                     <div class="flex items-center gap-3">
-                        ${equipo.LOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.LOGO))}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150" style="min-width: 32px; min-height: 32px;" onerror="this.style.display='none'">` : ''}
+                        ${equipo.LOGO ? `<img src="${convertGoogleDriveUrl(equipo.LOGO)}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150" style="min-width: 32px; min-height: 32px;" onerror="this.style.display='none'">` : ''}
                         <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.EQUIPOS}</span>
                     </div>
                 </td>
@@ -731,7 +731,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
             <div class="flex flex-col bg-white shadow-lg overflow-hidden rounded-brand hover:shadow-brand-lg transition-shadow border-b-2" style="border-bottom-color: var(--brand-gold);">
                 <div class="w-full h-16 md:h-28 lg:h-32 flex items-center justify-center overflow-hidden">
                     ${imagenAvatar ? `
-                        <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenAvatar))}" alt="${lider.JUGADOR}" class="h-full object-cover object-center">
+                        <img src="${convertGoogleDriveUrl(imagenAvatar)}" alt="${lider.JUGADOR}" class="h-full object-cover object-center">
                     ` : `
                         <div class="w-full h-full flex items-center justify-center">
                             <span class="text-gray-400 text-lg">${lider.JUGADOR || ''}</span>
@@ -760,7 +760,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
             <div class="flex flex-col bg-white shadow-lg overflow-hidden rounded-brand border-b-2" style="border-bottom-color: var(--brand-gold); opacity: 0.5;">
                 <div class="w-full h-16 md:h-28 lg:h-32 flex items-center justify-center overflow-hidden">
                     ${imagenAvatar ? `
-                        <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenAvatar))}" alt="Posición ${i + 1}" class="h-full object-cover object-center">
+                        <img src="${convertGoogleDriveUrl(imagenAvatar)}" alt="Posición ${i + 1}" class="h-full object-cover object-center">
                     ` : `
                         <div class="w-full h-full flex items-center justify-center">
                             <span class="text-gray-400 text-lg">-</span>
@@ -958,7 +958,7 @@ export function renderNoticias(noticias) {
         .map(
             (noticia, index) => `
             <article class="noticia-card bg-transparent shadow-lg ring-1 ring-black/5 rounded-brand overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer ${index === -1 ? "md:col-span-2 lg:col-span-3" : ""}" data-noticia-index="${index}">
-                <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(noticia.IMAGEN))}" class="w-full h-64 md:h-90 lg:h-96 object-cover" loading="lazy" alt="${noticia.TITULO}" onerror="this.style.display='none'" />
+                <img src="${convertGoogleDriveUrl(noticia.IMAGEN)}" class="w-full h-64 md:h-90 lg:h-96 object-contain" loading="lazy" alt="${noticia.TITULO}" onerror="this.style.display='none'" />
                 <div class="p-6">
                     <div class="flex items-center justify-between">
                         <span class="text-xs sm:text-sm font-medium bg-gray-100 px-3 py-1 rounded-brand">${noticia.FECHA}</span>
@@ -1024,7 +1024,7 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid gap-4">
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="h-80 md:h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 md:h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
                 </div>
             `;
         } else if (imagenes.length === 2) {
@@ -1032,10 +1032,10 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid md:grid-cols-2 gap-4">
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />                
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />                
                 </div>
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="h-80 max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-80 max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
                 </div>
             `;
         } else if (imagenes.length === 3) {
@@ -1043,11 +1043,11 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid grid-cols-2 gap-4">
                 <div class="flex gap-4">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />                    
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />                    
                 </div>
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="h-60 object-cover rounded-brand" onerror="this.style.display='none'" />                    
+                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-60 object-cover rounded-brand" onerror="this.style.display='none'" />                    
                 </div>
             `;
         } else if (imagenes.length === 4) {
@@ -1055,12 +1055,12 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid grid-cols-2 gap-4">
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />               
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />               
+                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
                 </div>
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />                 
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[3]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />                 
+                    <img src="${convertGoogleDriveUrl(imagenes[3])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />
                 </div>
             `;
         } else if (imagenes.length === 5) {
@@ -1068,13 +1068,13 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid grid-cols-2 gap-4">
                 <div class="grid gap-4 ">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[0]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />                 
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[1]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />                 
+                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
                 </div>
                 <div class="grid gap-3">
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[2]))}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />                
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[3]))}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />
-                    <img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(imagenes[4]))}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />                
+                    <img src="${convertGoogleDriveUrl(imagenes[3])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[4])}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
                 </div>
             `;
         }
@@ -1098,14 +1098,15 @@ export function mostrarDetalleNoticia(noticia) {
                 style="opacity: 0; transform: translateY(-56px); pointer-events: none;" >
                 <div class="noticia-dialog-content overflow-y-auto">
                     <div class="noticia-dialog-header">
-                        <button data-dialog-close="true"  class="noticia-dialog-close" aria-label="Cerrar" type="button" >
+                        <h3 class="text-sm md:text-lg lg:text-xl font-bold m-auto px-6">Noticia</h3>
+                        <button data-dialog-close="true"  class="noticia-dialog-close mr-6" aria-label="Cerrar" type="button" >
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
                     <div class="noticia-dialog-body p-6 md:p-10">                       
-                        <div class="flex flex-col lg:flex-row items-start justify-center gap-6">
+                        <div class="flex flex-col lg:flex-row items-start justify-center gap-8">
                             <div class="flex flex-col items-start justify-center gap-10 flex-1">
                                 <div class="flex flex-col sm:flex-row items-center justify-start gap-6">
                                     <span class="text-xs sm:text-sm font-medium py-1">${noticia.FECHA || ''}</span>
@@ -1289,7 +1290,7 @@ export function renderBracket(clasificacion) {
                         html += `
                     <div class="flex items-center justify-between py-2 px-2">
                         <div class="flex items-center gap-2">
-                        ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
+                        ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-sm">${equipos.LOCAL}</span>
                         </div>
                         <span class="font-bold text-sm">${equipos.LSCORE}</span>
@@ -1298,7 +1299,7 @@ export function renderBracket(clasificacion) {
                         html += `
                     <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
                         <div class="flex items-center gap-2">
-                        ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
+                        ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-sm">${equipos.VISITANTE}</span>
                         </div>
                         <span class="font-bold text-sm">${equipos.VSCORE}</span>
@@ -1340,7 +1341,7 @@ export function renderBracket(clasificacion) {
                         html += `
                     <div class="flex items-center justify-between py-2 px-2">
                         <div class="flex items-center gap-2">
-                        ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
+                        ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-sm">${equipos.LOCAL}</span>
                         </div>
                         <span class="font-bold text-sm">${equipos.LSCORE}</span>
@@ -1349,7 +1350,7 @@ export function renderBracket(clasificacion) {
                         html += `
                     <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
                         <div class="flex items-center gap-2">
-                        ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
+                        ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-sm">${equipos.VISITANTE}</span>
                         </div>
                         <span class="font-bold text-sm">${equipos.VSCORE}</span>
@@ -1392,7 +1393,7 @@ export function renderBracket(clasificacion) {
                         html += `
               <div class="flex items-center justify-between py-2 px-2">
                 <div class="flex items-center gap-2">
-                ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
+                ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                   <span class="font-medium text-sm">${equipos.LOCAL}</span>
                 </div>
                 <span class="font-bold text-sm">${equipos.LSCORE}</span>
@@ -1402,7 +1403,7 @@ export function renderBracket(clasificacion) {
                         html += `
               <div class="flex items-center justify-between py-2 px-2 border-t border-brand-gold">
                 <div class="flex items-center gap-2">
-                ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
+                ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                   <span class="font-medium text-sm">${equipos.VISITANTE}</span>
                 </div>
                 <span class="font-bold text-sm">${equipos.VSCORE}</span>
@@ -1437,7 +1438,7 @@ export function renderBracket(clasificacion) {
                         html += `
                 <div class="flex items-center justify-between py-2 px-2">
                   <div class="flex items-center gap-2">
-                    ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
+                    ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                     <span class="font-medium text-sm">${equipos.LOCAL}</span>
                   </div>
                   <span class="font-bold text-sm">${equipos.LSCORE}</span>
@@ -1447,7 +1448,7 @@ export function renderBracket(clasificacion) {
                         html += `
                 <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
                   <div class="flex items-center gap-2">
-                    ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
+                    ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                     <span class="font-medium text-sm">${equipos.VISITANTE}</span>
                   </div>
                   <span class="font-bold text-sm">${equipos.VSCORE}</span>
@@ -1627,14 +1628,14 @@ export function renderProximosPartidos(partidos) {
                     <div class="rounded-brand p-2 sm:p-6 md:p-8 bg-white shadow-lg ring-1 ring-black/5 border border-gray-200 hover:shadow-brand-md transition-shadow overflow-hidden">                      
                         <div class="flex flex-col lg:flex-row items-center justify-between gap-2 lg:gap-4 mb-2 lg:mb-4">
                             <div class="flex flex-col items-center flex-1">
-                                ${partido.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.LLOGO))}" alt="${local}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
+                                ${partido.LLOGO ? `<img src="${convertGoogleDriveUrl(partido.LLOGO)}" alt="${local}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                                 <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${local}</div>
                             </div>
                             <div class="text-3xl font-bold text-gray-800 flex items-center gap-2">
                                 <span class="text-4xl text-brand-gold">VS</span>
                             </div>
                             <div class="flex flex-col items-center flex-1">
-                                ${partido.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.VLOGO))}" alt="${visitante}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
+                                ${partido.VLOGO ? `<img src="${convertGoogleDriveUrl(partido.VLOGO)}" alt="${visitante}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                                 <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${visitante}</div>
                             </div>
                         </div>
