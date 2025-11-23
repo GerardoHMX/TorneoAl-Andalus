@@ -2,6 +2,7 @@
 // Inicialización del carrusel
 
 import { initCarousel } from './carousel.js';
+import { convertGoogleDriveUrl } from './ui.js';
 
 function initializeCarousel() {
     const carouselCards = [
@@ -15,6 +16,17 @@ function initializeCarousel() {
             bgColor: 'bg-brand-white',
             textColor: 'text-brand-blue',
             title: 'Torneo escolar',
+        },
+        {
+            text: `
+                <div class="flex-1 flex flex-col gap-3 items-center justify-center"> 
+                    <img src="${convertGoogleDriveUrl('https://drive.google.com/file/d/1wUqSjzfL4POj_t5pC0_RDkLlsgbyDqXT/view?usp=sharing')}" alt="Al-Ándalus" class="w-60 md:w-80 object-contain"> 
+                    <h3 class="text-brand-gold text-md font-bold">Cartel del Torneo escolar</h3>  
+                </div>
+            `,
+            bgColor: 'bg-brand-white',
+            textColor: 'text-brand-blue',
+            title: 'Cartel del Torneo escolar',
         },
         {
             text: `

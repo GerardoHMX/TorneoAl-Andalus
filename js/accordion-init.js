@@ -1,5 +1,7 @@
 // --- accordion-init.js ---
 
+import { convertGoogleDriveUrl } from './ui.js';
+
 const accordionData = [
     {
         text: `
@@ -9,6 +11,15 @@ const accordionData = [
             </div>
         `,
         title: 'Torneo escolar',
+    },
+    {
+        text: `
+            <div class="flex-1 flex flex-col gap-3 items-center justify-center"> 
+                <img src="${convertGoogleDriveUrl('https://drive.google.com/file/d/1wUqSjzfL4POj_t5pC0_RDkLlsgbyDqXT/view?usp=sharing')}" alt="Al-Ándalus" class="w-60 md:w-80 object-contain"> 
+                <h3 class="text-brand-gold text-md font-bold">Cartel del Torneo escolar</h3>  
+            </div>
+        `,
+        title: 'Cartel del Torneo escolar',
     },
     {
         title: 'Descripción del torneo',

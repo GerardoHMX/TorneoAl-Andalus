@@ -151,14 +151,14 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
                 <div class="rounded-brand p-2 sm:p-6 md:p-8 bg-gray-100 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden ">
                     <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-6 mb-6">
                         <div class="flex flex-col items-center flex-1">
-                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.LLOGO))}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16  object-contain mb-2 md:mb-3" onerror="this.style.display='none'">` : ''}
+                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.LLOGO))}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16  object-contain mb-2 md:mb-3 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                             <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
                         </div>
                         <div class="text-5xl font-bold text-gray-800 flex justify-center items-center gap-2 flex-shrink-0">
                            <span class="text-3xl">${m.LSCORE || '0'}</span> <span class="text-3xl text-brand-gold">:</span> <span class="text-3xl">${m.VSCORE || '0'}</span>
                         </div>
                         <div class="flex flex-col items-center flex-1">
-                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.VLOGO))}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16  object-contain mb-2 md:mb-3" onerror="this.style.display='none'">` : ''}
+                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(m.VLOGO))}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16  object-contain mb-2 md:mb-3 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                             <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
                         </div>
                     </div>
@@ -514,7 +514,7 @@ export function tablaClasificacionGrupal(list, ciclo) {
                     <td class="py-2 px-2 md:py-4 md:px-4 font-medium" style="text-align: left; padding-left: 1rem; color: #333333;">${pos}</td>
                     <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
                         <div class="flex items-center gap-3">
-                            ${equipo.LOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.LOGO))}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain" style="min-width: 32px; min-height: 32px;" onerror="this.style.display='none'">` : ''}
+                            ${equipo.LOGO ? `<img src="${convertGoogleDriveUrl(equipo.LOGO)}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150" style="min-width: 32px; min-height: 32px;" onerror="this.style.display='none'">` : ''}
                             <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg">${equipo.EQUIPOS}</span>
                         </div>
                     </td>
@@ -631,7 +631,7 @@ export function tablaResultados(list, ciclo) {
                 <td class="py-2 px-2 md:py-4 md:px-4 font-medium" style="text-align: left; padding-left: 1rem; color: #333333;">${pos}</td>
                 <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
                     <div class="flex items-center gap-3">
-                        ${equipo.LOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.LOGO))}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain" style="min-width: 32px; min-height: 32px;" onerror="this.style.display='none'">` : ''}
+                        ${equipo.LOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.LOGO))}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150" style="min-width: 32px; min-height: 32px;" onerror="this.style.display='none'">` : ''}
                         <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.EQUIPOS}</span>
                     </div>
                 </td>
@@ -1247,7 +1247,7 @@ export function renderBracket(clasificacion) {
                                 html += `
                     <div class="flex items-center justify-between py-2 lg:py-3 px-2 border-b border-brand-red last:border-0">
                         <div class="flex items-center gap-3">
-                         ${equipo.GLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipo.GLOGO))}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain">` : ''}
+                         ${equipo.GLOGO ? `<img src="${convertGoogleDriveUrl(equipo.GLOGO)}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-semibold text-sm">${equipo.EQUIPOS}</span>
                         </div>
                         <span class="font-bold text-tournament-red">${equipo.PUNTOS}</span>
@@ -1289,7 +1289,7 @@ export function renderBracket(clasificacion) {
                         html += `
                     <div class="flex items-center justify-between py-2 px-2">
                         <div class="flex items-center gap-2">
-                        ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain">` : ''}
+                        ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-sm">${equipos.LOCAL}</span>
                         </div>
                         <span class="font-bold text-sm">${equipos.LSCORE}</span>
@@ -1298,7 +1298,7 @@ export function renderBracket(clasificacion) {
                         html += `
                     <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
                         <div class="flex items-center gap-2">
-                        ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain">` : ''}
+                        ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-sm">${equipos.VISITANTE}</span>
                         </div>
                         <span class="font-bold text-sm">${equipos.VSCORE}</span>
@@ -1340,7 +1340,7 @@ export function renderBracket(clasificacion) {
                         html += `
                     <div class="flex items-center justify-between py-2 px-2">
                         <div class="flex items-center gap-2">
-                        ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain">` : ''}
+                        ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-sm">${equipos.LOCAL}</span>
                         </div>
                         <span class="font-bold text-sm">${equipos.LSCORE}</span>
@@ -1349,7 +1349,7 @@ export function renderBracket(clasificacion) {
                         html += `
                     <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
                         <div class="flex items-center gap-2">
-                        ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain">` : ''}
+                        ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-sm">${equipos.VISITANTE}</span>
                         </div>
                         <span class="font-bold text-sm">${equipos.VSCORE}</span>
@@ -1392,7 +1392,7 @@ export function renderBracket(clasificacion) {
                         html += `
               <div class="flex items-center justify-between py-2 px-2">
                 <div class="flex items-center gap-2">
-                ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain">` : ''}
+                ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                   <span class="font-medium text-sm">${equipos.LOCAL}</span>
                 </div>
                 <span class="font-bold text-sm">${equipos.LSCORE}</span>
@@ -1402,7 +1402,7 @@ export function renderBracket(clasificacion) {
                         html += `
               <div class="flex items-center justify-between py-2 px-2 border-t border-brand-gold">
                 <div class="flex items-center gap-2">
-                ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain">` : ''}
+                ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                   <span class="font-medium text-sm">${equipos.VISITANTE}</span>
                 </div>
                 <span class="font-bold text-sm">${equipos.VSCORE}</span>
@@ -1437,7 +1437,7 @@ export function renderBracket(clasificacion) {
                         html += `
                 <div class="flex items-center justify-between py-2 px-2">
                   <div class="flex items-center gap-2">
-                    ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain">` : ''}
+                    ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.LLOGO))}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                     <span class="font-medium text-sm">${equipos.LOCAL}</span>
                   </div>
                   <span class="font-bold text-sm">${equipos.LSCORE}</span>
@@ -1447,7 +1447,7 @@ export function renderBracket(clasificacion) {
                         html += `
                 <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
                   <div class="flex items-center gap-2">
-                    ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain">` : ''}
+                    ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(equipos.VLOGO))}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                     <span class="font-medium text-sm">${equipos.VISITANTE}</span>
                   </div>
                   <span class="font-bold text-sm">${equipos.VSCORE}</span>
@@ -1627,14 +1627,14 @@ export function renderProximosPartidos(partidos) {
                     <div class="rounded-brand p-2 sm:p-6 md:p-8 bg-white shadow-lg ring-1 ring-black/5 border border-gray-200 hover:shadow-brand-md transition-shadow overflow-hidden">                      
                         <div class="flex flex-col lg:flex-row items-center justify-between gap-2 lg:gap-4 mb-2 lg:mb-4">
                             <div class="flex flex-col items-center flex-1">
-                                ${partido.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.LLOGO))}" alt="${local}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2" onerror="this.style.display='none'">` : ''}
+                                ${partido.LLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.LLOGO))}" alt="${local}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                                 <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${local}</div>
                             </div>
                             <div class="text-3xl font-bold text-gray-800 flex items-center gap-2">
                                 <span class="text-4xl text-brand-gold">VS</span>
                             </div>
                             <div class="flex flex-col items-center flex-1">
-                                ${partido.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.VLOGO))}" alt="${visitante}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2" onerror="this.style.display='none'">` : ''}
+                                ${partido.VLOGO ? `<img src="${convertGoogleDriveUrl(convertGoogleDriveUrl(partido.VLOGO))}" alt="${visitante}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                                 <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${visitante}</div>
                             </div>
                         </div>
@@ -1669,7 +1669,7 @@ export function renderProximosPartidos(partidos) {
 }
 
 // Función para convertir URLs de Google Drive
-const convertGoogleDriveUrl = (url) => {
+export const convertGoogleDriveUrl = (url) => {
     if (!url) return url;
 
     // Si ya es una URL directa o no es de Google Drive, devolverla tal cual
