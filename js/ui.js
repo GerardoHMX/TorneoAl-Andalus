@@ -958,7 +958,7 @@ export function renderNoticias(noticias) {
         .map(
             (noticia, index) => `
             <article class="noticia-card bg-transparent shadow-lg ring-1 ring-black/5 rounded-brand overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer ${index === -1 ? "md:col-span-2 lg:col-span-3" : ""}" data-noticia-index="${index}">
-                <img src="${convertGoogleDriveUrl(noticia.IMAGEN)}" class="w-full h-64 md:h-90 lg:h-96 object-contain" loading="lazy" alt="${noticia.TITULO}" onerror="this.style.display='none'" />
+                <img src="${convertGoogleDriveUrl(noticia.IMAGEN)}" class="w-full h-64 md:h-90 lg:h-96 object-contain transition-transform duration-300 hover:scale-150" loading="lazy" alt="${noticia.TITULO}" onerror="this.style.display='none'" />
                 <div class="p-6">
                     <div class="flex items-center justify-between">
                         <span class="text-xs sm:text-sm font-medium bg-gray-100 px-3 py-1 rounded-brand">${noticia.FECHA}</span>
@@ -1024,7 +1024,7 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid gap-4">
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 md:h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 md:h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
                 </div>
             `;
         } else if (imagenes.length === 2) {
@@ -1032,10 +1032,10 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid md:grid-cols-2 gap-4">
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />                
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />                
                 </div>
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-80 max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-80 max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
                 </div>
             `;
         } else if (imagenes.length === 3) {
@@ -1043,11 +1043,11 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid grid-cols-2 gap-4">
                 <div class="flex gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />                    
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />                    
                 </div>
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-60 object-cover rounded-brand" onerror="this.style.display='none'" />                    
+                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-60 object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />                    
                 </div>
             `;
         } else if (imagenes.length === 4) {
@@ -1055,12 +1055,12 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid grid-cols-2 gap-4">
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />               
-                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />               
+                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
                 </div>
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />                 
-                    <img src="${convertGoogleDriveUrl(imagenes[3])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />                 
+                    <img src="${convertGoogleDriveUrl(imagenes[3])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
                 </div>
             `;
         } else if (imagenes.length === 5) {
@@ -1068,13 +1068,13 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid grid-cols-2 gap-4">
                 <div class="grid gap-4 ">
-                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />                 
-                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />                 
+                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
                 </div>
                 <div class="grid gap-3">
-                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />                
-                    <img src="${convertGoogleDriveUrl(imagenes[3])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
-                    <img src="${convertGoogleDriveUrl(imagenes[4])}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />                
+                    <img src="${convertGoogleDriveUrl(imagenes[3])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[4])}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
                 </div>
             `;
         }
