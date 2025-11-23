@@ -1,10 +1,10 @@
 # V Torneo Fútbol Sala Al-Ándalus — Colegio San Francisco de Asís
 ---
 
-![Bases](imagen/Bases.png)
-![Bracket](imagen/bracket.png)
-![Próximos partidos](imagen/proximosPartidos.png)
-![Resultados](imagen/resultados.png)
+![Bases](img/Bases.png)
+![Bracket](img/bracket.png)
+![Próximos partidos](img/proximosPartidos.png)
+![Resultados](img/resultados.png)
 
 **Autor:** Alumno de 1º Bachillerato Gerardo Huizar Castro — Colegio San Francisco de Asís  
 **Proyecto escolar:** V Torneo Fútbol Sala Al-Ándalus  
