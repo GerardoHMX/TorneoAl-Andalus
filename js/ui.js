@@ -671,19 +671,27 @@ export function tablaResultados(list, ciclo) {
 }
 
 // --- TABLA DE LIDERES GOLEADORES ---
-export function tablaLideresGoleadores(list, ciclo, otros = []) {
+export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "TODOS") {
     const div = document.getElementById("goleadores" + ciclo);
     if (!div) return;
     div.classList.add("mb-6", "mt-6");
 
     // Filtrar lideres para no mostrar registros incompletos
-    const lideres = list.filter(lider =>
+    let lideres = list.filter(lider =>
         lider.CICLO === ciclo &&
         lider.CICLO !== undefined &&
         lider.CICLO !== "" &&
         lider.JUGADOR !== undefined &&
         lider.JUGADOR !== ""
     );
+
+    // Obtener cursos únicos para el select
+    const cursosUnicos = [...new Set(lideres.map(l => l.CURSO).filter(c => c && c !== ""))].sort();
+
+    // Aplicar filtro de curso si no es "TODOS"
+    if (cursoFiltro !== "TODOS") {
+        lideres = lideres.filter(lider => lider.CURSO === cursoFiltro);
+    }
 
     // Función auxiliar para obtener la imagen según CICLO y POSICION
     const obtenerImagenPorPosicion = (ciclo, posicion) => {
@@ -713,10 +721,17 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
     // Primera parte: Top 3 goleadores en tarjetas (siempre se muestran)
     let html = `                
     <div>
-        <div class="flex items-center justify-between gap-2">                
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">                
             <h4 class="text-3xl font-bold text-brand-gold mb-2 flex items-center gap-2">
                 ${ciclo}
             </h4>
+            <div class="flex items-center gap-2">
+                <label for="filtro-curso-goleadores-${ciclo}" class="font-bold text-xs sm:text-sm md:text-md lg:text-lg uppercase whitespace-nowrap">Curso:</label>
+                <select id="filtro-curso-goleadores-${ciclo}" class="px-4 py-2 border border-gray-300 rounded-brand bg-white text-gray-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent cursor-pointer" data-ciclo="${ciclo}" data-tipo="goleadores">
+                    <option value="TODOS" ${cursoFiltro === "TODOS" ? "selected" : ""}>TODOS</option>
+                    ${cursosUnicos.map(curso => `<option value="${curso}" ${cursoFiltro === curso ? "selected" : ""}>${curso}</option>`).join("")}
+                </select>
+            </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="lideres${ciclo}">        
     `;
@@ -789,7 +804,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
     html += '</div>';
 
     // Segunda parte: Tabla completa con todos los goleadores o mensaje si no hay datos
-    const goleadoresCiclo = listOrdered.filter(lider => lider.CICLO === ciclo);
+    const goleadoresCiclo = listOrdered;
 
     if (goleadoresCiclo.length > 0) {
         html += `
@@ -852,7 +867,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
                         <tbody>
                             <tr class="bg-white border-gray-100 border border-b">
                                 <td colspan="5" class="py-8 px-4 text-center">
-                                    <p class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg">${ciclo === "ESO" ? "Aún no hay partidos jugados, pronto conoceremos a los primeros líderes de goleo." : "Todavía no se registran partidos. ¡Los goleadores aparecerán en cuanto ruede el balón!"}</p>
+                                    <p class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg">${cursoFiltro !== "TODOS" ? "No hay goleadores registrados para este curso." : (ciclo === "ESO" ? "Aún no hay partidos jugados, pronto conoceremos a los primeros líderes de goleo." : "Todavía no se registran partidos. ¡Los goleadores aparecerán en cuanto ruede el balón!")}</p>
                                 </td>
                             </tr>
                         </tbody>
@@ -867,13 +882,13 @@ export function tablaLideresGoleadores(list, ciclo, otros = []) {
 }
 
 // --- TABLA DE SANCIONADOS ---
-export function tablaSancionados(list, ciclo) {
+export function tablaSancionados(list, ciclo, cursoFiltro = "TODOS") {
     const div = document.getElementById("sancionados" + ciclo);
     if (!div) return;
     div.classList.add("overflow-x-auto", "mb-6", "mt-6");
 
     // Filtrar sancionados para no mostrar registros incompletos
-    const sancionados = list.filter(sancionado =>
+    let sancionados = list.filter(sancionado =>
         sancionado.CICLO === ciclo &&
         sancionado.CICLO !== undefined &&
         sancionado.CICLO !== "" &&
@@ -881,25 +896,40 @@ export function tablaSancionados(list, ciclo) {
         sancionado.JUGADOR !== ""
     );
 
+    // Obtener cursos únicos para el select
+    const cursosUnicos = [...new Set(sancionados.map(s => s.CURSO).filter(c => c && c !== ""))].sort();
+
+    // Aplicar filtro de curso si no es "TODOS"
+    if (cursoFiltro !== "TODOS") {
+        sancionados = sancionados.filter(sancionado => sancionado.CURSO === cursoFiltro);
+    }
+
     // Construir la tabla siempre, con o sin datos
     let html = `
         <div class="mb-6">
-            <div class="flex items-center justify-between gap-2">                
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">                
                 <h4 class="text-3xl font-bold text-brand-gold mb-2 flex items-center gap-2">
                     ${ciclo}
                 </h4>
+                <div class="flex items-center gap-2">
+                    <label for="filtro-curso-${ciclo}" class="font-bold text-xs sm:text-sm md:text-md lg:text-lg uppercase whitespace-nowrap">Curso:</label>
+                    <select id="filtro-curso-${ciclo}" class="px-4 py-2 border border-gray-300 rounded-brand bg-white text-gray-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent cursor-pointer" data-ciclo="${ciclo}">
+                        <option value="TODOS" ${cursoFiltro === "TODOS" ? "selected" : ""}>TODOS</option>
+                        ${cursosUnicos.map(curso => `<option value="${curso}" ${cursoFiltro === curso ? "selected" : ""}>${curso}</option>`).join("")}
+                    </select>
+                </div>
             </div>
             <div class="rounded-brand overflow-hidden shadow-lg">
-                <div class="overflow-x-auto">
-                    <table class="w-full min-w-full" style="border-collapse: collapse;">
+                <div class="overflow-scroll max-h-[32rem]">
+                    <table class="w-full" style="border-collapse: collapse;">
                         <thead>
                             <tr style="background-color: #B30000; color: white;">
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">EQUIPO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 15%; text-align: left; padding-left: 1rem;">CURSO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 10%; text-align: left; padding-left: 1rem;">JUGADOR</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 15%; text-align: center;">ROJAS</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 15%; text-align: center;">AMARILLAS</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 15%; text-align: center;">SUSPENDIDOS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: left; padding-left: 1rem;">EQUIPO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 20%; text-align: left; ">CURSO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 12%; text-align: left; ">JUGADOR</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: center;">ROJAS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: center;">AMARILLAS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: center;">SUSPENDIDOS</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -910,7 +940,7 @@ export function tablaSancionados(list, ciclo) {
         html += `
                             <tr class="bg-white border-gray-100 border border-b">
                                 <td colspan="6" class="py-8 px-4 text-center">
-                                    <p class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg">${ciclo === "ESO" ? "Parece que el juego limpio va ganando, no hay sanciones registradas." : "Todo en orden, ningún jugador ha sido sancionado hasta el momento."}</p>
+                                    <p class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg">${cursoFiltro !== "TODOS" ? "No hay sanciones registradas para este curso." : (ciclo === "ESO" ? "Parece que el juego limpio va ganando, no hay sanciones registradas." : "Todo en orden, ningún jugador ha sido sancionado hasta el momento.")}</p>
                                 </td>
                             </tr>
         `;
@@ -921,7 +951,7 @@ export function tablaSancionados(list, ciclo) {
                 <tr class="bg-white border-gray-100 border border-b">
                     <td class="py-2 px-2 md:py-4 md:px-4 font-medium text-xs sm:text-sm md:text-md lg:text-lg uppercase" >${sancionado.EQUIPO || '-'}</td>
                     <td class="py-2 px-2 md:py-4 md:px-4 font-medium text-xs sm:text-sm md:text-md lg:text-lg uppercase" >${sancionado.CURSO || '-'}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg uppercase" >${sancionado.JUGADOR || ''}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 font-medium text-xs sm:text-sm md:text-md lg:text-lg uppercase" >${sancionado.JUGADOR || ''}</td>
                     <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.TROJAS || 0}</td>
                     <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.TAMARILLAS || 0}</td>
                     <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.JUSTIFICACION || 0}</td>
@@ -958,7 +988,7 @@ export function renderNoticias(noticias) {
         .map(
             (noticia, index) => `
             <article class="noticia-card bg-transparent shadow-lg ring-1 ring-black/5 rounded-brand overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer ${index === -1 ? "md:col-span-2 lg:col-span-3" : ""}" data-noticia-index="${index}">
-                <img src="${convertGoogleDriveUrl(noticia.IMAGEN)}" class="w-full h-64 md:h-90 lg:h-96 object-contain transition-transform duration-300 hover:scale-150" loading="lazy" alt="${noticia.TITULO}" onerror="this.style.display='none'" />
+                <img src="${convertGoogleDriveUrl(noticia.IMAGEN)}" class="w-full h-64 md:h-90 lg:h-96 object-contain" loading="lazy" alt="${noticia.TITULO}" onerror="this.style.display='none'" />
                 <div class="p-6">
                     <div class="flex items-center justify-between">
                         <span class="text-xs sm:text-sm font-medium bg-gray-100 px-3 py-1 rounded-brand">${noticia.FECHA}</span>
@@ -1024,7 +1054,7 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid gap-4">
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 md:h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 md:h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />
                 </div>
             `;
         } else if (imagenes.length === 2) {
@@ -1032,10 +1062,10 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid md:grid-cols-2 gap-4">
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />                
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand " onerror="this.style.display='none'" />                
                 </div>
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-80 max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-80 max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />
                 </div>
             `;
         } else if (imagenes.length === 3) {
@@ -1043,11 +1073,11 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid grid-cols-2 gap-4">
                 <div class="flex gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />                    
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand " onerror="this.style.display='none'" />                    
                 </div>
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
-                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-60 object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />                    
+                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-60 object-cover rounded-brand " onerror="this.style.display='none'" />                    
                 </div>
             `;
         } else if (imagenes.length === 4) {
@@ -1055,12 +1085,12 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid grid-cols-2 gap-4">
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />               
-                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand " onerror="this.style.display='none'" />               
+                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />
                 </div>
                 <div class="grid gap-4">
-                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />                 
-                    <img src="${convertGoogleDriveUrl(imagenes[3])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />                 
+                    <img src="${convertGoogleDriveUrl(imagenes[3])}" alt="${noticia.TITULO}" class="h-80 object-cover rounded-brand " onerror="this.style.display='none'" />
                 </div>
             `;
         } else if (imagenes.length === 5) {
@@ -1068,13 +1098,13 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid grid-cols-2 gap-4">
                 <div class="grid gap-4 ">
-                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />                 
-                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />                 
+                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />
                 </div>
                 <div class="grid gap-3">
-                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />                
-                    <img src="${convertGoogleDriveUrl(imagenes[3])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
-                    <img src="${convertGoogleDriveUrl(imagenes[4])}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />                
+                    <img src="${convertGoogleDriveUrl(imagenes[3])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[4])}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />
                 </div>
             `;
         }
@@ -1597,7 +1627,7 @@ export function renderProximosPartidos(partidos) {
             html += `
                 <div class="md:container mx-auto mb-8">
                     <h4 class="text-2xl font-bold text-brand-blue mb-4 flex items-center gap-2">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         ${diaSemana} ${fechaFormateada}
@@ -1700,3 +1730,149 @@ export const convertGoogleDriveUrl = (url) => {
     // Si no se puede convertir, devolver la URL original
     return url;
 };
+
+// --- RENDER GALERÍA ---
+export function renderGalería(galeriaItems = []) {
+    const div = document.getElementById("galeria");
+    if (!div) return;
+
+    // Filtrar elementos publicados (similar a noticias)
+    const galeriaPublicada = galeriaItems.filter(item => item.PUBLICAR === "SI");
+
+    if (galeriaPublicada.length === 0) {
+        div.innerHTML = '<p class="text-gray-700 col-span-full text-center">La galería estará disponible pronto con imágenes y videos del torneo.</p>';
+        return;
+    }
+
+    // Renderizar elementos de galería
+    div.innerHTML = galeriaPublicada
+        .map((item, index) => {
+            if(item.PUBLICAR !== "SI") return '';
+            // Determinar si es video o imagen basado en el tipo o la URL
+            const esVideo = item.TIPO === 'VIDEO' || item.TIPO === 'video' || 
+                           (item.URL && (item.URL.includes('/file/d/') || item.URL.includes('youtube.com') || item.URL.includes('youtu.be')));
+            
+            if (esVideo) {
+                // Extraer ID del video de Google Drive
+                let videoId = null;
+                if (item.URL) {
+                    const match = item.URL.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                    if (match) {
+                        videoId = match[1];
+                    }
+                }
+
+                if (videoId) {
+                    return `
+                        <div class="galeria-item bg-white shadow-lg ring-1 ring-black/5 rounded-brand overflow-hidden hover:shadow-xl transition-shadow duration-300 bg-gray-100">
+                            <div class="w-full max-w-full mx-auto aspect-video">
+                                <iframe
+                                    class="w-full h-full border-0"
+                                    src="https://drive.google.com/file/d/${videoId}/preview"
+                                    allow="autoplay; fullscreen"
+                                    allowfullscreen
+                                ></iframe>
+                            </div>
+                            ${item.TITULO || item.FECHA ? `
+                                <div class="px-4">
+                                    ${item.FECHA ? `<span class="text-xs sm:text-sm font-medium rounded-brand mr-2 inline-block">${item.FECHA}</span>` : ''}
+                                    ${item.TITULO ? `<h4 class="text-sm md:text-base font-bold text-brand-blue ${item.FECHA ? 'mr-2 ' : ''}">${item.TITULO}</h4>` : ''}
+                                    ${item.DESCRIPCION ? `<p class="text-xs md:text-sm text-gray-600 mt-2">${item.DESCRIPCION}</p>` : ''}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+            }
+
+            // Es una imagen
+            const imagenUrl = item.URL || item.IMAGEN || '';
+            if (!imagenUrl) return '';
+
+            return `
+                <div class="galeria-item bg-white shadow-lg ring-1 ring-black/5 rounded-brand overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer bg-gray-100" data-galeria-index="${index}">
+                    <img 
+                        src="${convertGoogleDriveUrl(imagenUrl)}" 
+                        class="w-full h-64 md:h-80 lg:h-96 object-cover transition-transform duration-300 hover:scale-105" 
+                        loading="lazy" 
+                        alt="${item.TITULO || 'Imagen de galería'}" 
+                        onerror="this.style.display='none'" 
+                    />
+                    ${item.TITULO || item.FECHA || item.DESCRIPCION ? `
+                        <div class="px-4">
+                            ${item.FECHA ? `<span class="text-xs sm:text-sm font-medium rounded-brand mr-2 inline-block">${item.FECHA}</span>` : ''}
+                            ${item.TITULO ? `<h4 class="text-sm md:text-base font-bold text-brand-blue ${item.FECHA ? 'mr-2' : ''}">${item.TITULO}</h4>` : ''}
+                            ${item.DESCRIPCION ? `<p class="text-xs md:text-sm text-gray-600 mt-2">${item.DESCRIPCION}</p>` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        })
+        .filter(html => html !== '') // Filtrar elementos vacíos
+        .join('');
+
+    // Agregar event listeners para abrir imágenes en modal (opcional, similar a noticias)
+    div.querySelectorAll('.galeria-item[data-galeria-index]').forEach((item, index) => {
+        const galeriaItem = galeriaPublicada[index];
+        if (galeriaItem && !galeriaItem.URL?.includes('/file/d/')) {
+            item.addEventListener('click', () => {
+                mostrarDetalleGalería(galeriaItem);
+            });
+        }
+    });
+}
+
+// --- MOSTRAR DETALLE GALERÍA EN DIALOG (opcional) ---
+function mostrarDetalleGalería(item) {
+    // Crear o obtener el diálogo
+    let dialogContainer = document.getElementById('galeria-dialog-container');
+    if (!dialogContainer) {
+        dialogContainer = document.createElement('div');
+        dialogContainer.id = 'galeria-dialog-container';
+        document.body.appendChild(dialogContainer);
+    }
+
+    const imagenUrl = item.URL || item.IMAGEN || '';
+    if (!imagenUrl) return;
+
+    const contenidoLimpio = (item.DESCRIPCION || '').replace(/^"/, '').replace(/"$/, '');
+
+    dialogContainer.innerHTML = `
+        <dialog data-dialog="galeria-dialog" class="open:flex flex-col w-full max-w-4xl rounded-brand p-0">
+            <div class="noticia-dialog-content">
+                <div class="noticia-dialog-header">
+                    <h3 class="text-xl md:text-2xl font-bold">${item.TITULO || 'Galería'}</h3>
+                    <button class="noticia-dialog-close" onclick="this.closest('dialog').close()" aria-label="Cerrar">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="noticia-dialog-body" style="overflow-y: auto;">
+                    <div class="p-4">
+                        ${item.FECHA ? `<span class="text-xs sm:text-sm font-medium bg-gray-100 px-3 py-1 rounded-brand mb-4 inline-block">${item.FECHA}</span>` : ''}
+                        <img 
+                            src="${convertGoogleDriveUrl(imagenUrl)}" 
+                            alt="${item.TITULO || 'Imagen de galería'}" 
+                            class="w-full h-auto max-h-[70vh] object-contain rounded-brand mb-4" 
+                            onerror="this.style.display='none'" 
+                        />
+                        ${contenidoLimpio ? `<p class="text-sm md:text-base text-gray-700 leading-relaxed">${contenidoLimpio}</p>` : ''}
+                    </div>
+                </div>
+            </div>
+        </dialog>
+    `;
+
+    const dialog = dialogContainer.querySelector('dialog');
+    if (dialog) {
+        dialog.showModal();
+        
+        // Cerrar al hacer clic fuera del diálogo
+        dialog.addEventListener('click', (e) => {
+            if (e.target === dialog) {
+                dialog.close();
+            }
+        });
+    }
+}

@@ -89,7 +89,7 @@ const accordionData = [
                 </div>
                 <div class="text-gray-800 text-mdleading-5" >
                     Puntuación: <span class="text-brand-blue text-md font-bold" >3</span> victoria · <span class="text-brand-blue text-md font-bold" >1</span> empate · <span
-                        class="text-gray-600 text-md" style="color: #4b5563 !important;">0</span> derrota.
+                        class="text-gray-600 text-md" style="text-brand-blue text-md font-bold">0</span> derrota.
                 </div>
                 <div class="text-gray-800 text-mdleading-5" >
                     Partidos arbitrados por profesorado.

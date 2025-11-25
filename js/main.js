@@ -11,6 +11,7 @@ import {
     tablaLideresGoleadores,
     tablaSancionados,
     renderNoticias,
+    renderGalería,
     renderBracket,
     renderProximosPartidos
 } from "./ui.js";
@@ -32,10 +33,18 @@ let     STATE = {
         },
         grupoSeleccionado: {
             equipos: "TODOS"
+        },
+        cursoSeleccionado: {
+            sancionadosESO: "TODOS",
+            sancionadosBCH: "TODOS",
+            goleadoresESO: "TODOS",
+            goleadoresBCH: "TODOS"
         }
     };
 let semanaOffset = 0;
 let diaOffsetProximosPartidos = 0; // Offset en días para navegación día por día
+let diaOffsetNoticias = 0; // Offset en días para navegación día por día en noticias
+let diaOffsetGaleria = 0; // Offset en días para navegación día por día en galería
 
 // --- control de semana ---
 function getWeekRange(offset = 0) {
@@ -383,6 +392,782 @@ function filtrarProximosPartidos(clasificacion, ciclo, diaInicio, diaFin) {
     return partidosFiltrados;
 }
 
+// --- Encontrar días relevantes para noticias ---
+// Retorna un objeto con { diaInicio, diaFin } que representa el día actual o el día según el offset
+// Ignora fines de semana (solo lunes-viernes) y busca días con noticias publicadas
+// offsetDias: permite navegar día por día (0 = hoy, 1 = mañana, -1 = ayer, etc.)
+function encontrarDiasRelevantesNoticias(noticias, offsetDias = 0) {
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    
+    // Aplicar offset para navegación día por día
+    const fechaBase = new Date(hoy);
+    fechaBase.setDate(hoy.getDate() + offsetDias);
+    fechaBase.setHours(0, 0, 0, 0);
+    
+    const diaSemana = fechaBase.getDay(); // 0 = domingo, 6 = sábado
+    
+    // Filtrar solo noticias publicadas
+    const noticiasPublicadas = noticias.filter(n => n.PUBLICAR === "SI");
+    
+    // Función auxiliar para parsear fecha de noticia
+    // Formato esperado: DD/MM/YYYY o DD/MM/YY
+    const parsearFechaNoticia = (fechaStr) => {
+        if (!fechaStr || typeof fechaStr !== 'string') return null;
+        
+        const fechaLimpia = fechaStr.trim();
+        // Intentar formato DD/MM/YYYY o DD/MM/YY
+        const partes = fechaLimpia.split('/');
+        if (partes.length !== 3) return null;
+        
+        try {
+            const dia = parseInt(partes[0]);
+            const mes = parseInt(partes[1]);
+            let anio = parseInt(partes[2]);
+            
+            // Si el año tiene 2 dígitos, asumir 2000+
+            if (anio < 100) {
+                anio += 2000;
+            }
+            
+            if (isNaN(dia) || isNaN(mes) || isNaN(anio) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+                return null;
+            }
+            
+            const fecha = new Date(anio, mes - 1, dia);
+            fecha.setHours(0, 0, 0, 0);
+            
+            if (isNaN(fecha.getTime())) {
+                return null;
+            }
+            
+            return fecha;
+        } catch (error) {
+            return null;
+        }
+    };
+    
+    // Función para verificar si hay noticias en un día específico
+    const hayNoticiasEnDia = (fecha) => {
+        return noticiasPublicadas.some(noticia => {
+            const fechaNoticia = parsearFechaNoticia(noticia.FECHA);
+            if (!fechaNoticia) return false;
+            return fechaNoticia.getTime() === fecha.getTime();
+        });
+    };
+    
+    // Función para verificar si un día es sábado o domingo
+    const esFinDeSemana = (fecha) => {
+        const diaSemanaFecha = fecha.getDay();
+        return diaSemanaFecha === 0 || diaSemanaFecha === 6; // 0 = domingo, 6 = sábado
+    };
+    
+    // Función para encontrar el siguiente día laboral (lunes a viernes)
+    const siguienteDiaLaboral = (fecha) => {
+        const siguiente = new Date(fecha);
+        siguiente.setDate(fecha.getDate() + 1);
+        
+        const diaSemana = siguiente.getDay();
+        
+        // Si es sábado (6), saltar al lunes (sumar 2 días)
+        if (diaSemana === 6) {
+            siguiente.setDate(siguiente.getDate() + 2);
+        }
+        // Si es domingo (0), saltar al lunes (sumar 1 día)
+        else if (diaSemana === 0) {
+            siguiente.setDate(siguiente.getDate() + 1);
+        }
+        
+        return siguiente;
+    };
+    
+    // Función para encontrar el siguiente día laboral con noticias hacia adelante
+    const siguienteDiaConNoticias = (fechaInicio) => {
+        let fechaBusqueda = siguienteDiaLaboral(fechaInicio);
+        let diasBuscados = 0;
+        const maxDias = 60; // Buscar hasta 2 meses adelante
+        
+        while (diasBuscados < maxDias) {
+            if (!esFinDeSemana(fechaBusqueda) && hayNoticiasEnDia(fechaBusqueda)) {
+                return fechaBusqueda;
+            }
+            fechaBusqueda = siguienteDiaLaboral(fechaBusqueda);
+            diasBuscados++;
+        }
+        
+        // Si no se encuentra, retornar el siguiente día laboral como fallback
+        return siguienteDiaLaboral(fechaInicio);
+    };
+    
+    // Función para encontrar el día laboral anterior con noticias hacia atrás
+    const anteriorDiaConNoticias = (fechaInicio) => {
+        let fechaBusqueda = new Date(fechaInicio);
+        fechaBusqueda.setDate(fechaInicio.getDate() - 1);
+        let diasBuscados = 0;
+        const maxDias = 60; // Buscar hasta 2 meses atrás
+        
+        while (diasBuscados < maxDias) {
+            // Si es fin de semana, retroceder al viernes anterior
+            if (esFinDeSemana(fechaBusqueda)) {
+                const diaSemana = fechaBusqueda.getDay();
+                if (diaSemana === 0) { // Domingo
+                    fechaBusqueda.setDate(fechaBusqueda.getDate() - 2);
+                } else if (diaSemana === 6) { // Sábado
+                    fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
+                }
+            }
+            
+            if (!esFinDeSemana(fechaBusqueda) && hayNoticiasEnDia(fechaBusqueda)) {
+                return fechaBusqueda;
+            }
+            
+            fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
+            diasBuscados++;
+        }
+        
+        // Si no se encuentra, retornar el día anterior como fallback
+        fechaBusqueda = new Date(fechaInicio);
+        fechaBusqueda.setDate(fechaInicio.getDate() - 1);
+        if (esFinDeSemana(fechaBusqueda)) {
+            const diaSemana = fechaBusqueda.getDay();
+            if (diaSemana === 0) {
+                fechaBusqueda.setDate(fechaBusqueda.getDate() - 2);
+            } else if (diaSemana === 6) {
+                fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
+            }
+        }
+        return fechaBusqueda;
+    };
+    
+    // Si hay offset (navegación manual), buscar días con noticias
+    if (offsetDias !== 0) {
+        let diaInicio;
+        
+        if (offsetDias > 0) {
+            // Avanzar: buscar el siguiente día con noticias
+            let fechaBusqueda = new Date(fechaBase);
+            if (esFinDeSemana(fechaBusqueda)) {
+                fechaBusqueda = siguienteDiaLaboral(fechaBusqueda);
+            }
+            
+            // Buscar el día correspondiente al offset
+            for (let i = 0; i < offsetDias; i++) {
+                fechaBusqueda = siguienteDiaConNoticias(fechaBusqueda);
+            }
+            
+            diaInicio = fechaBusqueda;
+            // Mostrar solo el día consultado
+            return { diaInicio, diaFin: diaInicio };
+        } else {
+            // Retroceder: buscar el día anterior con noticias
+            let fechaBusqueda = new Date(fechaBase);
+            if (esFinDeSemana(fechaBusqueda)) {
+                fechaBusqueda = anteriorDiaConNoticias(fechaBusqueda);
+            }
+            
+            // Buscar el día correspondiente al offset (negativo)
+            for (let i = 0; i < Math.abs(offsetDias); i++) {
+                fechaBusqueda = anteriorDiaConNoticias(fechaBusqueda);
+            }
+            
+            diaInicio = fechaBusqueda;
+            // Mostrar solo el día consultado
+            return { diaInicio, diaFin: diaInicio };
+        }
+    }
+    
+    // Si es sábado (6) o domingo (0), buscar el siguiente día laboral más próximo con noticias
+    if (diaSemana === 0 || diaSemana === 6) {
+        let fechaBusqueda = siguienteDiaLaboral(fechaBase);
+        let diasBuscados = 0;
+        const maxDias = 14; // Buscar hasta 2 semanas adelante
+        
+        while (diasBuscados < maxDias) {
+            if (!esFinDeSemana(fechaBusqueda) && hayNoticiasEnDia(fechaBusqueda)) {
+                return { diaInicio: fechaBusqueda, diaFin: fechaBusqueda };
+            }
+            
+            fechaBusqueda = siguienteDiaLaboral(fechaBusqueda);
+            diasBuscados++;
+        }
+        
+        // Si no se encontró ningún día con noticias, usar el siguiente lunes como fallback
+        const diaInicio = siguienteDiaLaboral(fechaBase);
+        return { diaInicio, diaFin: diaInicio };
+    }
+    
+    // Si es día laboral, verificar si hay noticias en fechaBase
+    if (hayNoticiasEnDia(fechaBase)) {
+        return { diaInicio: fechaBase, diaFin: fechaBase };
+    }
+    
+    // Si no hay noticias en fechaBase, buscar el día más reciente con noticias
+    // Primero buscar hacia adelante (futuro) y encontrar el día más lejano con noticias
+    let fechaBusqueda = siguienteDiaLaboral(fechaBase);
+    let diasBuscados = 0;
+    const maxDias = 60; // Buscar hasta 2 meses adelante
+    let diaMasRecienteConNoticias = null;
+    
+    while (diasBuscados < maxDias) {
+        if (!esFinDeSemana(fechaBusqueda) && hayNoticiasEnDia(fechaBusqueda)) {
+            // Guardar el día más reciente encontrado (el último que encontremos será el más lejano)
+            diaMasRecienteConNoticias = new Date(fechaBusqueda);
+        }
+        fechaBusqueda = siguienteDiaLaboral(fechaBusqueda);
+        diasBuscados++;
+    }
+    
+    // Si se encontró un día con noticias en el futuro, retornarlo
+    if (diaMasRecienteConNoticias) {
+        return { diaInicio: diaMasRecienteConNoticias, diaFin: diaMasRecienteConNoticias };
+    }
+    
+    // Si no se encontró en el futuro, buscar hacia atrás (pasado) y encontrar el más reciente
+    fechaBusqueda = new Date(fechaBase);
+    fechaBusqueda.setDate(fechaBase.getDate() - 1);
+    diasBuscados = 0;
+    
+    while (diasBuscados < maxDias) {
+        // Si es fin de semana, retroceder al viernes anterior
+        if (esFinDeSemana(fechaBusqueda)) {
+            const diaSemana = fechaBusqueda.getDay();
+            if (diaSemana === 0) {
+                fechaBusqueda.setDate(fechaBusqueda.getDate() - 2);
+            } else if (diaSemana === 6) {
+                fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
+            }
+        }
+        
+        if (!esFinDeSemana(fechaBusqueda) && hayNoticiasEnDia(fechaBusqueda)) {
+            // El primer día que encontremos hacia atrás será el más reciente
+            diaMasRecienteConNoticias = new Date(fechaBusqueda);
+            break;
+        }
+        
+        fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
+        diasBuscados++;
+    }
+    
+    // Si se encontró un día con noticias en el pasado, retornarlo
+    if (diaMasRecienteConNoticias) {
+        return { diaInicio: diaMasRecienteConNoticias, diaFin: diaMasRecienteConNoticias };
+    }
+    
+    // Fallback: usar el siguiente lunes
+    const diaInicio = siguienteDiaLaboral(fechaBase);
+    return { diaInicio, diaFin: diaInicio };
+}
+
+// --- Filtrar noticias por fecha ---
+function filtrarNoticiasPorFecha(noticias, diaInicio, diaFin) {
+    if (!noticias || !Array.isArray(noticias) || noticias.length === 0) {
+        return [];
+    }
+    
+    // Filtrar solo noticias publicadas
+    const noticiasPublicadas = noticias.filter(n => n.PUBLICAR === "SI");
+    
+    // Asegurar que las fechas estén normalizadas
+    diaInicio.setHours(0, 0, 0, 0);
+    diaFin.setHours(0, 0, 0, 0);
+    
+    // Función auxiliar para parsear fecha de noticia
+    const parsearFechaNoticia = (fechaStr) => {
+        if (!fechaStr || typeof fechaStr !== 'string') return null;
+        
+        const fechaLimpia = fechaStr.trim();
+        const partes = fechaLimpia.split('/');
+        if (partes.length !== 3) return null;
+        
+        try {
+            const dia = parseInt(partes[0]);
+            const mes = parseInt(partes[1]);
+            let anio = parseInt(partes[2]);
+            
+            if (anio < 100) {
+                anio += 2000;
+            }
+            
+            if (isNaN(dia) || isNaN(mes) || isNaN(anio) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+                return null;
+            }
+            
+            const fecha = new Date(anio, mes - 1, dia);
+            fecha.setHours(0, 0, 0, 0);
+            
+            if (isNaN(fecha.getTime())) {
+                return null;
+            }
+            
+            return fecha;
+        } catch (error) {
+            return null;
+        }
+    };
+    
+    // Filtrar noticias que estén en el rango de fechas (inclusive)
+    const noticiasFiltradas = noticiasPublicadas.filter(noticia => {
+        const fechaNoticia = parsearFechaNoticia(noticia.FECHA);
+        if (!fechaNoticia) { 
+            return false;
+        }
+        
+        // Verificar que esté en el rango de días seleccionados (inclusive)
+        const estaEnRango = fechaNoticia.getTime() >= diaInicio.getTime() && 
+                           fechaNoticia.getTime() <= diaFin.getTime(); 
+        
+        return estaEnRango;
+    });
+    
+    // Si solo hay 1 noticia en el día seleccionado, buscar 2 noticias adicionales anteriores
+    if (noticiasFiltradas.length === 1) {
+        // Función para encontrar el día laboral anterior
+        const anteriorDiaLaboral = (fecha) => {
+            const anterior = new Date(fecha);
+            anterior.setDate(fecha.getDate() - 1);
+            
+            const diaSemana = anterior.getDay();
+            
+            // Si es domingo (0), retroceder al viernes (restar 2 días)
+            if (diaSemana === 0) {
+                anterior.setDate(anterior.getDate() - 2);
+            }
+            // Si es sábado (6), retroceder al viernes (restar 1 día)
+            else if (diaSemana === 6) {
+                anterior.setDate(anterior.getDate() - 1);
+            }
+            
+            return anterior;
+        };
+        
+        // Función para verificar si un día es sábado o domingo
+        const esFinDeSemana = (fecha) => {
+            const diaSemanaFecha = fecha.getDay();
+            return diaSemanaFecha === 0 || diaSemanaFecha === 6;
+        };
+        
+        // Buscar 2 noticias adicionales anteriores
+        let fechaBusqueda = anteriorDiaLaboral(diaInicio);
+        let noticiasAdicionales = [];
+        let diasBuscados = 0;
+        const maxDias = 60; // Buscar hasta 2 meses atrás
+        
+        while (noticiasAdicionales.length < 2 && diasBuscados < maxDias) {
+            // Buscar todas las noticias de este día
+            const noticiasDelDia = noticiasPublicadas.filter(noticia => {
+                const fechaNoticia = parsearFechaNoticia(noticia.FECHA);
+                if (!fechaNoticia) return false;
+                
+                fechaNoticia.setHours(0, 0, 0, 0);
+                return fechaNoticia.getTime() === fechaBusqueda.getTime();
+            });
+            
+            // Agregar las noticias encontradas (máximo 2 en total)
+            if (noticiasDelDia.length > 0) {
+                const espacioDisponible = 2 - noticiasAdicionales.length;
+                noticiasAdicionales.push(...noticiasDelDia.slice(0, espacioDisponible));
+            }
+            
+            // Si ya tenemos 2 noticias, salir
+            if (noticiasAdicionales.length >= 2) {
+                break;
+            }
+            
+            // Retroceder al día laboral anterior
+            fechaBusqueda = anteriorDiaLaboral(fechaBusqueda);
+            diasBuscados++;
+        }
+        
+        // Ordenar todas las noticias por fecha (más antiguas primero)
+        const todasLasNoticias = [...noticiasAdicionales, ...noticiasFiltradas];
+        todasLasNoticias.sort((a, b) => {
+            const fechaA = parsearFechaNoticia(a.FECHA);
+            const fechaB = parsearFechaNoticia(b.FECHA);
+            if (!fechaA || !fechaB) return 0;
+            return fechaA.getTime() - fechaB.getTime();
+        });
+        
+        console.log('Noticias adicionales encontradas:', {
+            noticiasOriginales: noticiasFiltradas.length,
+            noticiasAdicionales: noticiasAdicionales.length,
+            total: todasLasNoticias.length
+        });
+        
+        return todasLasNoticias;
+    }
+    
+    console.log('Filtrado de noticias:', {
+        totalPublicadas: noticiasPublicadas.length,
+        filtradas: noticiasFiltradas.length,
+        diaInicio: diaInicio.toLocaleDateString('es-ES'),
+        diaFin: diaFin.toLocaleDateString('es-ES')
+    });
+    
+    return noticiasFiltradas;
+}
+
+// --- Encontrar días relevantes para galería ---
+// Retorna un objeto con { diaInicio, diaFin } que representa el día actual o el día según el offset
+// Ignora fines de semana (solo lunes-viernes) y busca días con elementos de galería publicados
+// offsetDias: permite navegar día por día (0 = hoy, 1 = mañana, -1 = ayer, etc.)
+function encontrarDiasRelevantesGaleria(galeria, offsetDias = 0) {
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    
+    // Aplicar offset para navegación día por día
+    const fechaBase = new Date(hoy);
+    fechaBase.setDate(hoy.getDate() + offsetDias);
+    fechaBase.setHours(0, 0, 0, 0);
+    
+    const diaSemana = fechaBase.getDay(); // 0 = domingo, 6 = sábado
+    
+    // Filtrar solo elementos publicados
+    const galeriaPublicada = galeria.filter(g => g.PUBLICAR === "SI");
+    
+    // Función auxiliar para parsear fecha de galería
+    // Formato esperado: DD/MM/YYYY o DD/MM/YY
+    const parsearFechaGaleria = (fechaStr) => {
+        if (!fechaStr || typeof fechaStr !== 'string') return null;
+        
+        const fechaLimpia = fechaStr.trim();
+        const partes = fechaLimpia.split('/');
+        if (partes.length !== 3) return null;
+        
+        try {
+            const dia = parseInt(partes[0]);
+            const mes = parseInt(partes[1]);
+            let anio = parseInt(partes[2]);
+            
+            if (anio < 100) {
+                anio += 2000;
+            }
+            
+            if (isNaN(dia) || isNaN(mes) || isNaN(anio) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+                return null;
+            }
+            
+            const fecha = new Date(anio, mes - 1, dia);
+            fecha.setHours(0, 0, 0, 0);
+            
+            if (isNaN(fecha.getTime())) {
+                return null;
+            }
+            
+            return fecha;
+        } catch (error) {
+            return null;
+        }
+    };
+    
+    // Función para verificar si hay elementos de galería en un día específico
+    const hayGaleriaEnDia = (fecha) => {
+        return galeriaPublicada.some(item => {
+            const fechaItem = parsearFechaGaleria(item.FECHA);
+            if (!fechaItem) return false;
+            return fechaItem.getTime() === fecha.getTime();
+        });
+    };
+    
+    // Función para verificar si un día es sábado o domingo
+    const esFinDeSemana = (fecha) => {
+        const diaSemanaFecha = fecha.getDay();
+        return diaSemanaFecha === 0 || diaSemanaFecha === 6;
+    };
+    
+    // Función para encontrar el siguiente día laboral (lunes a viernes)
+    const siguienteDiaLaboral = (fecha) => {
+        const siguiente = new Date(fecha);
+        siguiente.setDate(fecha.getDate() + 1);
+        
+        const diaSemana = siguiente.getDay();
+        
+        if (diaSemana === 6) {
+            siguiente.setDate(siguiente.getDate() + 2);
+        } else if (diaSemana === 0) {
+            siguiente.setDate(siguiente.getDate() + 1);
+        }
+        
+        return siguiente;
+    };
+    
+    // Función para encontrar el siguiente día laboral con galería hacia adelante
+    const siguienteDiaConGaleria = (fechaInicio) => {
+        let fechaBusqueda = siguienteDiaLaboral(fechaInicio);
+        let diasBuscados = 0;
+        const maxDias = 60;
+        
+        while (diasBuscados < maxDias) {
+            if (!esFinDeSemana(fechaBusqueda) && hayGaleriaEnDia(fechaBusqueda)) {
+                return fechaBusqueda;
+            }
+            fechaBusqueda = siguienteDiaLaboral(fechaBusqueda);
+            diasBuscados++;
+        }
+        
+        return siguienteDiaLaboral(fechaInicio);
+    };
+    
+    // Función para encontrar el día laboral anterior con galería hacia atrás
+    const anteriorDiaConGaleria = (fechaInicio) => {
+        let fechaBusqueda = new Date(fechaInicio);
+        fechaBusqueda.setDate(fechaInicio.getDate() - 1);
+        let diasBuscados = 0;
+        const maxDias = 60;
+        
+        while (diasBuscados < maxDias) {
+            if (esFinDeSemana(fechaBusqueda)) {
+                const diaSemana = fechaBusqueda.getDay();
+                if (diaSemana === 0) {
+                    fechaBusqueda.setDate(fechaBusqueda.getDate() - 2);
+                } else if (diaSemana === 6) {
+                    fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
+                }
+            }
+            
+            if (!esFinDeSemana(fechaBusqueda) && hayGaleriaEnDia(fechaBusqueda)) {
+                return fechaBusqueda;
+            }
+            
+            fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
+            diasBuscados++;
+        }
+        
+        fechaBusqueda = new Date(fechaInicio);
+        fechaBusqueda.setDate(fechaInicio.getDate() - 1);
+        if (esFinDeSemana(fechaBusqueda)) {
+            const diaSemana = fechaBusqueda.getDay();
+            if (diaSemana === 0) {
+                fechaBusqueda.setDate(fechaBusqueda.getDate() - 2);
+            } else if (diaSemana === 6) {
+                fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
+            }
+        }
+        return fechaBusqueda;
+    };
+    
+    // Si hay offset (navegación manual), buscar días con galería
+    if (offsetDias !== 0) {
+        let diaInicio;
+        
+        if (offsetDias > 0) {
+            let fechaBusqueda = new Date(fechaBase);
+            if (esFinDeSemana(fechaBusqueda)) {
+                fechaBusqueda = siguienteDiaLaboral(fechaBusqueda);
+            }
+            
+            for (let i = 0; i < offsetDias; i++) {
+                fechaBusqueda = siguienteDiaConGaleria(fechaBusqueda);
+            }
+            
+            diaInicio = fechaBusqueda;
+            return { diaInicio, diaFin: diaInicio };
+        } else {
+            let fechaBusqueda = new Date(fechaBase);
+            if (esFinDeSemana(fechaBusqueda)) {
+                fechaBusqueda = anteriorDiaConGaleria(fechaBusqueda);
+            }
+            
+            for (let i = 0; i < Math.abs(offsetDias); i++) {
+                fechaBusqueda = anteriorDiaConGaleria(fechaBusqueda);
+            }
+            
+            diaInicio = fechaBusqueda;
+            return { diaInicio, diaFin: diaInicio };
+        }
+    }
+    
+    // Si es sábado (6) o domingo (0), buscar el siguiente día laboral más próximo con galería
+    if (diaSemana === 0 || diaSemana === 6) {
+        let fechaBusqueda = siguienteDiaLaboral(fechaBase);
+        let diasBuscados = 0;
+        const maxDias = 14;
+        
+        while (diasBuscados < maxDias) {
+            if (!esFinDeSemana(fechaBusqueda) && hayGaleriaEnDia(fechaBusqueda)) {
+                return { diaInicio: fechaBusqueda, diaFin: fechaBusqueda };
+            }
+            
+            fechaBusqueda = siguienteDiaLaboral(fechaBusqueda);
+            diasBuscados++;
+        }
+        
+        const diaInicio = siguienteDiaLaboral(fechaBase);
+        return { diaInicio, diaFin: diaInicio };
+    }
+    
+    // Si es día laboral, verificar si hay galería en fechaBase
+    if (hayGaleriaEnDia(fechaBase)) {
+        return { diaInicio: fechaBase, diaFin: fechaBase };
+    }
+    
+    // Si no hay galería en fechaBase, buscar el día más reciente con galería
+    let fechaBusqueda = siguienteDiaLaboral(fechaBase);
+    let diasBuscados = 0;
+    const maxDias = 60;
+    let diaMasRecienteConGaleria = null;
+    
+    while (diasBuscados < maxDias) {
+        if (!esFinDeSemana(fechaBusqueda) && hayGaleriaEnDia(fechaBusqueda)) {
+            diaMasRecienteConGaleria = new Date(fechaBusqueda);
+        }
+        fechaBusqueda = siguienteDiaLaboral(fechaBusqueda);
+        diasBuscados++;
+    }
+    
+    if (diaMasRecienteConGaleria) {
+        return { diaInicio: diaMasRecienteConGaleria, diaFin: diaMasRecienteConGaleria };
+    }
+    
+    // Buscar hacia atrás
+    fechaBusqueda = new Date(fechaBase);
+    fechaBusqueda.setDate(fechaBase.getDate() - 1);
+    diasBuscados = 0;
+    
+    while (diasBuscados < maxDias) {
+        if (esFinDeSemana(fechaBusqueda)) {
+            const diaSemana = fechaBusqueda.getDay();
+            if (diaSemana === 0) {
+                fechaBusqueda.setDate(fechaBusqueda.getDate() - 2);
+            } else if (diaSemana === 6) {
+                fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
+            }
+        }
+        
+        if (!esFinDeSemana(fechaBusqueda) && hayGaleriaEnDia(fechaBusqueda)) {
+            diaMasRecienteConGaleria = new Date(fechaBusqueda);
+            break;
+        }
+        
+        fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
+        diasBuscados++;
+    }
+    
+    if (diaMasRecienteConGaleria) {
+        return { diaInicio: diaMasRecienteConGaleria, diaFin: diaMasRecienteConGaleria };
+    }
+    
+    const diaInicio = siguienteDiaLaboral(fechaBase);
+    return { diaInicio, diaFin: diaInicio };
+}
+
+// --- Filtrar galería por fecha ---
+function filtrarGaleriaPorFecha(galeria, diaInicio, diaFin) {
+    if (!galeria || !Array.isArray(galeria) || galeria.length === 0) {
+        return [];
+    }
+    
+    // Filtrar solo elementos publicados
+    const galeriaPublicada = galeria.filter(g => g.PUBLICAR === "SI");
+    
+    // Asegurar que las fechas estén normalizadas
+    diaInicio.setHours(0, 0, 0, 0);
+    diaFin.setHours(0, 0, 0, 0);
+    
+    // Función auxiliar para parsear fecha de galería
+    const parsearFechaGaleria = (fechaStr) => {
+        if (!fechaStr || typeof fechaStr !== 'string') return null;
+        
+        const fechaLimpia = fechaStr.trim();
+        const partes = fechaLimpia.split('/');
+        if (partes.length !== 3) return null;
+        
+        try {
+            const dia = parseInt(partes[0]);
+            const mes = parseInt(partes[1]);
+            let anio = parseInt(partes[2]);
+            
+            if (anio < 100) {
+                anio += 2000;
+            }
+            
+            if (isNaN(dia) || isNaN(mes) || isNaN(anio) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+                return null;
+            }
+            
+            const fecha = new Date(anio, mes - 1, dia);
+            fecha.setHours(0, 0, 0, 0);
+            
+            if (isNaN(fecha.getTime())) {
+                return null;
+            }
+            
+            return fecha;
+        } catch (error) {
+            return null;
+        }
+    };
+    
+    // Filtrar elementos que estén en el rango de fechas (inclusive)
+    const galeriaFiltrada = galeriaPublicada.filter(item => {
+        const fechaItem = parsearFechaGaleria(item.FECHA);
+        if (!fechaItem) {
+            return false;
+        }
+        
+        const estaEnRango = fechaItem.getTime() >= diaInicio.getTime() && 
+                           fechaItem.getTime() <= diaFin.getTime();
+        
+        return estaEnRango;
+    });
+    
+    // Si solo hay 1 elemento en el día seleccionado, buscar 2 elementos adicionales anteriores
+    if (galeriaFiltrada.length === 1) {
+        const anteriorDiaLaboral = (fecha) => {
+            const anterior = new Date(fecha);
+            anterior.setDate(fecha.getDate() - 1);
+            
+            const diaSemana = anterior.getDay();
+            
+            if (diaSemana === 0) {
+                anterior.setDate(anterior.getDate() - 2);
+            } else if (diaSemana === 6) {
+                anterior.setDate(anterior.getDate() - 1);
+            }
+            
+            return anterior;
+        };
+        
+        let fechaBusqueda = anteriorDiaLaboral(diaInicio);
+        let elementosAdicionales = [];
+        let diasBuscados = 0;
+        const maxDias = 60;
+        
+        while (elementosAdicionales.length < 2 && diasBuscados < maxDias) {
+            const elementosDelDia = galeriaPublicada.filter(item => {
+                const fechaItem = parsearFechaGaleria(item.FECHA);
+                if (!fechaItem) return false;
+                
+                fechaItem.setHours(0, 0, 0, 0);
+                return fechaItem.getTime() === fechaBusqueda.getTime();
+            });
+            
+            if (elementosDelDia.length > 0) {
+                const espacioDisponible = 2 - elementosAdicionales.length;
+                elementosAdicionales.push(...elementosDelDia.slice(0, espacioDisponible));
+            }
+            
+            if (elementosAdicionales.length >= 2) {
+                break;
+            }
+            
+            fechaBusqueda = anteriorDiaLaboral(fechaBusqueda);
+            diasBuscados++;
+        }
+        
+        const todosLosElementos = [...elementosAdicionales, ...galeriaFiltrada];
+        todosLosElementos.sort((a, b) => {
+            const fechaA = parsearFechaGaleria(a.FECHA);
+            const fechaB = parsearFechaGaleria(b.FECHA);
+            if (!fechaA || !fechaB) return 0;
+            return fechaA.getTime() - fechaB.getTime();
+        });
+        
+        return todosLosElementos;
+    }
+    
+    return galeriaFiltrada;
+}
+
 // --- Función para validar valor booleano ---
 function esVerdadero(valor) {
     const valorStr = (valor || '').toString().trim().toUpperCase();
@@ -675,10 +1460,11 @@ function updateUI() {
 
     // Líderes Goleadores
     if (ciclos.goleadores === "TODOS") {
-        tablaLideresGoleadores(STATE.data.LIDERES, "ESO", STATE.data.OTROS);
-        tablaLideresGoleadores(STATE.data.LIDERES, "BCH", STATE.data.OTROS);
+        tablaLideresGoleadores(STATE.data.LIDERES, "ESO", STATE.data.OTROS, STATE.cursoSeleccionado.goleadoresESO);
+        tablaLideresGoleadores(STATE.data.LIDERES, "BCH", STATE.data.OTROS, STATE.cursoSeleccionado.goleadoresBCH);
     } else {
-        tablaLideresGoleadores(STATE.data.LIDERES, ciclos.goleadores, STATE.data.OTROS);
+        const cursoFiltro = ciclos.goleadores === "ESO" ? STATE.cursoSeleccionado.goleadoresESO : STATE.cursoSeleccionado.goleadoresBCH;
+        tablaLideresGoleadores(STATE.data.LIDERES, ciclos.goleadores, STATE.data.OTROS, cursoFiltro);
         const otroCiclo = ciclos.goleadores === "ESO" ? "BCH" : "ESO";
         const otroDiv = document.getElementById("goleadores" + otroCiclo);
         if (otroDiv) {
@@ -689,10 +1475,11 @@ function updateUI() {
 
     // Sancionados
     if (ciclos.sancionados === "TODOS") {
-        tablaSancionados(STATE.data.SANCIONES, "ESO");
-        tablaSancionados(STATE.data.SANCIONES, "BCH");
+        tablaSancionados(STATE.data.SANCIONES, "ESO", STATE.cursoSeleccionado.sancionadosESO);
+        tablaSancionados(STATE.data.SANCIONES, "BCH", STATE.cursoSeleccionado.sancionadosBCH);
     } else {
-        tablaSancionados(STATE.data.SANCIONES, ciclos.sancionados);
+        const cursoFiltro = ciclos.sancionados === "ESO" ? STATE.cursoSeleccionado.sancionadosESO : STATE.cursoSeleccionado.sancionadosBCH;
+        tablaSancionados(STATE.data.SANCIONES, ciclos.sancionados, cursoFiltro);
         const otroCiclo = ciclos.sancionados === "ESO" ? "BCH" : "ESO";
         const otroDiv = document.getElementById("sancionados" + otroCiclo);
         if (otroDiv) {
@@ -701,7 +1488,75 @@ function updateUI() {
         }
     }
     
-    renderNoticias(STATE.data.NOTICIAS);
+    // Noticias con paginador por fecha
+    // Encontrar los días relevantes usando el offset de días
+    const { diaInicio: diaInicioNoticias, diaFin: diaFinNoticias } = encontrarDiasRelevantesNoticias(
+        STATE.data.NOTICIAS || [],
+        diaOffsetNoticias
+    );
+    
+    // Debug: Log de los días encontrados y noticias disponibles
+    console.log('Noticias - Días encontrados:', {
+        diaInicio: diaInicioNoticias.toLocaleDateString('es-ES'),
+        diaFin: diaFinNoticias.toLocaleDateString('es-ES'),
+        offsetDias: diaOffsetNoticias,
+        totalNoticias: STATE.data.NOTICIAS?.length || 0,
+        noticiasPublicadas: STATE.data.NOTICIAS?.filter(n => n.PUBLICAR === "SI").length || 0
+    });
+    
+    // Filtrar noticias por fecha
+    const noticiasFiltradas = filtrarNoticiasPorFecha(
+        STATE.data.NOTICIAS || [],
+        diaInicioNoticias,
+        diaFinNoticias
+    );
+    
+    // Debug: Log de noticias filtradas
+    console.log('Noticias filtradas:', {
+        cantidad: noticiasFiltradas.length,
+        noticias: noticiasFiltradas.map(n => ({
+            fecha: n.FECHA,
+            titulo: n.TITULO
+        }))
+    });
+    
+    renderNoticias(noticiasFiltradas);
+    
+    // Etiqueta de la fecha para noticias
+    const labelNoticias = document.getElementById("noticias-fecha-label");
+    if (labelNoticias) {
+        const diaInicioNum = String(diaInicioNoticias.getDate()).padStart(2, '0');
+        const mesInicio = String(diaInicioNoticias.getMonth() + 1).padStart(2, '0');
+        const anioInicio = diaInicioNoticias.getFullYear();
+        labelNoticias.textContent = `${diaInicioNum}/${mesInicio}/${anioInicio}`;
+    }
+    
+    // Galería con paginador por fecha
+    // Encontrar los días relevantes usando el offset de días
+    const { diaInicio: diaInicioGaleria, diaFin: diaFinGaleria } = encontrarDiasRelevantesGaleria(
+        STATE.data.GALERIA || [],
+        diaOffsetGaleria
+    );
+    
+    // Filtrar galería por fecha
+    const galeriaFiltrada = filtrarGaleriaPorFecha(
+        STATE.data.GALERIA || [],
+        diaInicioGaleria,
+        diaFinGaleria
+    );
+    
+    // Renderizar galería desde la hoja GALERIA de Google Sheets
+    // Columnas esperadas: FECHA, TIPO, PUBLICAR, URL, TITULO
+    renderGalería(galeriaFiltrada);
+    
+    // Etiqueta de la fecha para galería
+    const labelGaleria = document.getElementById("galeria-fecha-label");
+    if (labelGaleria) {
+        const diaInicioNum = String(diaInicioGaleria.getDate()).padStart(2, '0');
+        const mesInicio = String(diaInicioGaleria.getMonth() + 1).padStart(2, '0');
+        const anioInicio = diaInicioGaleria.getFullYear();
+        labelGaleria.textContent = `${diaInicioNum}/${mesInicio}/${anioInicio}`;
+    }
 
     actualizarGruposDisponibles(ciclos.equipos);
 
@@ -845,6 +1700,47 @@ function actualizarGruposDisponibles(ciclo) {
     });
 }
 
+// --- Función para actualizar curso seleccionado en sancionados ---
+function actualizarCursoSancionados(ciclo, curso) {
+    if (ciclo === "ESO") {
+        STATE.cursoSeleccionado.sancionadosESO = curso;
+    } else if (ciclo === "BCH") {
+        STATE.cursoSeleccionado.sancionadosBCH = curso;
+    }
+    updateUI();
+}
+
+// --- Función para actualizar curso seleccionado en goleadores ---
+function actualizarCursoGoleadores(ciclo, curso) {
+    if (ciclo === "ESO") {
+        STATE.cursoSeleccionado.goleadoresESO = curso;
+    } else if (ciclo === "BCH") {
+        STATE.cursoSeleccionado.goleadoresBCH = curso;
+    }
+    updateUI();
+}
+
+// --- Inicializar selectores de curso para sancionados y goleadores ---
+function initCursoSelectors() {
+    // Los selects se crean dinámicamente, así que usamos delegación de eventos
+    document.addEventListener('change', (e) => {
+        if (e.target && e.target.id) {
+            const tipo = e.target.getAttribute('data-tipo');
+            const ciclo = e.target.getAttribute('data-ciclo');
+            const curso = e.target.value;
+            
+            if (ciclo && (ciclo === "ESO" || ciclo === "BCH")) {
+                if (tipo === "goleadores") {
+                    actualizarCursoGoleadores(ciclo, curso);
+                } else if (e.target.id.startsWith('filtro-curso-') && !tipo) {
+                    // Para sancionados (sin atributo data-tipo)
+                    actualizarCursoSancionados(ciclo, curso);
+                }
+            }
+        }
+    });
+}
+
 // --- Inicializar selectores de ciclo ---
 function initCicloSelectors() {
     const selectors = [
@@ -895,6 +1791,9 @@ function initCicloSelectors() {
         });
     }
     
+    // Inicializar selectores de curso para sancionados
+    initCursoSelectors();
+    
     // Event listeners para navegación día por día en próximos partidos
     const semanaAnterior = document.getElementById("semana-anterior");
     const semanaSiguiente = document.getElementById("semana-siguiente");
@@ -909,6 +1808,42 @@ function initCicloSelectors() {
     if (semanaSiguiente) {
         semanaSiguiente.addEventListener('click', () => {
             diaOffsetProximosPartidos++; // Avanzar un día
+            updateUI();
+        });
+    }
+    
+    // Event listeners para navegación día por día en noticias
+    const noticiasAnterior = document.getElementById("noticias-anterior");
+    const noticiasSiguiente = document.getElementById("noticias-siguiente");
+
+    if (noticiasAnterior) {
+        noticiasAnterior.addEventListener('click', () => {
+            diaOffsetNoticias--; // Retroceder un día
+            updateUI();
+        });
+    }
+
+    if (noticiasSiguiente) {
+        noticiasSiguiente.addEventListener('click', () => {
+            diaOffsetNoticias++; // Avanzar un día
+            updateUI();
+        });
+    }
+    
+    // Event listeners para navegación día por día en galería
+    const galeriaAnterior = document.getElementById("galeria-anterior");
+    const galeriaSiguiente = document.getElementById("galeria-siguiente");
+
+    if (galeriaAnterior) {
+        galeriaAnterior.addEventListener('click', () => {
+            diaOffsetGaleria--; // Retroceder un día
+            updateUI();
+        });
+    }
+
+    if (galeriaSiguiente) {
+        galeriaSiguiente.addEventListener('click', () => {
+            diaOffsetGaleria++; // Avanzar un día
             updateUI();
         });
     }

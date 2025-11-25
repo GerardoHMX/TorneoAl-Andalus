@@ -6,6 +6,7 @@ export const URLS = {
     SANCIONES: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRskeRn-mtzkR4JaGndzuwt_akX4SzWyF2IepdDiB7XA6LAUTgSNPGoypoaFbrsBzQDmgC2KjC4r8NY/pub?gid=440116157&single=true&output=csv",
     NOTICIAS: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRskeRn-mtzkR4JaGndzuwt_akX4SzWyF2IepdDiB7XA6LAUTgSNPGoypoaFbrsBzQDmgC2KjC4r8NY/pub?gid=1757087324&single=true&output=csv",
     OTROS: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRskeRn-mtzkR4JaGndzuwt_akX4SzWyF2IepdDiB7XA6LAUTgSNPGoypoaFbrsBzQDmgC2KjC4r8NY/pub?gid=2051372861&single=true&output=csv",
+    GALERIA: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRskeRn-mtzkR4JaGndzuwt_akX4SzWyF2IepdDiB7XA6LAUTgSNPGoypoaFbrsBzQDmgC2KjC4r8NY/pub?gid=1528902819&single=true&output=csv",
 };
 
 async function testURLs() {
@@ -105,6 +106,7 @@ export async function loadAllData() {
         fetchCSV(URLS.SANCIONES),
         fetchCSV(URLS.NOTICIAS),
         URLS.OTROS ? fetchCSV(URLS.OTROS).catch(() => []) : Promise.resolve([]),
+        URLS.GALERIA ? fetchCSV(URLS.GALERIA).catch(() => []) : Promise.resolve([]),
     ]);
 
     // Procesar resultados, usando array vacío si alguna falla
@@ -114,16 +116,17 @@ export async function loadAllData() {
         LIDERES,
         SANCIONES,
         NOTICIAS,
-        OTROS
+        OTROS,
+        GALERIA
     ] = results.map((result, index) => {
         if (result.status === 'fulfilled') {
             return result.value;
         } else {
-            const sheetNames = ['CLASIFICACION', 'EQUIPOS', 'LIDERES', 'SANCIONES', 'NOTICIAS', 'OTROS'];
+            const sheetNames = ['CLASIFICACION', 'EQUIPOS', 'LIDERES', 'SANCIONES', 'NOTICIAS', 'OTROS', 'GALERIA'];
             console.warn(`No se logro cargar la hoja ${sheetNames[index]}:`, result.reason?.message || result.reason);
             return [];
         }
     });
 
-    return { CLASIFICACION, EQUIPOS, LIDERES, SANCIONES, NOTICIAS, OTROS: OTROS || [] };
+    return { CLASIFICACION, EQUIPOS, LIDERES, SANCIONES, NOTICIAS, OTROS: OTROS || [], GALERIA: GALERIA || [] };
 }
