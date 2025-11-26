@@ -102,7 +102,7 @@ function initializeCarousel() {
                     </div>
                     <div class="text-md font-bold leading-5">
                         Puntuación: <span class="text-brand-blue text-md font-bold">3</span> victoria · <span class="text-brand-blue text-md font-bold">1</span> empate · <span
-                            class="text-brand-white text-md font-blue">0</span> derrota.
+                            class="text-brand-blue text-md font-bold">0</span> derrota.
                     </div>
                     <div class="text-md font-bold leading-5">
                         Partidos arbitrados por profesorado.

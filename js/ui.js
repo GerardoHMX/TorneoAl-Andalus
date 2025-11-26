@@ -3,7 +3,7 @@
 const grupos = ["A", "B", "C", "D"];
 const ciclos = ['ESO', 'BCH'];
 const brandColors = ["brand-red", "brand-orange", "brand-gold", "brand-green", "brand-blue"];
-const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+const meses = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 const diasSemana = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 const maxTeamsPerGroups = 4;
 const juegos = 6;
@@ -142,9 +142,16 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
         }
         if (grupos.includes(m.GRUPO) && m.GRUPO === grupo && m.CICLO === ciclo) {
             // Formatear fecha
-            const mesNombre = meses[parseInt(m.MES) - 1] || m.MES;
-            const diaFormateado = String(m.DIA).padStart(2, '0');
-            const fechaFormateada = `${diaFormateado} ${mesNombre}`;
+            const anio = m.ANIO ? parseInt(m.ANIO) : new Date().getFullYear();
+            const mes = parseInt(m.MES);
+            const dia = parseInt(m.DIA);
+            
+            // Validar que los valores sean números válidos
+            if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+                console.warn('Fecha inválida en partido:', partido);
+                return;
+            } 
+            const fechaFormateada = `${String(dia).padStart(2, '0')}/${meses[mes - 1] || mes}/${anio}`;
 
             cardsPerGroup.push(`                
                 <!-- Match Card ${i} -->
@@ -162,8 +169,8 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
                             <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
                         </div>
                     </div>
-                    <div class="text-center text-xs md:text-sm text-gray-600 mt-6">
-                        GRUPO ${m.GRUPO} - ${fechaFormateada}, ${m.HORA + 'am' || '00:00pm'}
+                    <div class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
+                        GRUPO ${m.GRUPO} - <span class="text-center text-xs md:text-sm text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs md:text-sm ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${m.ESTATUS || 'PENDIENTE'}</span>
                     </div>
                 </div>
             `);
@@ -208,7 +215,6 @@ export function tablaResultadosSemifinal(list, ciclo) {
         }
         if (grupos.includes(m.GRUPO) && m.GRUPO === grupo && m.CICLO === ciclo) {
             // Formatear fecha
-            const meses = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
             const mesNombre = meses[parseInt(m.MES) - 1] || m.MES;
             const diaFormateado = String(m.DIA).padStart(2, '0');
             const fechaFormateada = `${diaFormateado} ${mesNombre}`;
@@ -230,7 +236,7 @@ export function tablaResultadosSemifinal(list, ciclo) {
                         </div>
                     </div>
                     <div class="text-center text-xs md:text-sm text-gray-600 mt-6">
-                       Semifinal - ${fechaFormateada}, ${m.HORA + 'am' || '00:00pm'}
+                       Semifinal - ${fechaFormateada}, ${m.HORA + ' hrs' || ''}
                     </div>
                 </div>
             `);
@@ -298,7 +304,7 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
                             </div>
                         </div>
                         <div class="text-center text-xs md:text-sm text-gray-600 mt-6">
-                           ${m.GRUPO === "3RPUESTO" ? "Tercer Puesto" : "Primer Puesto"} - ${fechaFormateada}, ${m.HORA + 'am' || '00:00pm'}
+                           ${m.GRUPO === "3RPUESTO" ? "Tercer Puesto" : "Primer Puesto"} - ${fechaFormateada}, ${m.HORA + ' hrs' || ''}
                         </div>
                     </div>
                 `);

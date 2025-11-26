@@ -1,0 +1,67 @@
+### V — PUNTOS (acumula local + visitante + estatus JUGADO)
+
+=SUMA(ARRAYFORMULA(
+ SI($R$4:$R$9="JUGADO";
+   SI($J$4:$J$9=$U4;
+        SI($L$4:$L$9>$M$4:$M$9;3; SI($L$4:$L$9=$M$4:$M$9;1;0));
+   SI($Q$4:$Q$9=$U4;
+        SI($M$4:$M$9>$L$4:$L$9;3; SI($M$4:$M$9=$L$4:$L$9;1;0));
+   0));
+ 0)
+))
+
+✔ Suma 3, 1 o 0 según victoria/empate/derrota
+✔ Independiente si es local o visitante
+✔ Solo si el partido está JUGADO
+
+###  W — GANADOS
+=SUMA(ARRAYFORMULA(
+ SI($R$4:$R$9="JUGADO";
+   ($J$4:$J$9=$U4)*($L$4:$L$9>$M$4:$M$9) +
+   ($Q$4:$Q$9=$U4)*($M$4:$M$9>$L$4:$L$9);
+ 0)
+))
+
+###  X — EMPATADOS
+=SUMA(ARRAYFORMULA(
+ SI($R$4:$R$9="JUGADO";
+   ($J$4:$J$9=$U4)*($L$4:$L$9=$M$4:$M$9) +
+   ($Q$4:$Q$9=$U4)*($M$4:$M$9=$L$4:$L$9);
+ 0)
+))
+
+###  Y — PERDIDOS
+=SUMA(ARRAYFORMULA(
+ SI($R$4:$R$9="JUGADO";
+   ($J$4:$J$9=$U4)*($L$4:$L$9<$M$4:$M$9) +
+   ($Q$4:$Q$9=$U4)*($M$4:$M$9<$L$4:$L$9);
+ 0)
+))
+
+###  Z — GOLES A FAVOR
+=SUMA(ARRAYFORMULA(
+ SI($R$4:$R$9="JUGADO";
+   SI($J$4:$J$9=$U4; $L$4:$L$9;
+      SI($Q$4:$Q$9=$U4; $M$4:$M$9; 0));
+ 0)
+))
+
+###  AA — GOLES EN CONTRA
+=SUMA(ARRAYFORMULA(
+ SI($R$4:$R$9="JUGADO";
+   SI($J$4:$J$9=$U4; $M$4:$M$9;
+      SI($Q$4:$Q$9=$U4; $L$4:$L$9; 0));
+ 0)
+))
+
+###  AB — DIFERENCIA DE GOLES
+=Z4 - AA4
+
+###  AC — FAIRPLAY
+
+(ya lo ingresas manual, sin fórmula)
+
+###  AD — TOTAL (Puntos + Fairplay)
+=V4 + AC4
+
+🔥 Resultado
