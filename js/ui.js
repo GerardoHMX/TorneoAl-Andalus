@@ -4,6 +4,7 @@ const grupos = ["A", "B", "C", "D"];
 const ciclos = ['ESO', 'BCH'];
 const brandColors = ["brand-red", "brand-orange", "brand-gold", "brand-green", "brand-blue"];
 const meses = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+const mesesNombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 const diasSemana = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 const maxTeamsPerGroups = 4;
 const juegos = 6;
@@ -1609,7 +1610,7 @@ export function renderProximosPartidos(partidos) {
                 return;
             }
             
-            const mesNombre = meses[mes - 1] || mes;
+            const mesNombre = mesesNombres[mes - 1] || mes;
             const diaFormateado = String(dia).padStart(2, '0');
             const fechaFormateada = `${diaFormateado} ${mesNombre}`;
 
