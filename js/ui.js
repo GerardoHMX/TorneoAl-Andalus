@@ -390,10 +390,6 @@ export function tablaClasificacion(list, ciclo) {
                                 <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.FAIRPLAY}</div>
                             </div>
                         </div>
-                        <div class="mt-4 pt-3 border-t border-brand-blue flex justify-between items-center">
-                            <span class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">Total:</span>
-                            <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.TOTAL}</div>
-                        </div>
                     </div> 
                 `);
             }
@@ -505,8 +501,7 @@ export function tablaClasificacionGrupal(list, ciclo) {
                                     <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">GF</th>
                                     <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">GC</th>
                                     <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">DG</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">FPY</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-right: 1rem;">TOTAL</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-right: 1rem;">FPY</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -533,8 +528,7 @@ export function tablaClasificacionGrupal(list, ciclo) {
                     <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.GOLESAFAVOR}</td>
                     <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.GOLESENCONTRA}</td>
                     <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${dgFormatted}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.FAIRPLAY}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333; padding-right: 1rem;">${equipo.TOTAL}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333; padding-right: 1rem;">${equipo.FAIRPLAY}</td>
                 </tr>
             `;
         });
