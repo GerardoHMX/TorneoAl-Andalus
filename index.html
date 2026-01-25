@@ -10,8 +10,6 @@
     <meta name="author" content="Gerardo Huizar Castro">
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
-    <meta name="google-site-verification" content="google-site-verification=google-site-verification">
-    <meta name="google-site-verification" content="google-site-verification">
     <!-- Google Fonts Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,8 +97,8 @@
             <div class="flex items-center justify-between h-16 md:h-20">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <a href="https://colegiosanfranciscodeasis.com" target="_blank">
-                        <img src="img/logoColegio.png" alt="Al-Ándalus" class="h-full w-auto md:w-16 md:h-16 object-contain">
+                    <a href="https://colegiosanfranciscodeasis.com" target="_blank" data-config="colegio-link">
+                        <img src="img/logoColegio.png" alt="Al-Ándalus" class="h-full w-auto md:w-16 md:h-16 object-contain" data-config="colegio-logo">
                     </a>
                 </div>
                 <!-- Navegación Desktop -->
@@ -109,7 +107,12 @@
                 </nav>
                 <!-- Iconos Sociales -->
                 <div class="flex items-center space-x-4 md:space-x-5">
-                    <a href="https://www.instagram.com/colegiosfasismijas" target="_blank"  class="text-brand-text-dark hover:text-brand-red transition-colors" aria-label="Instagram">
+                    <!-- Selector de Idioma -->
+                    <div id="language-selector" class="flex items-center gap-2">
+                        <button data-lang="es" class="lang-btn px-2 py-1 rounded text-sm font-medium text-gray-600 hover:text-brand-blue transition-colors active bg-brand-blue text-white" aria-label="Español">ES</button>
+                        <button data-lang="en" class="lang-btn px-2 py-1 rounded text-sm font-medium text-gray-600 hover:text-brand-blue transition-colors" aria-label="English">EN</button>
+                    </div>
+                    <a href="https://www.instagram.com/colegiosfasismijas" target="_blank" class="text-brand-text-dark hover:text-brand-red transition-colors" aria-label="Instagram" data-config="instagram-link">
                         <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="currentColor" viewBox="0 0 24 24">
                             <path
                                 d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
@@ -137,20 +140,15 @@
     <section id="inicio" class="w-full h-full flex items-center overflow-hidden fondo lg:bg-fill md:bg-cover px-6 py-6">
         <div class="w-full flex items-center">
             <div class="w-full flex flex-col items-center gap-1 justify-center">
-
-                <h3 class="text-2xl md:text-3xl lg:text-4xl font-bold text-brand-gold mb-3">
+                <h3 class="text-2xl md:text-3xl lg:text-4xl font-bold text-brand-gold mb-3" data-translate="hero_title">
                     TORNEO DE FÚTBOL SALA
                 </h3>
                 <div class="flex flex-col gap-0">
-                    <h1 class="text-6xl sm:text-7xl lg:text-8xl font-bold text-brand-white ">
+                    <h1 class="text-6xl sm:text-7xl lg:text-8xl font-bold text-brand-white " data-config="torneo-nombre">
                         Al-Ándalus
                     </h1>
-                    <span class="text-2xl font-bold text-brand-white text-right">2025-2026</span>
+                    <span class="text-2xl font-bold text-brand-white text-right" data-config="torneo-anio">2025-2026</span>
                 </div>
-
-                <!-- Descripción
-                <div class="text-base sm:text-md md:text-md text-gray-600 leading-relaxed text-center p-4"> Competición escolar que promueve el deporte, la convivencia y el Fair Play. </div>  -->
-
             </div>
         </div>
     </section>
@@ -164,7 +162,7 @@
                 <button 
                     id="carousel-prev" 
                     class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-brand-md hover:bg-gray-50 transition-all duration-300 focus:outline-none border-none"
-                    aria-label="Anterior" >
+                    aria-label="Anterior" data-translate-aria-label="nav_previous">
                     <svg class="w-6 h-6 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
@@ -174,7 +172,7 @@
                 <button 
                     id="carousel-next" 
                     class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-brand-md hover:bg-gray-50 transition-all duration-300 focus:outline-none border-none"
-                    aria-label="Siguiente" >
+                    aria-label="Siguiente" data-translate-aria-label="nav_next">
                     <svg class="w-6 h-6 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
@@ -203,7 +201,7 @@
     <!-- Sección de Acordeón - Bases del Torneo -->
     <section id="accordionSection" class="w-full py-8 bg-brand-bg-light">
         <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold mb-8">Bases del Torneo</h3>
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold mb-8" data-translate="section_bases_title">Bases del Torneo</h3>
             <div id="basesAccordion" class="accordion">
             </div>
         </div>
@@ -212,7 +210,7 @@
     <!-- Sección de Próximos Partidos -->
     <section id="proximosPartidos" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6 fondoB">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 my-8">
-            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Próximos Partidos</h3>
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold" data-translate="section_next_matches_title">Próximos Partidos</h3>
             <div class="flex flex-col md:flex-row items-center gap-4">
                 <!-- Navegación de días (mostrando el rango de días actual y siguiente) -->
                 <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-brand px-4 py-2 shadow-sm">
@@ -225,7 +223,7 @@
                         <svg class="w-5 h-5 text-gray-600 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"> -->
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        <span id="semana-label" class="text-sm font-bold text-gray-800">Cargando...</span>
+                        <span id="semana-label" class="text-sm font-bold text-gray-800">...</span>
                     </div>
                     <button id="semana-siguiente" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Día siguiente">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -242,22 +240,22 @@
     <!-- Sección de Equipos -->
     <section id="equipos" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6">
         <div class="flex flex-col lg:flex-row items-center justify-between gap-4 my-8">
-            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Equipos participantes</h3>
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold" data-translate="section_teams_title">Equipos participantes</h3>
             <div class="flex flex-col lg:flex-row gap-4 w-full lg:w-auto">
                 <ul class="nav nav-tabs w-full lg:w-80" id="selector-equipos" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                        <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                        <button class="nav-link" data-ciclo="ESO" type="button" data-translate="filter_eso">ESO</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                        <button class="nav-link" data-ciclo="BCH" type="button" data-translate="filter_bch">BCH</button>
                     </li>
                 </ul>
                 <ul class="nav nav-tabs w-full lg:w-80" id="selector-grupos-equipos" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-grupo="TODOS" type="button">TODOS</button>
+                        <button class="nav-link active" data-grupo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" data-grupo="A" type="button">A</button>
@@ -281,10 +279,10 @@
     <!-- Section Jornadas -->
     <section id="jornadas" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
-            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Jornadas</h3>
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold" data-translate="section_journeys_title">Jornadas</h3>
             <ul class="nav nav-tabs w-80" id="selector-jornadas" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                    <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
@@ -307,10 +305,10 @@
     <!-- Sección de Clasificación -->
     <section id="clasificacion" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6 bg-brand-bg-light">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
-            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Clasificación</h3>
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold" data-translate="section_classification_title">Clasificación</h3>
             <ul class="nav nav-tabs w-80" id="selector-clasificacion" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                    <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
@@ -329,10 +327,10 @@
     <!-- Sección de Clasificación Grupal -->
     <section id="clasificacionGrupal" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
-            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Clasificación</h3>
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold" data-translate="section_classification_title">Clasificación</h3>
             <ul class="nav nav-tabs w-80" id="selector-clasificacion-grupal" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                    <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
@@ -351,7 +349,7 @@
     <!-- Sección de Bracket -->
     <section id="bracket" class="w-full h-full flex flex-col overflow-x-auto lg:bg-fill md:bg-cover px-6">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
-            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Bracket</h3>
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold" data-translate="section_bracket_title">Bracket</h3>
         </div>
         <div id="bracket-container"></div>
     </section>
@@ -359,10 +357,10 @@
     <!-- Sección de Lideres Goleadores -->
     <section id="goleadoresSection" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6 bg-brand-bg-light">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
-            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Líderes Goleadores</h3>
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold" data-translate="section_top_scorers_title">Líderes Goleadores</h3>
             <ul class="nav nav-tabs w-80" id="selector-goleadores" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                    <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
@@ -379,10 +377,10 @@
     <!-- Sección de Sancionados -->
     <section id="sancionadosSection" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
-            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Sancionados</h3>
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold" data-translate="section_sanctioned_title">Sancionados</h3>
             <ul class="nav nav-tabs w-80" id="selector-sancionados" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                    <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
@@ -399,10 +397,10 @@
     <!-- Sección de Resultados -->
     <section id="resultadosSection" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6 bg-brand-bg-light">        
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
-            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold">Resultados</h3>
+            <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold" data-translate="section_results_title">Resultados</h3>
             <ul class="nav nav-tabs w-80" id="selector-resultados" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" data-ciclo="TODOS" type="button">TODOS</button>
+                    <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
@@ -421,7 +419,7 @@
     <!-- Sección de Noticias -->
     <section id="noticiasSection" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6 fondoC">        
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 my-8">
-            <h3 class="text-3xl md:text-4xl text-brand-blue font-bold">Noticias</h3>
+            <h3 class="text-3xl md:text-4xl text-brand-blue font-bold" data-translate="section_news_title">Noticias</h3>
             <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-brand px-4 py-2 shadow-sm">
                 <button id="noticias-anterior" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Día anterior">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -432,7 +430,7 @@
                     <svg class="w-5 h-5 text-gray-600 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span id="noticias-fecha-label" class="text-sm font-bold text-gray-800">Cargando...</span>
+                        <span id="noticias-fecha-label" class="text-sm font-bold text-gray-800">...</span>
                 </div>
                 <button id="noticias-siguiente" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Día siguiente">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -447,7 +445,7 @@
     <!-- Sección de Galería -->
     <section id="galeriaSection" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6 bg-brand-bg-light">        
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 my-8">
-            <h3 class="text-3xl md:text-4xl text-brand-blue font-bold">Galería</h3>
+            <h3 class="text-3xl md:text-4xl text-brand-blue font-bold" data-translate="section_gallery_title">Galería</h3>
             <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-brand px-4 py-2 shadow-sm">
                 <button id="galeria-anterior" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Día anterior">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -458,7 +456,7 @@
                     <svg class="w-5 h-5 text-gray-600 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span id="galeria-fecha-label" class="text-sm font-bold text-gray-800">Cargando...</span>
+                        <span id="galeria-fecha-label" class="text-sm font-bold text-gray-800">...</span>
                 </div>
                 <button id="galeria-siguiente" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Día siguiente">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -476,30 +474,30 @@
             <div class="flex flex-row flex-wrap items-center justify-center gap-1">
                 <img src="https://colegiosanfranciscodeasis.com/wp-content/uploads/2023/03/logo-ColegioSanFranciscodeAsis.png" alt="Al-Ándalus" class="w-28 h-28 transition-transform duration-300 hover:scale-150"> 
                 <div class="flex flex-col flex-wrap items-center sm:items-start justify-center gap-1">                
-                    <span class="text-xl md:text-2xl text-brand-blue">Colegio San Francisco de Asís</span>
-                    <div><a href="tel:+34952473424" class="text-xs md:text-md text-gray-600">952 47 34 24</a> – <a href="tel:+34952663717" class="text-xs md:text-md text-gray-600">952 66 37 17</a></div>
-                    <a href="mailto:administracion@colegiosanfranciscodeasis.com" target="_blank" class="text-xs md:text-md text-gray-600">administracion@colegiosanfranciscodeasis.com</a>
+                    <span class="text-xl md:text-2xl text-brand-blue" data-config="colegio-nombre">Colegio San Francisco de Asís</span>
+                    <div><a href="tel:+34952473424" class="text-xs md:text-md text-gray-600"><span data-config="colegio-telefono1">952 47 34 24</span></a> – <a href="tel:+34952663717" class="text-xs md:text-md text-gray-600"><span data-config="colegio-telefono2">952 66 37 17</span></a></div>
+                    <a href="mailto:administracion@colegiosanfranciscodeasis.com" target="_blank" class="text-xs md:text-md text-gray-600"><span data-config="colegio-email">administracion@colegiosanfranciscodeasis.com</span></a>
                     <div class="flex flex-row sm:flex-col flex-wrap items-center sm:items-start justify-center">
-                        <a href="https://goo.gl/maps/Z9XU1Uv5AAixNX2s6" target="_blank" class="text-xs md:text-md text-gray-600 text-wrap">Plaza Maite Alcázar Zambrano, Urbanización El Coto.</a> 
-                        <span class="text-xs md:text-md text-gray-600">Mijas Costa, Málaga.</span>
+                        <a href="https://goo.gl/maps/Z9XU1Uv5AAixNX2s6" target="_blank" class="text-xs md:text-md text-gray-600 text-wrap"><span data-config="colegio-direccion">Plaza Maite Alcázar Zambrano, Urbanización El Coto.</span></a> 
+                        <span class="text-xs md:text-md text-gray-600"><span data-config="colegio-localidad">Mijas Costa</span>, <span data-config="colegio-provincia">Málaga</span>.</span>
                     </div>
                 </div>
             </div>            
             <div class="flex flex-row flex-wrap items-center justify-center gap-y-1 gap-x-6 px-4">
-                <span class="text-lg md:text-xl lg:text-2xl text-brand-blue">Torneo escolar de Fútbol Sala</span>
-                <h1 class="text-4xl font-bold text-brand-red ">Al-Ándalus</h1>
-                <span class="text-md md:text-lg text-brand-gold ">2025-2026</span>
+                <span class="text-lg md:text-xl lg:text-2xl text-brand-blue" data-translate="footer_tournament_title">Torneo escolar de Fútbol Sala</span>
+                <h1 class="text-4xl font-bold text-brand-red " data-config="torneo-nombre">Al-Ándalus</h1>
+                <span class="text-md md:text-lg text-brand-gold " data-config="torneo-anio">2025-2026</span>
             </div>
             <div class="flex flex-row flex-wrap items-center justify-center gap-1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
                 <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/GerardoHMX" target="_blank">
                     <img src="img/profile.jpg" alt="Perfil de Gerardo Huizar Castro" class="h-10 w-10 object-contain transition-transform duration-300 hover:scale-150">
                 </a>
                 <div>
-                    <a property="dct:title" rel="cc:attributionURL" href="https://github.com/GerardoHMX/TorneoAl-Andalus" target="_blank">Realizado por</a>   
+                    <a property="dct:title" rel="cc:attributionURL" href="https://github.com/GerardoHMX/TorneoAl-Andalus" target="_blank" data-translate="footer_made_by">Realizado por</a>   
                     <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/GerardoHMX">Gerardo Huizar Castro</a>                   
                 </div>                
                 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" class="flex flex-row flex-wrap items-center justify-center gap-1">
-                    <span>es bajo licencia</span>    
+                    <span data-translate="footer_license">es bajo licencia</span>    
                     <div><img class="h-4 w-4 object-contain transition-transform duration-300 hover:scale-150" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="" target="_blank"></div>
                     <div><img class="h-4 w-4 object-contain transition-transform duration-300 hover:scale-150" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="" target="_blank"></div>
                     <div><img class="h-4 w-4 object-contain transition-transform duration-300 hover:scale-150" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt="" target="_blank"></div>
@@ -513,6 +511,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Material Tailwind Dialog -->
     <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/dialog.js"></script>
+    <!-- Sistema de traducciones (debe cargarse primero) -->
+    <script type="module" src="js/translations.js"></script>
+    <script type="module" src="js/data.js"></script>
+    <script type="module" src="js/ui.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/carousel-init.js"></script>
     <script type="module" src="js/accordion-init.js"></script>

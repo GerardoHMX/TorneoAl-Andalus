@@ -7,6 +7,7 @@ export const URLS = {
     NOTICIAS: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRskeRn-mtzkR4JaGndzuwt_akX4SzWyF2IepdDiB7XA6LAUTgSNPGoypoaFbrsBzQDmgC2KjC4r8NY/pub?gid=1757087324&single=true&output=csv",
     OTROS: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRskeRn-mtzkR4JaGndzuwt_akX4SzWyF2IepdDiB7XA6LAUTgSNPGoypoaFbrsBzQDmgC2KjC4r8NY/pub?gid=2051372861&single=true&output=csv",
     GALERIA: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRskeRn-mtzkR4JaGndzuwt_akX4SzWyF2IepdDiB7XA6LAUTgSNPGoypoaFbrsBzQDmgC2KjC4r8NY/pub?gid=1528902819&single=true&output=csv",
+    CONFIGURACION: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRskeRn-mtzkR4JaGndzuwt_akX4SzWyF2IepdDiB7XA6LAUTgSNPGoypoaFbrsBzQDmgC2KjC4r8NY/pub?gid=894153727&single=true&output=csv",
 };
 
 async function testURLs() {
@@ -26,15 +27,70 @@ async function testURLs() {
 // testURLs();
 
 // Función para obtener y parsear CSV
-export async function fetchCSV(url) {
+export async function fetchCSV(url, isConfiguracion = false) {
     const r = await fetch(url, { cache: "no-store" });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const text = await r.text();
-    return csvToObjects(text);
+    return csvToObjects(text, isConfiguracion);
+}
+
+// Función para obtener las filas sin parsear (solo para CONFIGURACION)
+export async function fetchCSVRows(url) {
+    const r = await fetch(url, { cache: "no-store" });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const text = await r.text();
+    return csvToRows(text);
+}
+
+// Convierte CSV a array de filas (sin convertir a objetos)
+function csvToRows(csv) {
+    const rows = [];
+    let currentRow = [];
+    let currentField = '';
+    let insideQuotes = false;
+    
+    // Recorrer el texto carácter por carácter
+    for (let i = 0; i < csv.length; i++) {
+        const char = csv[i];
+        const nextChar = csv[i + 1];
+        
+        if (char === '"') {
+            if (insideQuotes && nextChar === '"') {
+                currentField += '"';
+                i++;
+            } else {
+                insideQuotes = !insideQuotes;
+            }
+        } else if (char === ',' && !insideQuotes) {
+            currentRow.push(currentField.trim());
+            currentField = '';
+        } else if ((char === '\n' || (char === '\r' && nextChar !== '\n')) && !insideQuotes) {
+            if (char === '\r' && nextChar === '\n') {
+                i++;
+            }
+            currentRow.push(currentField.trim());
+            currentField = '';
+            if (currentRow.length > 0 && currentRow.some(field => field !== '')) {
+                rows.push(currentRow);
+            }
+            currentRow = [];
+        } else {
+            currentField += char;
+        }
+    }
+    
+    if (currentField.trim() !== '' || currentRow.length > 0) {
+        currentRow.push(currentField.trim());
+        if (currentRow.length > 0 && currentRow.some(field => field !== '')) {
+            rows.push(currentRow);
+        }
+    }
+    
+    return rows;
 }
 
 // Convierte CSV a array de objetos, respetando comillas y saltos de línea dentro de campos
-function csvToObjects(csv) {
+function csvToObjects(csv, isConfiguracion = false) {
     const rows = [];
     let currentRow = [];
     let currentField = '';
@@ -88,11 +144,26 @@ function csvToObjects(csv) {
     }
     
     // Obtener headers y datos según la estructura esperada
-    const headers = rows[2]; // tercera fila = fila 3 (index 2)
-    const dataRows = rows.slice(3); // desde la fila 4 en adelante
+    let headers, dataRows;
+    
+    if (isConfiguracion) {
+        // Para CONFIGURACION: las filas 1-2 están agrupadas (instrucciones)
+        // Los headers están en la fila 3 (index 2), datos desde fila 4 (index 3)
+        if (rows.length > 2) {
+            headers = rows[2]; // tercera fila = fila 3 (index 2) con headers: CAMPO, TIPO, DESCRIPCION, VALOR
+            dataRows = rows.slice(3); // desde la fila 4 en adelante
+        } else {
+            headers = rows[0] || [];
+            dataRows = rows.slice(1);
+        }
+    } else {
+        // Para todas las demás hojas: headers en fila 3 (index 2), datos desde fila 4 (index 3)
+        headers = rows[2]; // tercera fila = fila 3 (index 2)
+        dataRows = rows.slice(3); // desde la fila 4 en adelante
+    }
 
     return dataRows.map(r =>
-        Object.fromEntries(headers.map((h, i) => [h, r[i] ?? ""]))
+        Object.fromEntries(headers.map((h, i) => [h ? h.trim() : `col_${i}`, r[i] ?? ""]))
     );
 }
 
@@ -107,6 +178,7 @@ export async function loadAllData() {
         fetchCSV(URLS.NOTICIAS),
         URLS.OTROS ? fetchCSV(URLS.OTROS).catch(() => []) : Promise.resolve([]),
         URLS.GALERIA ? fetchCSV(URLS.GALERIA).catch(() => []) : Promise.resolve([]),
+        URLS.CONFIGURACION ? fetchCSV(URLS.CONFIGURACION, true).catch(() => []) : Promise.resolve([]),
     ]);
 
     // Procesar resultados, usando array vacío si alguna falla
@@ -117,16 +189,17 @@ export async function loadAllData() {
         SANCIONES,
         NOTICIAS,
         OTROS,
-        GALERIA
+        GALERIA,
+        CONFIGURACION
     ] = results.map((result, index) => {
         if (result.status === 'fulfilled') {
             return result.value;
         } else {
-            const sheetNames = ['CLASIFICACION', 'EQUIPOS', 'LIDERES', 'SANCIONES', 'NOTICIAS', 'OTROS', 'GALERIA'];
+            const sheetNames = ['CLASIFICACION', 'EQUIPOS', 'LIDERES', 'SANCIONES', 'NOTICIAS', 'OTROS', 'GALERIA', 'CONFIGURACION'];
             console.warn(`No se logro cargar la hoja ${sheetNames[index]}:`, result.reason?.message || result.reason);
             return [];
         }
     });
 
-    return { CLASIFICACION, EQUIPOS, LIDERES, SANCIONES, NOTICIAS, OTROS: OTROS || [], GALERIA: GALERIA || [] };
+    return { CLASIFICACION, EQUIPOS, LIDERES, SANCIONES, NOTICIAS, OTROS: OTROS || [], GALERIA: GALERIA || [], CONFIGURACION: CONFIGURACION || [] };
 }

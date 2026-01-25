@@ -1,5 +1,6 @@
 // --- main.js ---
-import { loadAllData } from "./data.js";
+import { loadAllData, fetchCSVRows, URLS } from "./data.js";
+import { updateAllTranslations, translate } from "./translations.js";
 import {
     tablaEquipos,
     tablaResultadosFaseDeGrupos,
@@ -73,13 +74,6 @@ function encontrarDiasRelevantes(clasificacion, ciclo, offsetDias = 0) {
     
     const diaSemana = fechaBase.getDay(); // 0 = domingo, 6 = sábado
     
-    console.log('encontrarDiasRelevantes iniciado:', {
-        hoy: hoy.toLocaleDateString('es-ES'),
-        fechaBase: fechaBase.toLocaleDateString('es-ES'),
-        offsetDias,
-        diaSemana,
-        totalPartidos: clasificacion?.length || 0
-    });
     
     // Función auxiliar para verificar si un partido es válido
     // Único criterio: debe tener equipos definidos (LOCAL y VISITANTE)
@@ -326,11 +320,7 @@ function filtrarProximosPartidos(clasificacion, ciclo, diaInicio, diaFin) {
     diaInicio.setHours(0, 0, 0, 0);
     diaFin.setHours(0, 0, 0, 0);
 
-    console.log('Filtrando partidos:', {
-        diaInicio: diaInicio.toLocaleDateString('es-ES'),
-        diaFin: diaFin.toLocaleDateString('es-ES'),
-        totalPartidos: clasificacion.length
-    });
+    
 
     // Filtrar partidos que:
     // 1. Tengan fecha válida (DIA, MES, ANIO)
@@ -388,7 +378,7 @@ function filtrarProximosPartidos(clasificacion, ciclo, diaInicio, diaFin) {
         }
     });
 
-    console.log('Partidos filtrados encontrados:', partidosFiltrados.length);
+    
     return partidosFiltrados;
 }
 
@@ -787,21 +777,8 @@ function filtrarNoticiasPorFecha(noticias, diaInicio, diaFin) {
             return fechaA.getTime() - fechaB.getTime();
         });
         
-        console.log('Noticias adicionales encontradas:', {
-            noticiasOriginales: noticiasFiltradas.length,
-            noticiasAdicionales: noticiasAdicionales.length,
-            total: todasLasNoticias.length
-        });
-        
         return todasLasNoticias;
     }
-    
-    console.log('Filtrado de noticias:', {
-        totalPublicadas: noticiasPublicadas.length,
-        filtradas: noticiasFiltradas.length,
-        diaInicio: diaInicio.toLocaleDateString('es-ES'),
-        diaFin: diaFin.toLocaleDateString('es-ES')
-    });
     
     return noticiasFiltradas;
 }
@@ -1231,9 +1208,45 @@ function generarNavegacion(otros = []) {
             const seccion = seccionKey ? (item[seccionKey] || '').toString().trim() : '';
             const nombre = nombreKey ? (item[nombreKey] || '').toString().trim() : '';
             
-            if (!seccion || !nombre || nombre === '-') return '';                        
+            if (!seccion || !nombre || nombre === '-') return '';
+            
+            // Usar seccion directamente como clave de traducción 
+            let nombreTraducido = '';
             const href = '#' + seccion;
-            return `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors">${nombre.toUpperCase()}</a>`;
+            switch (seccion) {
+                case 'inicio':                
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">INICIO</a>`;
+                    break;
+                case 'equipos':
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">EQUIPOS</a>`;
+                    break;
+                case 'jornadas':
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">JORNADAS</a>`;
+                    break;
+                case 'clasificacionGrupal':
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">CLASIFICACIÓN</a>`;
+                    break;
+                case 'bracket':
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">BRACKET</a>`;
+                    break;
+                case 'goleadoresSection':
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">LÍDERES</a>`;
+                    break;
+                case 'sancionadosSection':
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">SANCIONADOS</a>`;
+                    break;
+                case 'resultadosSection':
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">RESULTADOS</a>`;
+                    break;
+                case 'noticiasSection':
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">NOTICIAS</a>`;
+                    break;
+                default:
+                    nombreTraducido = '';
+                    break;
+            }
+
+            return nombreTraducido;
         }).join('');
         
     } else {
@@ -1252,9 +1265,13 @@ function generarNavegacion(otros = []) {
             const seccion = seccionKey ? (item[seccionKey] || '').toString().trim() : '';
             const nombre = nombreKey ? (item[nombreKey] || '').toString().trim() : '';
             
-            if (!seccion || !nombre || nombre === '-') return '';            
+            if (!seccion || !nombre || nombre === '-') return '';
+            
+            // Usar seccion directamente como clave de traducción
+            const nombreTraducido = translate(seccion) || nombre;
+            
             const href = '#' + seccion;
-            return `<a href="${href}" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors">${nombre.toUpperCase()}</a>`;
+            return `<a href="${href}" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">${nombreTraducido}</a>`;
         }).join('');
         
     } else {
@@ -1333,12 +1350,200 @@ function inicializarSmoothScroll() {
     });
 }
 
+// --- Funciones de Configuración ---
+
+// Cargar configuración desde CONFIGURACION y convertir a objeto plano
+async function loadConfig() {
+    // Cargar las filas directamente del CSV sin parsear a objetos
+    let rows = [];
+    
+    try {
+        rows = await fetchCSVRows(URLS.CONFIGURACION);
+    } catch (error) {
+        console.warn('Error al cargar CONFIGURACION:', error);
+        STATE.config = {};
+        return;
+    }
+    
+    if (!rows || rows.length < 4) {
+        console.warn('No hay suficientes filas en CONFIGURACION');
+        STATE.config = {};
+        return;
+    }
+
+    const CONFIG = {};
+    
+    const headers = rows[1];
+    const campoIndex = headers.findIndex(h => h && h.toUpperCase().trim() === 'CAMPO');
+    const valorIndex = headers.findIndex(h => h && h.toUpperCase().trim() === 'VALOR');
+    
+    if (campoIndex === -1 || valorIndex === -1) {
+        console.warn('No se encontraron las columnas CAMPO o VALOR en los headers');
+        STATE.config = {};
+        return;
+    }
+    
+    for (let i = 3; i < rows.length; i++) {
+        const row = rows[i];
+        const campo = row[campoIndex]?.trim();
+        let valor = row[valorIndex]?.trim();        
+        if (!campo || campo === '') {
+            continue;
+        }        
+        if (!valor || valor === '') {
+            valor = 'Sin Datos';
+        }        
+        CONFIG[campo] = valor;
+    }
+
+    STATE.config = CONFIG;
+    //console.log('Configuración cargada:', CONFIG);
+}
+
+// Obtener valor de configuración desde Google Sheets
+// Si no existe o es "Sin Datos", retorna cadena vacía (sin valores por defecto)
+function getConfigValue(key) {
+    if (!STATE.config) {
+        loadConfig();
+    }
+
+    // Buscar key case-insensitive
+    const foundKey = Object.keys(STATE.config || {}).find(k => k.toUpperCase() === key.toUpperCase());
+    if (foundKey && STATE.config[foundKey]) {
+        const valor = STATE.config[foundKey];
+        // Si el valor es "Sin Datos", retornar cadena vacía para que se vea el error
+        return valor === 'Sin Datos' ? '' : valor;
+    }
+
+    // No hay valores por defecto - retornar cadena vacía si no se encuentra
+    // Esto permitirá que se vea el error si falta la configuración
+    return '';
+}
+
+// Aplicar configuración a elementos del DOM
+function applyConfig() {
+    // Hero Section - Nombre del torneo y año
+    const torneoNombreEl = document.querySelector('[data-config="torneo-nombre"]');
+    if (torneoNombreEl) {
+        torneoNombreEl.textContent = getConfigValue('TORNEO_NOMBRE');
+    }
+
+    const torneoAnioEl = document.querySelector('[data-config="torneo-anio"]');
+    if (torneoAnioEl) {
+        torneoAnioEl.textContent = getConfigValue('TORNEO_ANIO');
+    }
+
+    // Footer - Información del colegio
+    const colegioNombreEl = document.querySelector('[data-config="colegio-nombre"]');
+    if (colegioNombreEl) {
+        colegioNombreEl.textContent = getConfigValue('COLEGIO_NOMBRE');
+    }
+
+    const colegioTelefono1El = document.querySelector('[data-config="colegio-telefono1"]');
+    if (colegioTelefono1El) {
+        colegioTelefono1El.textContent = getConfigValue('COLEGIO_TELEFONO1');
+        const link = colegioTelefono1El.closest('a');
+        if (link) {
+            link.href = `tel:+34${getConfigValue('COLEGIO_TELEFONO1').replace(/\s/g, '')}`;
+        }
+    }
+
+    const colegioTelefono2El = document.querySelector('[data-config="colegio-telefono2"]');
+    if (colegioTelefono2El) {
+        colegioTelefono2El.textContent = getConfigValue('COLEGIO_TELEFONO2');
+        const link = colegioTelefono2El.closest('a');
+        if (link) {
+            link.href = `tel:+34${getConfigValue('COLEGIO_TELEFONO2').replace(/\s/g, '')}`;
+        }
+    }
+
+    const colegioEmailEl = document.querySelector('[data-config="colegio-email"]');
+    if (colegioEmailEl) {
+        colegioEmailEl.textContent = getConfigValue('COLEGIO_EMAIL');
+        const link = colegioEmailEl.closest('a');
+        if (link) {
+            link.href = `mailto:${getConfigValue('COLEGIO_EMAIL')}`;
+        }
+    }
+
+    const colegioDireccionEl = document.querySelector('[data-config="colegio-direccion"]');
+    if (colegioDireccionEl) {
+        colegioDireccionEl.textContent = getConfigValue('COLEGIO_DIRECCION');
+    }
+
+    const colegioLocalidadEl = document.querySelector('[data-config="colegio-localidad"]');
+    if (colegioLocalidadEl) {
+        colegioLocalidadEl.textContent = getConfigValue('COLEGIO_LOCALIDAD');
+    }
+
+    const colegioProvinciaEl = document.querySelector('[data-config="colegio-provincia"]');
+    if (colegioProvinciaEl) {
+        colegioProvinciaEl.textContent = getConfigValue('COLEGIO_PROVINCIA');
+    }
+
+    // Header - Logo y URL del colegio
+    const colegioLogoEl = document.querySelector('[data-config="colegio-logo"]');
+    if (colegioLogoEl) {
+        const logoUrl = getConfigValue('COLEGIO_LOGO_URL');
+        if (logoUrl) {
+            colegioLogoEl.src = logoUrl;
+        }
+    }
+
+    const colegioLinkEl = document.querySelector('[data-config="colegio-link"]');
+    if (colegioLinkEl) {
+        colegioLinkEl.href = getConfigValue('COLEGIO_URL');
+    }
+
+    // Redes sociales - Instagram
+    const instagramLinkEl = document.querySelector('[data-config="instagram-link"]');
+    if (instagramLinkEl) {
+        instagramLinkEl.href = getConfigValue('REDES_INSTAGRAM_URL');
+    }
+
+    // Meta tags
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+        metaDescription.content = getConfigValue('TORNEO_DESCRIPCION');
+    }
+
+    const metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (metaKeywords) {
+        const keywords = `${getConfigValue('TORNEO_NOMBRE')}, ${getConfigValue('COLEGIO_NOMBRE')}, Torneo escolar, Fútbol Sala`;
+        metaKeywords.content = keywords;
+    }
+
+    // Google Analytics
+    const gaScript = document.querySelector('script[src*="googletagmanager"]');
+    if (gaScript) {
+        const gaId = getConfigValue('GA_TRACKING_ID');
+        if (gaId && gaId !== 'G-2N3LTTCYQS') {
+            // Actualizar el ID en el script si es diferente
+            gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+            // Actualizar la configuración de gtag
+            if (window.gtag) {
+                window.gtag('config', gaId);
+            }
+        }
+    }
+
+    // Título de la página
+    const pageTitle = document.querySelector('title');
+    if (pageTitle) {
+        pageTitle.textContent = `Torneo Escolar - ${getConfigValue('TORNEO_NOMBRE')}`;
+    }
+}
+
 // --- carga inicial ---
 async function init() {
 
     preloader();
     
     STATE.data = await loadAllData();
+    
+    // Cargar y aplicar configuración
+    await loadConfig();
+    applyConfig();
     
     requestAnimationFrame(() => {
         // Generar navegación dinámica desde la hoja OTROS (basada en MENU)
@@ -1350,11 +1555,12 @@ async function init() {
     });
 
     // Auto recarga cada 5 minutos
-    setInterval(() => {
-        loadAllData().then(d => {
-            STATE.data = d;
-            updateUI();
-        });
+    setInterval(async () => {
+        const d = await loadAllData();
+        STATE.data = d;
+        await loadConfig();
+        applyConfig();
+        updateUI();
     }, 5 * 60 * 1000);
 }
 
@@ -1495,14 +1701,7 @@ function updateUI() {
         diaOffsetNoticias
     );
     
-    // Debug: Log de los días encontrados y noticias disponibles
-    console.log('Noticias - Días encontrados:', {
-        diaInicio: diaInicioNoticias.toLocaleDateString('es-ES'),
-        diaFin: diaFinNoticias.toLocaleDateString('es-ES'),
-        offsetDias: diaOffsetNoticias,
-        totalNoticias: STATE.data.NOTICIAS?.length || 0,
-        noticiasPublicadas: STATE.data.NOTICIAS?.filter(n => n.PUBLICAR === "SI").length || 0
-    });
+
     
     // Filtrar noticias por fecha
     const noticiasFiltradas = filtrarNoticiasPorFecha(
@@ -1511,20 +1710,15 @@ function updateUI() {
         diaFinNoticias
     );
     
-    // Debug: Log de noticias filtradas
-    console.log('Noticias filtradas:', {
-        cantidad: noticiasFiltradas.length,
-        noticias: noticiasFiltradas.map(n => ({
-            fecha: n.FECHA,
-            titulo: n.TITULO
-        }))
-    });
     
     renderNoticias(noticiasFiltradas);
     
     // Etiqueta de la fecha para noticias
     const labelNoticias = document.getElementById("noticias-fecha-label");
     if (labelNoticias) {
+        // Remover atributo data-translate para evitar que updateAllTranslations() sobrescriba el texto
+        labelNoticias.removeAttribute('data-translate');
+        
         const diaInicioNum = String(diaInicioNoticias.getDate()).padStart(2, '0');
         const mesInicio = String(diaInicioNoticias.getMonth() + 1).padStart(2, '0');
         const anioInicio = diaInicioNoticias.getFullYear();
@@ -1552,6 +1746,9 @@ function updateUI() {
     // Etiqueta de la fecha para galería
     const labelGaleria = document.getElementById("galeria-fecha-label");
     if (labelGaleria) {
+        // Remover atributo data-translate para evitar que updateAllTranslations() sobrescriba el texto
+        labelGaleria.removeAttribute('data-translate');
+        
         const diaInicioNum = String(diaInicioGaleria.getDate()).padStart(2, '0');
         const mesInicio = String(diaInicioGaleria.getMonth() + 1).padStart(2, '0');
         const anioInicio = diaInicioGaleria.getFullYear();
@@ -1569,13 +1766,7 @@ function updateUI() {
         diaOffsetProximosPartidos
     );
     
-    // Debug: Log de los días encontrados
-    console.log('Días encontrados:', {
-        diaInicio: diaInicio.toLocaleDateString('es-ES'),
-        diaFin: diaFin.toLocaleDateString('es-ES'),
-        offsetDias: diaOffsetProximosPartidos,
-        totalPartidos: STATE.data.CLASIFICACION?.length || 0
-    });
+    
     
     // Filtrar partidos por equipos definidos y rango de fechas
     const partidosFiltrados = filtrarProximosPartidos(
@@ -1585,22 +1776,14 @@ function updateUI() {
         diaFin
     );
     
-    // Debug: Log de partidos filtrados
-    console.log('Partidos filtrados:', {
-        cantidad: partidosFiltrados.length,
-        partidos: partidosFiltrados.map(p => ({
-            fecha: `${p.DIA}/${p.MES}/${p.ANIO || new Date().getFullYear()}`,
-            local: p.LOCAL,
-            visitante: p.VISITANTE,
-            ciclo: p.CICLO
-        }))
-    });
-    
     renderProximosPartidos(partidosFiltrados);
 
     // Etiqueta de los días para próximos partidos
     const label = document.getElementById("semana-label");
     if (label) {
+        // Remover atributo data-translate para evitar que updateAllTranslations() sobrescriba el texto
+        label.removeAttribute('data-translate');
+        
         const diaInicioNum = String(diaInicio.getDate()).padStart(2, '0');
         const mesInicio = String(diaInicio.getMonth() + 1).padStart(2, '0');
         const anioInicio = diaInicio.getFullYear();
@@ -1622,6 +1805,8 @@ function updateUI() {
     if (OTROS && OTROS.length > 0) {
         requestAnimationFrame(() => {
             controlarVisibilidadSecciones(OTROS);
+            // Actualizar todas las traducciones después de renderizar
+            updateAllTranslations();
             // Ocultar preloader solo después de que todo esté completamente actualizado
             if (esCargaInicial) {
                 ocultarPreloader();
@@ -1632,9 +1817,14 @@ function updateUI() {
         // Si no hay datos de OTROS, ocultar preloader igualmente
         if (esCargaInicial) {
             requestAnimationFrame(() => {
+                // Actualizar todas las traducciones después de renderizar
+                updateAllTranslations();
                 ocultarPreloader();
                 esCargaInicial = false;
             });
+        } else {
+            // Actualizar traducciones incluso si no es carga inicial
+            updateAllTranslations();
         }
     }
  

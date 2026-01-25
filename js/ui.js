@@ -1,12 +1,35 @@
 // Funciones de renderizado de cada sección del Torneo Al-Ándalus
+import { currentLanguage, translate } from './translations.js';
 
 const grupos = ["A", "B", "C", "D"];
 const ciclos = ['ESO', 'BCH'];
 const brandColors = ["brand-red", "brand-orange", "brand-gold", "brand-green", "brand-blue"];
 const meses = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
-const mesesNombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-const diasSemana = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
-const maxTeamsPerGroups = 4;
+
+// Arrays de meses en español
+const mesesNombresES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+                         "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+// Arrays de meses en inglés
+const mesesNombresEN = ["January", "February", "March", "April", "May", "June", 
+                        "July", "August", "September", "October", "November", "December"];
+
+// Arrays de días en español
+const diasSemanaES = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+
+// Arrays de días en inglés
+const diasSemanaEN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+// Función helper para obtener array de meses según idioma
+function getMesesNombres(lang = currentLanguage) {
+    return lang === 'en' ? mesesNombresEN : mesesNombresES;
+}
+
+// Función helper para obtener array de días según idioma
+function getDiasSemana(lang = currentLanguage) {
+    return lang === 'en' ? diasSemanaEN : diasSemanaES;
+}
+
 const juegos = 6;
 const temsPerGroup = 4;
 
@@ -50,14 +73,14 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
     if (gruposAMostrar.length > 0) {
         gruposAMostrar.forEach((grupo) => {
             const key = `${ciclo}_${grupo}`;
-            const data = equiposPorCicloGrupo[key];
+            const data = equiposPorCicloGrupo[key];            
             if (data && data.equipos.length > 0) {
                 html += `
                     <div class="w-full mb-6">
                         <div class="text-3xl font-bold py-3 font-bold mb-6">
                             <div class="flex items-center gap-2">
                                 <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${ciclo}</h4>
-                                <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${grupo}</h4>                                
+                                <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"><span data-translate="table_group">Grupo</span> ${grupo}</h4>                                
                             </div>
                         </div>
                         <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -73,9 +96,7 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
                                         <h5 class="text-sm sm:text-md md:text-lg font-bold text-brand-text-dark mb-3 uppercase">
                                             ${equipo.EQUIPO}
                                         </h5>
-                                        <p class="text-xs md:text-sm text-gray-600 leading-relaxed">
-                                            Equipo participante del Grupo ${grupo} en la categoría ${ciclo}.
-                                        </p>
+                                        <p class="text-xs md:text-sm text-gray-600 leading-relaxed" data-translate="team_participant_description" data-group="${grupo}" data-cycle="${ciclo}"></p>
                                     </div>
                                 </div>
                             `).join('')}
@@ -95,7 +116,7 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
                     <div class="text-3xl font-bold px-4 py-3 font-bold mb-6">
                         <div class="flex items-center gap-2">
                             <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${data.ciclo}</h4>    
-                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${data.grupo}</h4>                            
+                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"><span class="text-3xl font-bold text-brand-red flex items-center"  data-translate="group">Grupo</span> ${data.grupo}</h4>                            
                         </div>
                     </div>
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -112,9 +133,8 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
                                     <h5 class="text-sm sm:text-md md:text-lg font-bold text-brand-text-dark mb-3 uppercase">
                                         ${equipo.EQUIPO}
                                     </h5>
-                                    <p class="text-xs md:text-sm text-gray-600 leading-relaxed">
-                                        Equipo participante del Grupo ${data.grupo} en la categoría ${data.ciclo}. 
-                                        Compitiendo en el Torneo Al-Ándalus 2025-2026.
+                                    <p class="text-xs md:text-sm text-gray-600 leading-relaxed">                                        
+                                        <span class="text-xs md:text-sm text-gray-600 leading-relaxed" data-translate="team_participant_at">Equipo participante </span> ${data.GRUPO}  ${data.ciclo}                                         
                                     </p>
                                 </div>
                             </div>
@@ -145,7 +165,20 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
             // Formatear fecha
             const anio = m.ANIO ? parseInt(m.ANIO) : new Date().getFullYear();
             const mes = parseInt(m.MES);
-            const dia = parseInt(m.DIA);
+            const dia = parseInt(m.DIA);           
+            let estatus = '';
+
+            switch (m.ESTATUS) {
+                case 'JUGADO':
+                    estatus = `<span class="text-center text-xs md:text-sm text-brand-green font-bold uppercase" data-translate="match_status_jugado">JUGADO</span>`;
+                    break;
+                case 'CANCELADO':
+                    estatus = `<span class="text-center text-xs md:text-sm text-red-500 font-bold uppercase" data-translate="match_status_cancelado">CANCELADO</span>`;
+                    break;
+                default:
+                    estatus = `<span class="text-center text-xs md:text-sm text-gray-500 font-bold uppercase" data-translate="match_status_pendiente">PENDIENTE</span>`;
+                    break;
+            }            
             
             // Validar que los valores sean números válidos
             if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
@@ -154,7 +187,7 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
             } 
             const fechaFormateada = `${String(dia).padStart(2, '0')}/${meses[mes - 1] || mes}/${anio}`;
 
-            cardsPerGroup.push(`                
+            cardsPerGroup.push(`
                 <!-- Match Card ${i} -->
                 <div class="rounded-brand p-2 sm:p-6 md:p-8 bg-gray-100 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden ">
                     <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-6 mb-6">
@@ -171,7 +204,7 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
                         </div>
                     </div>
                     <div class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
-                        GRUPO ${m.GRUPO} - <span class="text-center text-xs md:text-sm text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs md:text-sm ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${m.ESTATUS || 'PENDIENTE'}</span>
+                        <span class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2" data-translate="group">Grupo</span> ${m.GRUPO} - <span class="text-center text-xs md:text-sm text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs md:text-sm ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>
                     </div>
                 </div>
             `);
@@ -182,7 +215,7 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
                     <div class="text-3xl font-bold py-3 font-bold mb-6">
                         <div class="flex items-center gap-2">
                             <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${m.CICLO}</h4>
-                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${m.GRUPO}</h4>                            
+                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"> <span class="text-3xl font-bold text-brand-red flex items-center" data-translate="group">Grupo</span> ${grupo}</h4>
                         </div>
                     </div>
                     <div class="grid grid grid-cols-2 lg:grid-cols-3 gap-6" id="cards-per-group-${m.GRUPO}">
@@ -341,7 +374,7 @@ export function tablaClasificacion(list, ciclo) {
     div.classList.add("overflow-x-auto", "mb-6", "mt-6");
     let grupo = "A";
     let cardsPerGroup = [];
-    let cardsGroup = [];
+    let cardsGroup = []; 
 
     list.map((m, i) => {
         if (m.EQUIPOS !== undefined && m.EQUIPOS.trim() !== "" && m.CICLO === ciclo) {
@@ -399,7 +432,7 @@ export function tablaClasificacion(list, ciclo) {
                     <div class="text-3xl font-bold py-3 font-bold mb-6">
                         <div class="flex items-center gap-2">
                             <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${m.CICLO}</h4>    
-                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2">Grupo ${m.GRUPO}</h4> 
+                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"> <span class="text-3xl font-bold text-brand-red flex items-center" data-translate="group">Grupo</span> ${grupo}</h4> 
                         </div>
                     </div>
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-6" id="points-per-team-${m.GRUPO}">
@@ -446,7 +479,7 @@ export function tablaClasificacionGrupal(list, ciclo) {
         }));
 
     if (equipos.length === 0) {
-        div.innerHTML = '<p class="text-gray-500 text-center">No hay datos de clasificación grupal disponibles</p>';
+        div.innerHTML = '<p class="text-gray-500 text-center" data-translate="msg_no_data">No hay datos de clasificación grupal disponibles</p>';
         return;
     }
 
@@ -483,7 +516,7 @@ export function tablaClasificacionGrupal(list, ciclo) {
             <div class="mb-8">
                 <div class="flex items-center justify-between gap-2 mb-4">                
                     <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">
-                        ${ciclo} - Grupo ${grupo}
+                        ${ciclo} - <span class="text-3xl font-bold text-brand-gold flex items-center gap-2" data-translate="group">Grupo</span> ${grupo}
                     </h4>
                 </div>
                 <div class="rounded-brand overflow-hidden shadow-lg">
@@ -491,16 +524,16 @@ export function tablaClasificacionGrupal(list, ciclo) {
                         <table class="w-full min-w-full" style="border-collapse: collapse;">
                             <thead>
                                 <tr style="background-color: #B30000; color: white;">
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">POS</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">EQUIPO</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PJ</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PTS</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PG</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PE</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PP</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">GF</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">GC</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">DG</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_position">POS</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_team">EQUIPO</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_played">PJ</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_points">PTS</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_won">PG</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_drawn">PE</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_lost">PP</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_goals_for">GF</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_goals_against">GC</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_goals_diff">DG</th>
                                     <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-right: 1rem;">FPY</th>
                                 </tr>
                             </thead>
@@ -539,16 +572,16 @@ export function tablaClasificacionGrupal(list, ciclo) {
                     </div>
                     <div class="bg-gray-100 py-2 px-2 md:py-4 md:px-4 border-t border-gray-300">
                         <div class="flex flex-wrap gap-x-6 gap-y-1 justify-center">
-                            <span class="text-xs text-gray-600"><strong class="text-xs">Pos:</strong> Posición</span>
-                            <span class="text-xs text-gray-600"><strong class="text-xs">PJ:</strong> Partidos Jugados</span>
-                            <span class="text-xs text-gray-600"><strong class="text-xs">PTS:</strong> Puntos</span>
-                            <span class="text-xs text-gray-600"><strong class="text-xs">PG:</strong> Partidos Ganados</span>
-                            <span class="text-xs text-gray-600"><strong class="text-xs">PE:</strong> Partidos Empatados</span>
-                            <span class="text-xs text-gray-600"><strong class="text-xs">PP:</strong> Partidos Perdidos</span>
-                            <span class="text-xs text-gray-600"><strong class="text-xs">GF:</strong> Goles a Favor</span>
-                            <span class="text-xs text-gray-600"><strong class="text-xs">GC:</strong> Goles en Contra</span>
-                            <span class="text-xs text-gray-600"><strong class="text-xs">DG:</strong> Diferencia de Goles</span>
-                            <span class="text-xs text-gray-600"><strong class="text-xs">FPY:</strong> Fair Play</span>
+                            <span><strong class="text-xs" data-translate="table_position">Pos</strong>: <span class="text-xs text-gray-600" data-translate="table_position_description">Posición</span> </span>
+                            <span><strong class="text-xs" data-translate="table_played">PJ</strong>: <span class="text-xs text-gray-600" data-translate="table_played_description">Partidos Jugados</span></span>
+                            <span><strong class="text-xs" data-translate="table_points">PTS</strong>: <span class="text-xs text-gray-600" data-translate="table_points_description">Puntos</span></span>
+                            <span><strong class="text-xs" data-translate="table_won">PG</strong>: <span class="text-xs text-gray-600" data-translate="table_won_description">Partidos Ganados</span></span>
+                            <span><strong class="text-xs" data-translate="table_drawn">PE</strong>: <span class="text-xs text-gray-600" data-translate="table_drawn_description">Partidos Empatados</span></span>
+                            <span><strong class="text-xs" data-translate="table_lost">PP</strong>: <span class="text-xs text-gray-600" data-translate="table_lost_description">Partidos Perdidos</span></span>
+                            <span><strong class="text-xs" data-translate="table_goals_for">GF</strong>: <span class="text-xs text-gray-600" data-translate="table_goals_for_description">Goles a Favor</span></span>
+                            <span><strong class="text-xs" data-translate="table_goals_against">GC</strong>: <span class="text-xs text-gray-600" data-translate="table_goals_against_description">Goles en Contra</span></span>
+                            <span><strong class="text-xs" data-translate="table_goals_diff">DG</strong>: <span class="text-xs text-gray-600" data-translate="table_goals_diff_description">Diferencia de Goles</span></span>
+                            <span><strong class="text-xs" data-translate="table_fair_play">FPY</strong>: <span class="text-xs text-gray-600" data-translate="table_fair_play_description">Juego limpio</span></span>
                         </div>
                     </div>
                 </div>
@@ -557,7 +590,7 @@ export function tablaClasificacionGrupal(list, ciclo) {
     });
 
     if (html === '') {
-        div.innerHTML = '<p class="text-gray-500 text-center">No hay datos de clasificación grupal disponibles</p>';
+        div.innerHTML = '<p class="text-gray-500 text-center" data-translate="msg_no_data">No hay datos de clasificación grupal disponibles</p>';
         return;
     }
 
@@ -584,7 +617,7 @@ export function tablaResultados(list, ciclo) {
         }));
 
     if (equipos.length === 0) {
-        div.innerHTML = '<p class="text-gray-500 text-center">No hay datos de resultados disponibles</p>';
+        div.innerHTML = '<p class="text-gray-500 text-center" data-translate="msg_no_data">No hay datos de resultados disponibles</p>';
         return;
     }
 
@@ -608,16 +641,16 @@ export function tablaResultados(list, ciclo) {
                 <table class="w-full min-w-full" style="border-collapse: collapse;">
                     <thead>
                         <tr style="background-color: #B30000; color: white;">
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">POS</th>
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;">Equipo</th>
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PJ</th> <!-- Partidos Jugados -->
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PG</th> <!-- Partidos Ganados -->
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PE</th> <!-- Empates -->
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">PP</th> <!-- Partidos Perdidos -->
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">GF</th> <!-- Goles a favor -->
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">GC</th> <!-- Goles en contra -->
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;">DG</th> <!-- Diferencia de goles -->
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-right: 1rem;">PTS</th> <!-- Puntos -->
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_position">POS</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_team">Equipo</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_played">PJ</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_won">PG</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_drawn">PE</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_lost">PP</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_goals_for">GF</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_goals_against">GC</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_goals_diff">DG</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-right: 1rem;" data-translate="table_points">PTS</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -654,15 +687,15 @@ export function tablaResultados(list, ciclo) {
             </div>
             <div class="bg-gray-100 py-2 px-2 md:py-4 md:px-4 border-t border-gray-300">
                 <div class="flex flex-wrap gap-x-6 gap-y-1 justify-center">
-                    <span class="text-xs text-gray-600"><strong class="text-xs">Pos:</strong> Posición</span>
-                    <span class="text-xs text-gray-600"><strong class="text-xs">PJ:</strong> Partidos Jugados</span>
-                    <span class="text-xs text-gray-600"><strong class="text-xs">PG:</strong> Partidos Ganados</span>
-                    <span class="text-xs text-gray-600"><strong class="text-xs">PE:</strong> Partidos Empatados</span>
-                    <span class="text-xs text-gray-600"><strong class="text-xs">PP:</strong> Partidos Perdidos</span>
-                    <span class="text-xs text-gray-600"><strong class="text-xs">GF:</strong> Goles a Favor</span>
-                    <span class="text-xs text-gray-600"><strong class="text-xs">GC:</strong> Goles en Contra</span>
-                    <span class="text-xs text-gray-600"><strong class="text-xs">DG:</strong> Diferencia de Goles</span>
-                    <span class="text-xs text-gray-600"><strong class="text-xs">PTS:</strong> Puntos</span>
+                    <span><strong class="text-xs" data-translate="table_position">Pos:</strong>: <span class="text-xs text-gray-600" data-translate="table_position_description"> Posición</span></span>
+                    <span><strong class="text-xs" data-translate="table_played">PJ:</strong>: <span class="text-xs text-gray-600" data-translate="table_played_description"> Partidos Jugados</span></span>
+                    <span><strong class="text-xs" data-translate="table_won">PG:</strong>: <span class="text-xs text-gray-600" data-translate="table_won_description"> Partidos Ganados</span></span>
+                    <span><strong class="text-xs" data-translate="table_drawn">PE:</strong>: <span class="text-xs text-gray-600" data-translate="table_drawn_description"> Partidos Empatados</span></span>
+                    <span><strong class="text-xs" data-translate="table_lost">PP:</strong>: <span class="text-xs text-gray-600" data-translate="table_lost_description"> Partidos Perdidos</span></span>
+                    <span><strong class="text-xs" data-translate="table_goals_for">GF:</strong>: <span class="text-xs text-gray-600" data-translate="table_goals_for_description"> Goles a Favor</span></span>
+                    <span><strong class="text-xs" data-translate="table_goals_against">GC:</strong>: <span class="text-xs text-gray-600" data-translate="table_goals_against_description"> Goles en Contra</span></span>
+                    <span><strong class="text-xs" data-translate="table_goals_diff">DG:</strong>: <span class="text-xs text-gray-600" data-translate="table_goals_diff_description"> Diferencia de Goles</span></span>
+                    <span><strong class="text-xs" data-translate="table_points">PTS:</strong>: <span class="text-xs text-gray-600" data-translate="table_points_description"> Puntos</span></span>
                 </div>
             </div>
         </div>
@@ -727,7 +760,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
                 ${ciclo}
             </h4>
             <div class="flex items-center gap-2">
-                <label for="filtro-curso-goleadores-${ciclo}" class="font-bold text-xs sm:text-sm md:text-md lg:text-lg uppercase whitespace-nowrap">Curso:</label>
+                <label for="filtro-curso-goleadores-${ciclo}" class="font-bold text-xs sm:text-sm md:text-md lg:text-lg uppercase whitespace-nowrap" data-translate="course">Curso:</label>
                 <select id="filtro-curso-goleadores-${ciclo}" class="px-4 py-2 border border-gray-300 rounded-brand bg-white text-gray-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent cursor-pointer" data-ciclo="${ciclo}" data-tipo="goleadores">
                     <option value="TODOS" ${cursoFiltro === "TODOS" ? "selected" : ""}>TODOS</option>
                     ${cursosUnicos.map(curso => `<option value="${curso}" ${cursoFiltro === curso ? "selected" : ""}>${curso}</option>`).join("")}
@@ -814,11 +847,11 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
                     <table class="w-full min-w-full" style="border-collapse: collapse;">
                         <thead>
                             <tr style="background-color: #B30000; color: white;">
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">CICLO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">EQUIPO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">CURSO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">JUGADOR</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: center; padding-right: 1rem;">GOLES</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_ciclo">CICLO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_team_name">EQUIPO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_course">CURSO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_player">JUGADOR</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: center; padding-right: 1rem; uppercase" data-translate="table_goals">GOLES</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -851,6 +884,16 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
             </div>
         `;
     } else {
+
+        let mensaje = "";
+        if (cursoFiltro !== "TODOS") {
+            mensaje = `<span class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_no_scorers_registered">No hay goleadores registrados para este curso.</span>`;
+        } else if (ciclo === "ESO") {
+            mensaje = `<span class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_no_scorers_yet">Aún no hay partidos jugados, pronto conoceremos a los primeros líderes de goleo.</span>`;
+        } else {
+            mensaje = `<span class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_no_scorers_registered_yet">Todavía no se registran partidos. ¡Los goleadores aparecerán en cuanto ruede el balón!</span>`;
+        }
+
         // Mostrar tabla con encabezados y mensaje como celda con colspan
         html += `
             <div class="rounded-brand overflow-hidden shadow-lg mt-8">
@@ -868,7 +911,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
                         <tbody>
                             <tr class="bg-white border-gray-100 border border-b">
                                 <td colspan="5" class="py-8 px-4 text-center">
-                                    <p class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg">${cursoFiltro !== "TODOS" ? "No hay goleadores registrados para este curso." : (ciclo === "ESO" ? "Aún no hay partidos jugados, pronto conoceremos a los primeros líderes de goleo." : "Todavía no se registran partidos. ¡Los goleadores aparecerán en cuanto ruede el balón!")}</p>
+                                    <p>${mensaje}</p>
                                 </td>
                             </tr>
                         </tbody>
@@ -913,7 +956,7 @@ export function tablaSancionados(list, ciclo, cursoFiltro = "TODOS") {
                     ${ciclo}
                 </h4>
                 <div class="flex items-center gap-2">
-                    <label for="filtro-curso-${ciclo}" class="font-bold text-xs sm:text-sm md:text-md lg:text-lg uppercase whitespace-nowrap">Curso:</label>
+                    <label for="filtro-curso-${ciclo}" class="font-bold text-xs sm:text-sm md:text-md lg:text-lg uppercase whitespace-nowrap" data-translate="course">Curso:</label>
                     <select id="filtro-curso-${ciclo}" class="px-4 py-2 border border-gray-300 rounded-brand bg-white text-gray-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent cursor-pointer" data-ciclo="${ciclo}">
                         <option value="TODOS" ${cursoFiltro === "TODOS" ? "selected" : ""}>TODOS</option>
                         ${cursosUnicos.map(curso => `<option value="${curso}" ${cursoFiltro === curso ? "selected" : ""}>${curso}</option>`).join("")}
@@ -926,22 +969,32 @@ export function tablaSancionados(list, ciclo, cursoFiltro = "TODOS") {
                         <thead>
                             <tr style="background-color: #B30000; color: white;">
                                 <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: left; padding-left: 1rem;">EQUIPO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 20%; text-align: left; ">CURSO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 12%; text-align: left; ">JUGADOR</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: center;">ROJAS</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: center;">AMARILLAS</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: center;">SUSPENDIDOS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 20%; text-align: left; " data-translate="table_course">CURSO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 12%; text-align: left; " data-translate="table_player">JUGADOR</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: center;" data-translate="table_red_cards">ROJAS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: center;" data-translate="table_yellow_cards">AMARILLAS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: center;" data-translate="table_suspended">SUSPENDIDOS</th>
                             </tr>
                         </thead>
                         <tbody>
     `;
 
     if (sancionados.length === 0) {
+
+        let mensaje = "";
+        if (cursoFiltro !== "TODOS") {
+            mensaje = `<span class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_no_sanctions_no_sanctions">No hay sanciones registradas para este curso.</span>`;
+        } else if (ciclo === "ESO") {
+            mensaje = `<span class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_no_sanctions_play_clean">Todo en orden, ningún jugador ha sido sancionado hasta el momento.</span>`;
+        } else {
+            mensaje = `<span class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_no_sanctions">No hay sanciones registradas para este curso.</span>`;
+        }
+
         // Mostrar mensaje como celda con colspan cuando no hay datos
         html += `
                             <tr class="bg-white border-gray-100 border border-b">
                                 <td colspan="6" class="py-8 px-4 text-center">
-                                    <p class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg">${cursoFiltro !== "TODOS" ? "No hay sanciones registradas para este curso." : (ciclo === "ESO" ? "Parece que el juego limpio va ganando, no hay sanciones registradas." : "Todo en orden, ningún jugador ha sido sancionado hasta el momento.")}</p>
+                                    <p>${mensaje}</p>
                                 </td>
                             </tr>
         `;
@@ -978,7 +1031,7 @@ export function renderNoticias(noticias) {
     if (!div) return;
 
     if (noticias.length === 0 || noticias.every(noticia => noticia.PUBLICAR !== "SI")) {
-        div.innerHTML = '<p class="text-gray-700 col-span-full text-center">Parece que el Torneo Escolar todavía no da titulares… ¡pero pronto los habrá!</p>'
+        div.innerHTML = '<p class="text-gray-700 col-span-full text-center" data-translate="msg_no_news_description">Parece que el Torneo Escolar todavía no da titulares… ¡pero pronto los habrá!</p>'
         return
     }
 
@@ -1004,7 +1057,7 @@ export function renderNoticias(noticias) {
                     const necesitaTruncar = contenidoLimpio.length > 80;
                     return `
                             <p class="mb-4 text-xs sm:text-sm leading-relaxed">${contenidoTruncado}</p>
-                            ${necesitaTruncar ? '<div class="flex justify-end mt-2"><span class="text-xs sm:text-sm font-medium bg-gray-100 px-3 py-1 rounded-brand text-brand-blue hover:text-brand-red">Continuar leyendo →</span></div>' : ''}
+                            ${necesitaTruncar ? '<div class="flex justify-end mt-2"><span class="text-xs sm:text-sm font-medium bg-gray-100 px-3 py-1 rounded-brand text-brand-blue hover:text-brand-red" data-translate="msg_read_more">Continuar leyendo →</span></div>' : ''}
                         `;
                 })()}
                 </div>
@@ -1023,8 +1076,6 @@ export function renderNoticias(noticias) {
 
 // --- MOSTRAR DETALLE NOTICIA EN DIALOG ---
 export function mostrarDetalleNoticia(noticia) {
-    console.log('Mostrando detalle de noticia:', noticia);
-
     // Crear o obtener el diálogo
     let dialogContainer = document.getElementById('noticia-dialog-container');
     if (!dialogContainer) {
@@ -1129,7 +1180,7 @@ export function mostrarDetalleNoticia(noticia) {
                 style="opacity: 0; transform: translateY(-56px); pointer-events: none;" >
                 <div class="noticia-dialog-content overflow-y-auto">
                     <div class="noticia-dialog-header">
-                        <h3 class="text-sm md:text-lg lg:text-xl font-bold m-auto px-6">Noticia</h3>
+                        <h3 class="text-sm md:text-lg lg:text-xl font-bold m-auto px-6" data-translate="noticia">Noticia</h3>
                         <button data-dialog-close="true"  class="noticia-dialog-close mr-6" aria-label="Cerrar" type="button" >
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -1224,7 +1275,7 @@ export function renderBracket(clasificacion) {
     if (!div) return;
     div.classList.add("mb-10", "mt-6", "overflow-x-auto");
     if (clasificacion.length === 0) {
-        div.innerHTML = '<p class="text-gray-500 text-center">No hay datos de clasificación disponibles</p>'
+        div.innerHTML = '<p class="text-gray-500 text-center" data-translate="msg_no_classification_data">No hay datos de clasificación disponibles</p>'
         return
     }
 
@@ -1270,21 +1321,21 @@ export function renderBracket(clasificacion) {
 
                     Object.keys(equiposPorCiclo).forEach((ciclo) => {
                         html += `
-            <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-3 lg:p-4 min-w-[240px] w-[300px]">
-                <div class="text-center font-bold text-xl mb-3 lg:mb-4 tracking-wide">Grupo ${grupo} - <span class="text-brand-gold text-xl">${ciclo}</span></div>
-                <div class="lg:space-y-2">
-            `;
+                            <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-3 lg:p-4 min-w-[240px] w-[300px]">
+                                <div class="text-center font-bold text-xl mb-3 lg:mb-4 tracking-wide"> <span class="text-center font-bold text-xl mb-3 lg:mb-4 tracking-wide" data-translate="group">Grupo</span> ${grupo} - <span class="text-brand-gold text-xl">${ciclo}</span></div>
+                                <div class="lg:space-y-2">
+                            `;
                         equiposPorCiclo[ciclo].forEach((equipo) => {
                             if (equipo && equipo.EQUIPOS !== undefined && equipo.EQUIPOS !== "") {
                                 html += `
-                    <div class="flex items-center justify-between py-2 lg:py-3 px-2 border-b border-brand-red last:border-0">
-                        <div class="flex items-center gap-3">
-                         ${equipo.GLOGO ? `<img src="${convertGoogleDriveUrl(equipo.GLOGO)}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
-                        <span class="font-semibold text-sm">${equipo.EQUIPOS}</span>
-                        </div>
-                        <span class="font-bold text-tournament-red">${equipo.PUNTOS}</span>
-                    </div>
-                    `;
+                                <div class="flex items-center justify-between py-2 lg:py-3 px-2 border-b border-brand-red last:border-0">
+                                    <div class="flex items-center gap-3">
+                                    ${equipo.GLOGO ? `<img src="${convertGoogleDriveUrl(equipo.GLOGO)}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
+                                    <span class="font-semibold text-sm">${equipo.EQUIPOS}</span>
+                                    </div>
+                                    <span class="font-bold text-tournament-red">${equipo.PUNTOS}</span>
+                                </div>
+                                `;
                             }
                         })
                         html += `
@@ -1313,7 +1364,7 @@ export function renderBracket(clasificacion) {
                 cuartosPorCiclo[ciclo].forEach((equipos) => {
                     html += `
                 <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
-                    <div class="text-center font-bold text-xl mb-4 tracking-wide">Cuartos de Final - <span class="text-brand-gold text-xl">${ciclo}</span></div>
+                    <div class="text-center font-bold text-xl mb-4 tracking-wide"><span class="text-center font-bold text-xl mb-4 tracking-wide" data-translate="quarter_finals">Cuartos de Final</span> - <span class="text-brand-gold text-xl">${ciclo}</span></div>
                     <div class="space-y-2">
                 `;
 
@@ -1364,7 +1415,7 @@ export function renderBracket(clasificacion) {
                 semifinalesPorCiclo[ciclo].forEach((equipos) => {
                     html += `
                 <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
-                    <div class="text-center font-bold text-xl mb-4 tracking-wide">Semifinal <span class="text-brand-gold text-xl">${ciclo}</span></div>
+                    <div class="text-center font-bold text-xl mb-4 tracking-wide"><span class="text-center font-bold text-xl mb-4 tracking-wide" data-translate="semifinals">Semifinales</span> <span class="text-brand-gold text-xl">${ciclo}</span></div>
                     <div class="space-y-2">
                 `;
 
@@ -1416,7 +1467,7 @@ export function renderBracket(clasificacion) {
 
                     html += `
           <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
-            <div class="text-center font-bold text-xl mb-4 tracking-wide">Final <span class="text-brand-gold text-xl">${ciclo}</span></div>
+            <div class="text-center font-bold text-xl mb-4 tracking-wide"><span class="text-center font-bold text-xl mb-4 tracking-wide" data-translate="final">Final</span> <span class="text-brand-gold text-xl">${ciclo}</span></div>
             <div class="space-y-2">
         `;
 
@@ -1460,31 +1511,31 @@ export function renderBracket(clasificacion) {
             Object.keys(tercerosPorCiclo).forEach((ciclo) => {
                 tercerosPorCiclo[ciclo].forEach((equipos) => {
                     html += `
-            <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
-              <div class="text-center font-bold text-xl mb-4 tracking-wide">Tercer Puesto <span class="text-brand-gold text-xl">${ciclo}</span></div>
-              <div class="space-y-2">
-          `;
+                        <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
+                        <div class="text-center font-bold text-xl mb-4 tracking-wide"><span class="text-center font-bold text-xl mb-4 tracking-wide" data-translate="third_and_fourth_place">Tercer Puesto</span> <span class="text-brand-gold text-xl">${ciclo}</span></div>
+                        <div class="space-y-2"> 
+                    `;
 
                     if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) {
                         html += `
-                <div class="flex items-center justify-between py-2 px-2">
-                  <div class="flex items-center gap-2">
-                    ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
-                    <span class="font-medium text-sm">${equipos.LOCAL}</span>
-                  </div>
-                  <span class="font-bold text-sm">${equipos.LSCORE}</span>
-                </div>
-              `;
+                            <div class="flex items-center justify-between py-2 px-2">
+                            <div class="flex items-center gap-2">
+                                ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
+                                <span class="font-medium text-sm">${equipos.LOCAL}</span>
+                            </div>
+                            <span class="font-bold text-sm">${equipos.LSCORE}</span>
+                            </div>
+                        `;
 
                         html += `
-                <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
-                  <div class="flex items-center gap-2">
-                    ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
-                    <span class="font-medium text-sm">${equipos.VISITANTE}</span>
-                  </div>
-                  <span class="font-bold text-sm">${equipos.VSCORE}</span>
-                </div>
-              `;
+                            <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
+                            <div class="flex items-center gap-2">
+                                ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
+                                <span class="font-medium text-sm">${equipos.VISITANTE}</span>
+                            </div>
+                            <span class="font-bold text-sm">${equipos.VSCORE}</span>
+                            </div>
+                        `;
                     }
 
                     html += `
@@ -1516,8 +1567,8 @@ export function renderProximosPartidos(partidos) {
     if (!Array.isArray(partidos) || partidos.length === 0) {
         div.innerHTML = `
             <div class="text-center py-12">
-                <p class="text-gray-900 text-lg mb-2">No hay partidos programados para los próximos días.</p>
-                <p class="text-gray-600 text-sm">Los partidos se mostrarán automáticamente cuando estén programados.</p>
+                <p class="text-gray-900 text-lg mb-2" data-translate="msg_no_matches">No hay partidos programados para los próximos días.</p>
+                <p class="text-gray-600 text-sm" data-translate="msg_no_matches_description">Los partidos se mostrarán automáticamente cuando estén programados.</p>
             </div>
         `;
         return;
@@ -1531,8 +1582,8 @@ export function renderProximosPartidos(partidos) {
     if (partidosValidos.length === 0) {
         div.innerHTML = `
             <div class="text-center py-12">
-                <p class="text-gray-900 text-lg mb-2">No hay partidos programados para los próximos días.</p>
-                <p class="text-gray-600 text-sm">Los partidos se mostrarán automáticamente cuando estén programados.</p>
+                <p class="text-gray-900 text-lg mb-2" data-translate="msg_no_matches">No hay partidos programados para los próximos días.</p>
+                <p class="text-gray-600 text-sm" data-translate="msg_no_matches_description">Los partidos se mostrarán automáticamente cuando estén programados.</p>
             </div>
         `;
         return;
@@ -1567,8 +1618,8 @@ export function renderProximosPartidos(partidos) {
     if (fechasKeys.length === 0) {
         div.innerHTML = `
             <div class="text-center py-12">
-                <p class="text-gray-900 text-lg mb-2">No hay partidos programados para los próximos días.</p>
-                <p class="text-gray-600 text-sm">Los partidos se mostrarán automáticamente cuando estén programados.</p>
+                <p class="text-gray-900 text-lg mb-2" data-translate="msg_no_matches">No hay partidos programados para los próximos días.</p>
+                <p class="text-gray-600 text-sm" data-translate="msg_no_matches_description">Los partidos se mostrarán automáticamente cuando estén programados.</p>
             </div>
         `;
         return;
@@ -1604,6 +1655,7 @@ export function renderProximosPartidos(partidos) {
                 return;
             }
             
+            const mesesNombres = getMesesNombres();
             const mesNombre = mesesNombres[mes - 1] || mes;
             const diaFormateado = String(dia).padStart(2, '0');
             const fechaFormateada = `${diaFormateado} ${mesNombre}`;
@@ -1615,6 +1667,7 @@ export function renderProximosPartidos(partidos) {
                 return;
             }
             
+            const diasSemana = getDiasSemana();
             const diaSemana = diasSemana[fecha.getDay()] || 'Desconocido';
             const partidosDelDia = partidosPorFecha[fechaKey];
 
@@ -1627,7 +1680,7 @@ export function renderProximosPartidos(partidos) {
 
             html += `
                 <div class="md:container mx-auto mb-8">
-                    <h4 class="text-2xl font-bold text-brand-blue mb-4 flex items-center gap-2">
+                    <h4 class="text-2xl font-bold text-brand-blue mb-4 flex items-center gap-2" data-date="${fechaKey}">
                         <svg class="w-6 h-6 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
@@ -1638,20 +1691,20 @@ export function renderProximosPartidos(partidos) {
 
             partidosDelDia.forEach(partido => {
                 // Determinar el tipo de partido según el grupo
-                let tipoPartido = "";
+                let tipoPartido = `<span class="text-xs sm:text-sm md:text-md text-gray-600"></span>`;
                 if (partido.GRUPO === "SEMIFINAL") {
-                    tipoPartido = "Semifinal";
+                    tipoPartido =  `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="semifinals">Semifinales</span>`;
                 } else if (partido.GRUPO === "3RPUESTO") {
-                    tipoPartido = "Tercer Puesto";
+                    tipoPartido = `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="third_and_fourth_place">Tercer Puesto</span>`;
                 } else if (partido.GRUPO === "1RPUESTO") {
-                    tipoPartido = "Final";
+                    tipoPartido = `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="final">Final</span>`;
                 } else if (partido.GRUPO && ["A", "B", "C", "D"].includes(partido.GRUPO)) {
-                    tipoPartido = `Grupo ${partido.GRUPO}`;
+                    tipoPartido = `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="group">Grupo</span> ${partido.GRUPO}`;
                 }
 
-                const local = (partido.LOCAL || 'Por definir').trim();
-                const visitante = (partido.VISITANTE || 'Por definir').trim();
-                const hora = partido.HORA ? String(partido.HORA).trim() : 'Hora por confirmar';
+                const local = (partido.LOCAL || `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="to_define">Por definir</span>`);
+                const visitante = (partido.VISITANTE || `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="to_define">Por definir</span>`);
+                const hora = partido.HORA ? String(partido.HORA).trim() : `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="hour_to_confirm">Hora por confirmar</span>`;
                 const fecha = partido.DIA ? String(partido.DIA).trim() + "/" + String(partido.MES).trim() + "/" + String(partido.ANIO).trim() : '';
                 const ciclo = partido.CICLO ? String(partido.CICLO).trim() : '';
 
@@ -1691,8 +1744,8 @@ export function renderProximosPartidos(partidos) {
     if (html.trim() === '') {
         div.innerHTML = `
             <div class="text-center py-12">
-                <p class="text-gray-900 text-lg mb-2">No hay partidos programados para los próximos días.</p>
-                <p class="text-gray-600 text-sm">Los partidos se mostrarán automáticamente cuando estén programados.</p>
+                <p class="text-gray-900 text-lg mb-2" data-translate="msg_no_matches" >No hay partidos programados para los próximos días.</p>
+                <p class="text-gray-600 text-sm" data-translate="msg_no_matches_description">Los partidos se mostrarán automáticamente cuando estén programados.</p>
             </div>
         `;
     } else {
@@ -1741,8 +1794,8 @@ export function renderGalería(galeriaItems = []) {
     const galeriaPublicada = galeriaItems.filter(item => item.PUBLICAR === "SI");
 
     if (galeriaPublicada.length === 0) {
-        div.innerHTML = '<p class="text-gray-700 col-span-full text-center">La galería estará disponible pronto con imágenes y videos del torneo.</p>';
-        return;
+            div.innerHTML = '<p class="text-gray-700 col-span-full text-center" data-translate="msg_no_gallery_description">La galería estará disponible pronto con imágenes y videos del torneo.</p>';
+            return;
     }
 
     // Renderizar elementos de galería
