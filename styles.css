@@ -43,8 +43,8 @@ h1, h2 {
     width: 100%;
     background-color: var(--brand-red);
     background-image: 
-        url("/img/pattern.svg"),      
-        url("/img/pattern.svg");
+        url("img/pattern.svg"),      
+        url("img/pattern.svg");
     background-size: 80%;
     background-repeat: no-repeat, no-repeat;
     background-position: left top, right 60%; 
@@ -57,7 +57,7 @@ h1, h2 {
     background-color: var(--brand-gray);
     background-image:
         linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
-        url("/img/pattern.svg");
+        url("img/pattern.svg");
         background-size: 180%, 180%;
         background-repeat: no-repeat, no-repeat;
         background-position: left, left;
@@ -69,7 +69,7 @@ h1, h2 {
     background-color: var(--brand-gray);
     background-image:
         linear-gradient(rgba(255,255,255,0.76), rgba(255,255,255,0.76)),
-        url("/img/pattern.svg");
+        url("img/pattern.svg");
     background-size: 180%, 180%;
     background-repeat: no-repeat, no-repeat;
     background-position: left, left;
@@ -80,7 +80,7 @@ h1, h2 {
     width: 100%;
     background-image: 
         linear-gradient(rgba(255,255,255,0.76), rgba(255,255,255,0.76)),
-        url("/img/dots.png");
+        url("img/dots.png");
     background-size: 50%, 30%;
     background-repeat: repeat, repeat;
     background-position: left, right;
@@ -131,7 +131,7 @@ div:has(#menuMovil) {
 }
 
 .masthead {
-    background: url("/img/lines.png") rgba(0, 0, 0, 0) repeat;
+    background: url("img/lines.png") rgba(0, 0, 0, 0) repeat;
     background-color: var(--brand-white);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
