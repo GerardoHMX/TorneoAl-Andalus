@@ -1462,15 +1462,21 @@ function getConfigValue(key) {
 
 // Aplicar configuración a elementos del DOM
 function applyConfig() {
-    // Hero Section - Nombre del torneo y año
-    const torneoNombreEl = document.querySelector('[data-config="torneo-nombre"]');
-    if (torneoNombreEl) {
-        torneoNombreEl.textContent = getConfigValue('TORNEO_NOMBRE');
+    // Hero Section - Nombre del torneo y año (puede haber múltiples elementos)
+    const torneoNombreValue = getConfigValue('TORNEO_NOMBRE');
+    if (torneoNombreValue) {
+        const torneoNombreElements = document.querySelectorAll('[data-config="torneo-nombre"]');
+        torneoNombreElements.forEach(el => {
+            el.textContent = torneoNombreValue;
+        });
     }
 
-    const torneoAnioEl = document.querySelector('[data-config="torneo-anio"]');
-    if (torneoAnioEl) {
-        torneoAnioEl.textContent = getConfigValue('TORNEO_ANIO');
+    const torneoAnioValue = getConfigValue('TORNEO_ANIO');
+    if (torneoAnioValue) {
+        const torneoAnioElements = document.querySelectorAll('[data-config="torneo-anio"]');
+        torneoAnioElements.forEach(el => {
+            el.textContent = torneoAnioValue;
+        });
     }
 
     // Footer - Información del colegio
