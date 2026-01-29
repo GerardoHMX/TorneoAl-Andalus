@@ -5,6 +5,18 @@ module.exports = {
     "./js/**/*.js",
     "./**/*.html"
   ],
+  safelist: [
+    // Clases que se generan dinámicamente o que Tailwind puede no detectar
+    'text-md',
+    'sm:text-md',
+    'md:text-md',
+    'lg:text-md',
+    'xl:text-md',
+    // Clases de ancho que pueden no detectarse correctamente
+    'w-80',
+    'md:w-80',
+    'lg:w-80',
+  ],
   theme: {
     extend: {
         colors: {
@@ -27,6 +39,9 @@ module.exports = {
                 'bg-light': '#f8f9fa',
                 'bg-dark': '#212529'
             }
+        },
+        fontSize: {
+            'md': '1rem', // text-md equivalente a text-base
         },
         borderRadius: {
           'brand': '0px'

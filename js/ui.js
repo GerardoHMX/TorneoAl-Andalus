@@ -76,7 +76,7 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
             if (data && data.equipos.length > 0) {
                 html += `
                     <div class="w-full mb-6">
-                        <div class="text-3xl py-3 font-bold mb-6">
+                        <div class="text-3xl py-3 font-bold">
                             <div class="flex items-center gap-2">
                                 <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${ciclo}</h4>
                                 <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"><span class="text-3xl font-bold text-brand-red flex items-center" data-translate="group">Grupo</span> ${grupo}</h4>                                
@@ -151,7 +151,7 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
 export function tablaResultadosFaseDeGrupos(list, ciclo) {
     const div = document.getElementById("faseDeGrupos" + ciclo);
     if (!div) return;
-    div.classList.add("mb-6", "mt-6");
+    
     let grupo = "A";
     let cardsPerGroup = [];
     let cardsGroup = [];
@@ -211,7 +211,7 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
         if (cardsPerGroup.length === juegos && grupos.includes(m.GRUPO)) {
             const html = `
                 <div class="w-full mb-6">
-                    <div class="text-3xl py-3 font-bold mb-6">
+                    <div class="text-3xl py-3 font-bold">
                         <div class="flex items-center gap-2">
                             <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${m.CICLO}</h4>
                             <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"> <span class="text-3xl font-bold text-brand-red flex items-center" data-translate="group">Grupo</span> ${grupo}</h4>
@@ -228,6 +228,10 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
         }
     });
 
+    if (cardsGroup.length > 0) {
+        div.classList.add("mb-6");
+    }
+
     div.innerHTML = cardsGroup.map(card => card).join("");
 }
 
@@ -237,7 +241,7 @@ export function tablaResultadosCuartosDeFinal(list, ciclo) {
     
     const div = document.getElementById("cuartosDeFinal" + ciclo);
     if (!div) return;
-    div.classList.add("mb-6", "mt-6");
+    
     const grupos = ["CUARTOS"];
     const juegos = 2;
     let grupo = "CUARTOS";
@@ -298,7 +302,7 @@ export function tablaResultadosCuartosDeFinal(list, ciclo) {
         }
         if (cardsPerGroup.length === juegos && grupos.includes(m.GRUPO)) {
             const html = `
-                <div class="mb-6" >
+                <div>
                     <div class="flex flex-row items-center gap-2">
                         <h4 class="text-3xl font-bold text-brand-gold mb-6 flex items-center gap-2">${m.CICLO}</h4>
                         <h4 class="text-3xl font-bold text-brand-red mb-6 flex items-center gap-2" data-translate="quarter_finals">
@@ -315,6 +319,10 @@ export function tablaResultadosCuartosDeFinal(list, ciclo) {
             cardsGroup.push(html);
         }
     });
+
+    if (cardsGroup.length > 0) {
+        div.classList.add("mb-6");
+    }
 
     div.innerHTML = cardsGroup.map(card => card).join("");
 }
@@ -385,7 +393,7 @@ export function tablaResultadosSemifinal(list, ciclo) {
         }
         if (cardsPerGroup.length === juegos && grupos.includes(m.GRUPO)) {
             const html = `
-                <div class="mb-6" >
+                <div>
                     <div class="flex flex-row items-center gap-2">
                         <h4 class="text-3xl font-bold text-brand-gold mb-6 flex items-center gap-2">${m.CICLO}</h4>
                         <h4 class="text-3xl font-bold text-brand-red mb-6 flex items-center gap-2" data-translate="semifinals">
@@ -404,7 +412,7 @@ export function tablaResultadosSemifinal(list, ciclo) {
     });
 
     if (cardsGroup.length > 0) {
-        div.classList.add("mb-6", "mt-6");
+        div.classList.add("mb-6");
     }
 
     div.innerHTML = cardsGroup.map(card => card).join("");
@@ -489,7 +497,7 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
         // Si hay partidos de este tipo, crear el HTML correspondiente
         if (cardsPerGroup.length > 0) {
             const html = `
-                <div class="mb-6" >
+                <div >
                     <div class="flex flex-row items-center gap-2">
                         <h4 class="text-3xl font-bold text-brand-gold mb-6 flex items-center gap-2">${ciclo}</h4>
                         <h4 class="text-3xl font-bold text-brand-red mb-6 flex items-center gap-2">
@@ -506,7 +514,7 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
     });
 
     if (cardsGroup.length > 0) {
-        div.classList.add("mb-6", "mt-6");
+        div.classList.add("mb-6");
     }
 
     div.innerHTML = cardsGroup.map(card => card).join("");
@@ -573,8 +581,8 @@ export function tablaClasificacion(list, ciclo) {
             }
             if (cardsPerGroup.length === temsPerGroup && grupos.includes(m.GRUPO)) {
                 const html = `
-                <div class="mb-6">
-                    <div class="text-3xl py-3 font-bold mb-6">
+                <div >
+                    <div class="text-3xl py-3 font-bold">
                         <div class="flex items-center gap-2">
                             <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${m.CICLO}</h4>    
                             <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"> <span class="text-3xl font-bold text-brand-red flex items-center" data-translate="group">Grupo</span> ${grupo}</h4> 
@@ -853,7 +861,7 @@ export function tablaResultados(list, ciclo) {
 export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "TODOS") {
     const div = document.getElementById("goleadores" + ciclo);
     if (!div) return;
-    div.classList.add("mb-6", "mt-6");
+    div.classList.add("mb-6");
 
     // Filtrar lideres para no mostrar registros incompletos
     let lideres = list.filter(lider =>
@@ -907,7 +915,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
             <div class="flex items-center gap-2">
                 <label for="filtro-curso-goleadores-${ciclo}" class="font-bold text-xs sm:text-sm md:text-md lg:text-lg uppercase whitespace-nowrap" data-translate="course">Curso:</label>
                 <select id="filtro-curso-goleadores-${ciclo}" class="px-4 py-2 border border-gray-300 rounded-brand bg-white text-gray-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent cursor-pointer" data-ciclo="${ciclo}" data-tipo="goleadores">
-                    <option value="TODOS" ${cursoFiltro === "TODOS" ? "selected" : ""}>TODOS</option>
+                    <option value="TODOS" ${cursoFiltro === "TODOS" ? "selected" : ""} data-translate="filter_all">TODOS</option>
                     ${cursosUnicos.map(curso => `<option value="${curso}" ${cursoFiltro === curso ? "selected" : ""}>${curso}</option>`).join("")}
                 </select>
             </div>
@@ -922,8 +930,8 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
 
         if (lider) {
             html += `
-            <div class="flex flex-col bg-white shadow-lg overflow-hidden rounded-brand hover:shadow-brand-lg transition-shadow border-b-2" style="border-bottom-color: var(--brand-gold);">
-                <div class="w-full h-16 md:h-28 lg:h-32 flex items-center justify-center overflow-hidden">
+            <div class="flex flex-col bg-white shadow-lg overflow-hidden rounded-brand hover:shadow-brand-lg transition-shadow border-b-2 border-brand-gold" >
+                <div class="w-full h-16 md:h-28 lg:h-32 flex items-center justify-center overflow-hidden border-b-2 border-brand-gold">
                     ${imagenAvatar ? `
                         <img src="${convertGoogleDriveUrl(imagenAvatar)}" alt="${lider.JUGADOR}" class="h-full object-cover object-center">
                     ` : `
@@ -932,27 +940,24 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
                         </div>
                     `}
                 </div> 
-                <div class="relative flex flex-col items-center justify-center py-2 px-3" >                    
-                    <div class="absolute top-0 left-0 right-0 h-0.5 bg-brand-blue"></div>
-                    <div class="flex flex-col items-center gap-1">
-                        <h5 class="text-lg font-bold text-brand-blue text-center">
-                            ${lider.JUGADOR || ''}
-                        </h5>
-                        <p class="text-sm text-gray-600 text-center">
-                            ${lider.EQUIPO || ''}
-                        </p>
-                        <p class="text-sm text-gray-600 text-center">
-                            ${i == 0 ? 'Primer' : i == 1 ? 'Segundo' : i == 2 ? 'Tercero' : ''} Puesto  ${lider.GOLES ? lider.GOLES + ' Goles' : '0 Goles'} 
-                        </p>
-                    </div>                    
+                <div class="flex flex-col items-center justify-center py-2 px-2" >
+                    <h5 class="text-lg font-bold text-brand-blue text-center mb-1">
+                        ${lider.JUGADOR || ''}
+                    </h5>
+                    <p class="text-sm text-gray-600 text-center mb-1">
+                        ${lider.EQUIPO || ''}
+                    </p>
+                    <p class="text-sm text-gray-600 text-center mb-1">
+                        ${i == 0 ? 'Primer' : i == 1 ? 'Segundo' : i == 2 ? 'Tercero' : ''} Puesto  ${lider.GOLES ? lider.GOLES + ' Goles' : '0 Goles'} 
+                    </p>
                 </div>
             </div> 
             `;
         } else {
             // Mostrar tarjeta vacía si no hay datos para esta posición
             html += `
-            <div class="flex flex-col bg-white shadow-lg overflow-hidden rounded-brand border-b-2" style="border-bottom-color: var(--brand-gold); opacity: 0.5;">
-                <div class="w-full h-16 md:h-28 lg:h-32 flex items-center justify-center overflow-hidden">
+            <div class="flex flex-col bg-white shadow-lg overflow-hidden rounded-brand border-b-2 border-brand-gold" >
+                <div class="w-full h-16 md:h-28 lg:h-32 flex items-center justify-center overflow-hidden border-b-2 border-brand-gold">
                     ${imagenAvatar ? `
                         <img src="${convertGoogleDriveUrl(imagenAvatar)}" alt="Posición ${i + 1}" class="h-full object-cover object-center">
                     ` : `
@@ -961,8 +966,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
                         </div>
                     `}
                 </div> 
-                <div class="relative flex flex-col items-center justify-center py-2 px-3" >                    
-                    <div class="absolute top-0 left-0 right-0 h-0.5 bg-brand-blue"></div>
+                <div class="relative flex flex-col items-center justify-center py-2 px-2" >
                     <div class="flex flex-col items-center gap-1">
                         <h5 class="text-lg font-bold text-brand-blue text-center">
                             -
@@ -988,7 +992,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
     if (goleadoresCiclo.length > 0) {
         html += `
             <div class="rounded-brand overflow-hidden shadow-lg mt-8">
-                <div class="overflow-x-auto">
+                <div class="overflow-scroll max-h-[32rem]">
                     <table class="w-full min-w-full" style="border-collapse: collapse;">
                         <thead>
                             <tr style="background-color: #B30000; color: white;">
@@ -1095,7 +1099,7 @@ export function tablaSancionados(list, ciclo, cursoFiltro = "TODOS") {
 
     // Construir la tabla siempre, con o sin datos
     let html = `
-        <div class="mb-6">
+        <div >
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">                
                 <h4 class="text-3xl font-bold text-brand-gold mb-2 flex items-center gap-2">
                     ${ciclo}
@@ -1103,7 +1107,7 @@ export function tablaSancionados(list, ciclo, cursoFiltro = "TODOS") {
                 <div class="flex items-center gap-2">
                     <label for="filtro-curso-${ciclo}" class="font-bold text-xs sm:text-sm md:text-md lg:text-lg uppercase whitespace-nowrap" data-translate="course">Curso:</label>
                     <select id="filtro-curso-${ciclo}" class="px-4 py-2 border border-gray-300 rounded-brand bg-white text-gray-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent cursor-pointer" data-ciclo="${ciclo}">
-                        <option value="TODOS" ${cursoFiltro === "TODOS" ? "selected" : ""}>TODOS</option>
+                        <option value="TODOS" ${cursoFiltro === "TODOS" ? "selected" : ""} data-translate="filter_all">TODOS</option>
                         ${cursosUnicos.map(curso => `<option value="${curso}" ${cursoFiltro === curso ? "selected" : ""}>${curso}</option>`).join("")}
                     </select>
                 </div>
@@ -1706,7 +1710,7 @@ export function renderProximosPartidos(partidos) {
         console.warn('No se encontró el elemento proximosPartidos-container');
         return;
     }
-    div.classList.add("mb-6", "mt-6");
+    div.classList.add("mb-6");
 
     // Validar que partidos sea un array válido
     if (!Array.isArray(partidos) || partidos.length === 0) {

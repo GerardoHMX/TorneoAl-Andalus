@@ -1,6 +1,54 @@
 // --- accordion-init.js ---
 
 import { convertGoogleDriveUrl } from './ui.js';
+import { fetchCSV, URLS } from './data.js';
+
+// Función auxiliar para verificar si un valor es "SI"
+function esVerdadero(valor) {
+    const valorStr = (valor || '').toString().trim().toUpperCase();
+    return valorStr === 'SI';
+}
+
+// Función para verificar la visibilidad de la sección desde OTROS
+async function verificarVisibilidadSeccion(seccionId) {
+    try {
+        if (!URLS.OTROS) {
+            console.warn('No hay URL para OTROS, se asume visible');
+            return true;
+        }
+
+        const otros = await fetchCSV(URLS.OTROS);
+        if (!otros || otros.length === 0) {
+            console.warn('No hay datos de OTROS, se asume visible');
+            return true;
+        }
+
+        // Buscar la sección en los datos de OTROS
+        for (const item of otros) {
+            const keys = Object.keys(item);
+            const seccionKey = keys.find(k => k.toUpperCase() === 'SECCION') || keys.find(k => k.toLowerCase() === 'seccion');
+            const visibleKey = keys.find(k => k.toUpperCase() === 'VISIBLE') || keys.find(k => k.toLowerCase() === 'visible');
+            
+            const seccion = seccionKey ? (item[seccionKey] || '').toString().trim() : '';
+            const visible = visibleKey ? (item[visibleKey] || '').toString().trim() : '';
+            
+            if (seccion) {
+                let itemSeccionId = seccion.trim().replace(/^["']|["']$/g, '');
+                if (itemSeccionId === seccionId) {
+                    return esVerdadero(visible);
+                }
+            }
+        }
+
+        // Si no se encuentra la sección en OTROS, se asume visible por defecto
+        console.log(`⚠️ Sección "${seccionId}" no encontrada en OTROS, se asume visible`);
+        return true;
+    } catch (error) {
+        console.error('Error al verificar visibilidad:', error);
+        // En caso de error, se asume visible para no bloquear la inicialización
+        return true;
+    }
+}
 
 const accordionData = [
     {
@@ -171,7 +219,17 @@ const accordionData = [
 ];
 
 // Función para inicializar el acordeón
-function initializeAccordion() {
+async function initializeAccordion() {
+    // Verificar visibilidad desde los datos de OTROS
+    const esVisible = await verificarVisibilidadSeccion('accordionSection');
+    const accordionSection = document.getElementById('accordionSection');
+    if (!esVisible) {                
+        if (accordionSection) {
+            accordionSection.style.display = 'none';
+        }
+        return;
+    }
+
     const accordionContainer = document.getElementById('basesAccordion');
     if (!accordionContainer) return;
 
@@ -228,7 +286,9 @@ function initAccordionWhenReady() {
     }
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeAccordion);
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeAccordion();
+        });
     } else {
         // El DOM ya está listo
         initializeAccordion();

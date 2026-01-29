@@ -178,7 +178,7 @@ div:has(#menuMovil) {
 .nav-tabs {
     border-bottom: 2px solid var(--brand-blue);
     display: flex;
-    width: 100%;
+    /* width: 100% removido para permitir que las clases de Tailwind (w-80, etc.) funcionen */
 }
 
 .nav-tabs .nav-item {
