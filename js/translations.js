@@ -59,6 +59,7 @@ const translations = {
     
     // Títulos de Secciones
     section_bases_title: "Bases del Torneo",
+    section_podium_title: "Podio",
     section_next_matches_title: "Próximos Partidos",
     section_teams_title: "Equipos participantes",
     section_journeys_title: "Jornadas",
@@ -136,7 +137,12 @@ const translations = {
     nav_previous: "Anterior",
     nav_next: "Siguiente",
     nav_loading: "Cargando...",
-    
+
+    primer_puesto: "Primer puesto",
+    segundo_puesto: "Segundo puesto",
+    tercer_puesto: "Tercer puesto",
+    goles_description: "Goles",
+
     // Encabezados de Tablas
     table_team: "Equipo",
     table_points: "PTS",
@@ -185,7 +191,7 @@ const translations = {
     // Footer
     footer_tournament_title: "Torneo escolar de Fútbol Sala",
     footer_made_by: "Realizado por",
-    footer_license: "es bajo licencia"
+    footer_license: "bajo licencia"
   },
   en: {
     // Hero Section
@@ -216,6 +222,7 @@ const translations = {
     
     // Títulos de Secciones
     section_bases_title: "Tournament Rules",
+    section_podium_title: "Podium",
     section_next_matches_title: "Upcoming Matches",
     section_teams_title: "Participating Teams",
     section_journeys_title: "Matchdays",
@@ -287,6 +294,11 @@ const translations = {
     nav_previous: "Previous",
     nav_next: "Next",
     nav_loading: "Loading...",
+
+    primer_puesto: "First place",
+    segundo_puesto: "Second place",
+    tercer_puesto: "Third place",
+    goles_description: "Goals",
     
     // Encabezados de Tablas
     table_team: "Team",

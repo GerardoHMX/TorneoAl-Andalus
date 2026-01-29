@@ -483,9 +483,6 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
                                 <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
                             </div>
                         </div>
-                        <div class="text-center text-xs md:text-sm text-gray-600 mt-6">
-                           ${m.GRUPO === "3RPUESTO" ? "Tercer Puesto" : "Primer Puesto"} - ${fechaFormateada}, ${m.HORA + ' hrs' || ''}
-                        </div>
                         <div class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
                             ${text}
                         </div>
@@ -928,7 +925,23 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
         const lider = listOrdered[i];
         const imagenAvatar = obtenerImagenPorPosicion(ciclo, i + 1);
 
-        if (lider) {
+        if (lider) { 
+            let puesto = '';
+            switch(i.toString()){
+                case '0':
+                    puesto = `<p class="mb-1 text-center"><span class="text-sm text-gray-600 font-bold" data-translate="primer_puesto">Primer puesto</span> <span class="text-sm text-gray-600">${lider.GOLES ? lider.GOLES : '0'}</span> <span class="text-sm text-gray-600" data-translate="goles_description">Goles</span></p>`;
+                    break;
+                case '1':
+                    puesto = `<p class="mb-1 text-center"><span class="text-sm text-gray-600 font-bold" data-translate="segundo_puesto">Segundo puesto</span> <span class="text-sm text-gray-600 text-center">${lider.GOLES ? lider.GOLES : '0'}</span> <span class="text-sm text-gray-600" data-translate="goles_description">Goles</span></p>`;
+                    break;
+                case '2':
+                    puesto = `<p class="mb-1 text-center"><span class="text-sm text-gray-600 font-bold" data-translate="tercer_puesto">Tercer puesto</span> <span class="text-sm text-gray-600 text-center">${lider.GOLES ? lider.GOLES : '0'}</span> <span class="text-sm text-gray-600" data-translate="goles_description">Goles</span></p>`;
+                    break;
+                default:
+                    puesto = `<p class="mb-1 text-center"><span class="text-sm text-gray-600 font-bold"> ${lider.GOLES ? lider.GOLES : '0'} <span class="text-sm text-gray-600" data-translate="goles_description">Goles</span></p>`;
+                    break; 
+            }
+            
             html += `
             <div class="flex flex-col bg-white shadow-lg overflow-hidden rounded-brand hover:shadow-brand-lg transition-shadow border-b-2 border-brand-gold" >
                 <div class="w-full h-16 md:h-28 lg:h-32 flex items-center justify-center overflow-hidden border-b-2 border-brand-gold">
@@ -944,12 +957,10 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
                     <h5 class="text-lg font-bold text-brand-blue text-center mb-1">
                         ${lider.JUGADOR || ''}
                     </h5>
+                    ${puesto || ''}
                     <p class="text-sm text-gray-600 text-center mb-1">
                         ${lider.EQUIPO || ''}
-                    </p>
-                    <p class="text-sm text-gray-600 text-center mb-1">
-                        ${i == 0 ? 'Primer' : i == 1 ? 'Segundo' : i == 2 ? 'Tercero' : ''} Puesto  ${lider.GOLES ? lider.GOLES + ' Goles' : '0 Goles'} 
-                    </p>
+                    </p>                    
                 </div>
             </div> 
             `;
@@ -1299,13 +1310,13 @@ export function mostrarDetalleNoticia(noticia) {
             imagenesHTML += `
             <div class="grid grid-cols-2 gap-4">
                 <div class="grid gap-4 ">
-                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />                 
-                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[0])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />                 
+                    <img src="${convertGoogleDriveUrl(imagenes[1])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />
                 </div>
                 <div class="grid gap-3">
-                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />                
-                    <img src="${convertGoogleDriveUrl(imagenes[3])}" alt="${noticia.TITULO}" class="h-80 h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />
-                    <img src="${convertGoogleDriveUrl(imagenes[4])}" alt="${noticia.TITULO}" class="h-40 h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[2])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />                
+                    <img src="${convertGoogleDriveUrl(imagenes[3])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />
+                    <img src="${convertGoogleDriveUrl(imagenes[4])}" alt="${noticia.TITULO}" class="h-auto max-w-full object-cover rounded-brand " onerror="this.style.display='none'" />
                 </div>
             `;
         }
@@ -2078,4 +2089,59 @@ function mostrarDetalleGalería(item) {
             }
         });
     }
+}
+
+// --- RENDERIZAR PODIO ---
+export async function renderPodio(clasificacion) { 
+
+    const div = document.getElementById("podioSection");
+    if (!div) return;
+
+    // Buscar datos del tercer puesto (GRUPO: 3RPUESTO)
+    const tercerPuesto = clasificacion.find(m => m.GRUPO === "3RPUESTO");
+    
+    // Buscar datos del primer puesto (GRUPO: 1RPUESTO)
+    const primerPuesto = clasificacion.find(m => m.GRUPO === "1RPUESTO");
+
+    // Primer Puesto: GANA y GLOGO de 1RPUESTO
+    const primerPuestoLogo = convertGoogleDriveUrl(primerPuesto.GLOGO); 
+    const primerPuestoNombre = primerPuesto.GANA;    
+
+    // Segundo Puesto: PIERDE y PLOGO de 1RPUESTO
+    const segundoPuestoLogo = convertGoogleDriveUrl(primerPuesto.PLOGO); 
+    const segundoPuestoNombre = primerPuesto.PIERDE; 
+
+    // Tercer Puesto: GANA y GLOGO de 3RPUESTO
+    const tercerPuestoLogo = convertGoogleDriveUrl(tercerPuesto.GLOGO); 
+    const tercerPuestoNombre = tercerPuesto.GANA;
+      
+    let podioHtml = `
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
+                <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold uppercase" data-translate="section_podium_title">Podio</h3>
+            </div>
+            <div class="w-full py-8 flex justify-center items-center">
+                <div class="relative w-full max-w-4xl mx-auto">
+                    <img src="/img/podium.png" class="h-60 w-auto object-contain mx-auto block" alt="Podio del Torneo">
+                    <!-- Primer Puesto (centro, arriba) -->
+                    <div id="podio-primer-puesto" class="absolute flex flex-col items-center justify-center" style="top: 5%; left: 50%; transform: translateX(-50%); width: 30%;">
+                        <img id="podio-primer-logo" src="${primerPuestoLogo}" alt="${primerPuestoNombre}" class="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain mb-2" onerror="this.style.display='none'">
+                        <div id="podio-primer-nombre" class="text-xs sm:text-sm md:text-md lg:text-base font-bold text-gray-800 uppercase text-center break-words px-2">${primerPuestoNombre}</div>
+                    </div>
+                    <!-- Segundo Puesto (izquierda) -->
+                    <div id="podio-segundo-puesto" class="absolute flex flex-col items-center justify-center" style="bottom: 75%; left: 10%; width: 25%;">
+                        <img id="podio-segundo-logo" src="${segundoPuestoLogo}" alt="${segundoPuestoNombre}" class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-contain mb-2" onerror="this.style.display='none'">
+                        <div id="podio-segundo-nombre" class="text-xs sm:text-sm md:text-md lg:text-base font-bold text-gray-800 uppercase text-center break-words px-2">${segundoPuestoNombre}</div>
+                    </div>
+                    <!-- Tercer Puesto (derecha) -->
+                    <div id="podio-tercer-puesto" class="absolute flex flex-col items-center justify-center" style="bottom: 65%; right: 10%; width: 25%;">
+                        <img id="podio-tercer-logo" src="${tercerPuestoLogo}" alt="${tercerPuestoNombre}" class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-contain mb-2" onerror="this.style.display='none'">
+                        <div id="podio-tercer-nombre" class="text-xs sm:text-sm md:text-md lg:text-base font-bold text-gray-800 uppercase text-center break-words px-2">${tercerPuestoNombre}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    div.innerHTML = podioHtml;
+    
 }

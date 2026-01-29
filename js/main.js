@@ -15,7 +15,8 @@ import {
     renderNoticias,
     renderGalería,
     renderBracket,
-    renderProximosPartidos
+    renderProximosPartidos,
+    renderPodio
 } from "./ui.js";
 
 
@@ -1712,6 +1713,9 @@ function updateUI() {
 
     // Bracket - mostrar todo sin filtrar por ciclo
     renderBracket(STATE.data.CLASIFICACION);
+
+    // Podio - mostrar ganadores del torneo
+    renderPodio(STATE.data.CLASIFICACION);
 
     // Líderes Goleadores
     if (ciclos.goleadores === "TODOS") {
