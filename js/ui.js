@@ -1,8 +1,7 @@
 // Funciones de renderizado de cada sección del Torneo Al-Ándalus
-import { currentLanguage, translate } from './translations.js';
+import { currentLanguage } from './translations.js';
 
 const grupos = ["A", "B", "C", "D"];
-const ciclos = ['ESO', 'BCH'];
 const brandColors = ["brand-red", "brand-orange", "brand-gold", "brand-green", "brand-blue"];
 const meses = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 
@@ -77,10 +76,10 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
             if (data && data.equipos.length > 0) {
                 html += `
                     <div class="w-full mb-6">
-                        <div class="text-3xl font-bold py-3 font-bold mb-6">
+                        <div class="text-3xl py-3 font-bold mb-6">
                             <div class="flex items-center gap-2">
                                 <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${ciclo}</h4>
-                                <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"><span data-translate="table_group">Grupo</span> ${grupo}</h4>                                
+                                <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"><span class="text-3xl font-bold text-brand-red flex items-center" data-translate="group">Grupo</span> ${grupo}</h4>                                
                             </div>
                         </div>
                         <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -113,7 +112,7 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
             const data = equiposPorCicloGrupo[key];
             html += `
                 <div class="w-full mb-6">
-                    <div class="text-3xl font-bold px-4 py-3 font-bold mb-6">
+                    <div class="text-3xl px-4 py-3 font-bold mb-6">
                         <div class="flex items-center gap-2">
                             <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${data.ciclo}</h4>    
                             <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"><span class="text-3xl font-bold text-brand-red flex items-center"  data-translate="group">Grupo</span> ${data.grupo}</h4>                            
@@ -165,7 +164,7 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
             // Formatear fecha
             const anio = m.ANIO ? parseInt(m.ANIO) : new Date().getFullYear();
             const mes = parseInt(m.MES);
-            const dia = parseInt(m.DIA);           
+            const dia = parseInt(m.DIA);
             let estatus = '';
 
             switch (m.ESTATUS) {
@@ -189,7 +188,7 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
 
             cardsPerGroup.push(`
                 <!-- Match Card ${i} -->
-                <div class="rounded-brand p-2 sm:p-6 md:p-8 bg-gray-100 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden ">
+                <div class="p-2 sm:p-6 md:p-8 bg-gray-100 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden ">
                     <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-6 mb-6">
                         <div class="flex flex-col items-center flex-1">
                             ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16  object-contain mb-2 md:mb-3 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
@@ -212,13 +211,13 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
         if (cardsPerGroup.length === juegos && grupos.includes(m.GRUPO)) {
             const html = `
                 <div class="w-full mb-6">
-                    <div class="text-3xl font-bold py-3 font-bold mb-6">
+                    <div class="text-3xl py-3 font-bold mb-6">
                         <div class="flex items-center gap-2">
                             <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${m.CICLO}</h4>
                             <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"> <span class="text-3xl font-bold text-brand-red flex items-center" data-translate="group">Grupo</span> ${grupo}</h4>
                         </div>
                     </div>
-                    <div class="grid grid grid-cols-2 lg:grid-cols-3 gap-6" id="cards-per-group-${m.GRUPO}">
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-6" id="cards-per-group-${m.GRUPO}">
                         ${cardsPerGroup.map(card => card).join("")}
                     </div>
                 </div>
@@ -232,14 +231,16 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
     div.innerHTML = cardsGroup.map(card => card).join("");
 }
 
-// --- TABLA DE RESULTADOS SEMIFINAL ---
-export function tablaResultadosSemifinal(list, ciclo) {
-    const div = document.getElementById("semifinal" + ciclo);
+// --- TABLA DE RESULTADOS CUARTOS DE FINAL ---
+
+export function tablaResultadosCuartosDeFinal(list, ciclo) {
+    
+    const div = document.getElementById("cuartosDeFinal" + ciclo);
     if (!div) return;
     div.classList.add("mb-6", "mt-6");
-    const grupos = ["SEMIFINAL"];
+    const grupos = ["CUARTOS"];
     const juegos = 2;
-    let grupo = "SEMIFINAL";
+    let grupo = "CUARTOS";
     let cardsPerGroup = [];
     let cardsGroup = [];
 
@@ -249,9 +250,29 @@ export function tablaResultadosSemifinal(list, ciclo) {
         }
         if (grupos.includes(m.GRUPO) && m.GRUPO === grupo && m.CICLO === ciclo) {
             // Formatear fecha
-            const mesNombre = meses[parseInt(m.MES) - 1] || m.MES;
-            const diaFormateado = String(m.DIA).padStart(2, '0');
-            const fechaFormateada = `${diaFormateado} ${mesNombre}`;
+            const anio = m.ANIO ? parseInt(m.ANIO) : new Date().getFullYear();
+            const mes = parseInt(m.MES);
+            const dia = parseInt(m.DIA);
+            let estatus = '';
+
+            switch (m.ESTATUS) {
+                case 'JUGADO':
+                    estatus = `<span class="text-center text-xs md:text-sm text-brand-green font-bold uppercase" data-translate="match_status_jugado">JUGADO</span>`;
+                    break;
+                case 'CANCELADO':
+                    estatus = `<span class="text-center text-xs md:text-sm text-red-500 font-bold uppercase" data-translate="match_status_cancelado">CANCELADO</span>`;
+                    break;
+                default:
+                    estatus = `<span class="text-center text-xs md:text-sm text-gray-500 font-bold uppercase" data-translate="match_status_pendiente">PENDIENTE</span>`;
+                    break;
+            }            
+            
+            // Validar que los valores sean números válidos
+            if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+                console.warn('Fecha inválida en partido:', partido);
+                return;
+            } 
+            const fechaFormateada = `${String(dia).padStart(2, '0')}/${meses[mes - 1] || mes}/${anio}`;
 
             cardsPerGroup.push(`                
                 <!-- Match Card ${i} -->
@@ -269,8 +290,8 @@ export function tablaResultadosSemifinal(list, ciclo) {
                             <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
                         </div>
                     </div>
-                    <div class="text-center text-xs md:text-sm text-gray-600 mt-6">
-                       Semifinal - ${fechaFormateada}, ${m.HORA + ' hrs' || ''}
+                    <div class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
+                        <span class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2" data-translate="quarter_finals">Cuartos de Final</span> - <span class="text-center text-xs md:text-sm text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs md:text-sm ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>
                     </div>
                 </div>
             `);
@@ -280,8 +301,8 @@ export function tablaResultadosSemifinal(list, ciclo) {
                 <div class="mb-6" >
                     <div class="flex flex-row items-center gap-2">
                         <h4 class="text-3xl font-bold text-brand-gold mb-6 flex items-center gap-2">${m.CICLO}</h4>
-                        <h4 class="text-3xl font-bold text-brand-red mb-6 flex items-center gap-2">
-                            Semifinal
+                        <h4 class="text-3xl font-bold text-brand-red mb-6 flex items-center gap-2" data-translate="quarter_finals">
+                            Cuartos de Final
                         </h4> 
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6" id="cards-per-group-${m.GRUPO}">
@@ -298,13 +319,103 @@ export function tablaResultadosSemifinal(list, ciclo) {
     div.innerHTML = cardsGroup.map(card => card).join("");
 }
 
-// --- TABLA DE RESULTADOS TERCER PUESTO ---
+// --- TABLA DE RESULTADOS SEMIFINAL ---
+export function tablaResultadosSemifinal(list, ciclo) {
+    
+    const div = document.getElementById("semifinal" + ciclo);
+    if (!div) return;
+    
+    const grupos = ["SEMIFINAL"];
+    const juegos = 2;
+    let grupo = "SEMIFINAL";
+    let cardsPerGroup = [];
+    let cardsGroup = [];
+
+    list.map((m, i) => {
+        if (grupos.includes(m.GRUPO)) {
+            grupo = m.GRUPO;
+        }
+        if (grupos.includes(m.GRUPO) && m.GRUPO === grupo && m.CICLO === ciclo) {
+            // Formatear fecha
+            const anio = m.ANIO ? parseInt(m.ANIO) : new Date().getFullYear();
+            const mes = parseInt(m.MES);
+            const dia = parseInt(m.DIA);
+            let estatus = '';
+
+            switch (m.ESTATUS) {
+                case 'JUGADO':
+                    estatus = `<span class="text-center text-xs md:text-sm text-brand-green font-bold uppercase" data-translate="match_status_jugado">JUGADO</span>`;
+                    break;
+                case 'CANCELADO':
+                    estatus = `<span class="text-center text-xs md:text-sm text-red-500 font-bold uppercase" data-translate="match_status_cancelado">CANCELADO</span>`;
+                    break;
+                default:
+                    estatus = `<span class="text-center text-xs md:text-sm text-gray-500 font-bold uppercase" data-translate="match_status_pendiente">PENDIENTE</span>`;
+                    break;
+            }            
+            
+            // Validar que los valores sean números válidos
+            if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+                console.warn('Fecha inválida en partido:', partido);
+                return;
+            } 
+            const fechaFormateada = `${String(dia).padStart(2, '0')}/${meses[mes - 1] || mes}/${anio}`;
+
+            cardsPerGroup.push(`                
+                <!-- Match Card ${i} -->
+                <div class="p-8 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">                   
+                    <div class="flex items-center justify-between gap-6 mb-6">
+                        <div class="flex flex-col items-center flex-1">
+                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
+                            <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-800">
+                            ${m.LSCORE || '0'} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'}
+                        </div>
+                        <div class="flex flex-col items-center flex-1">
+                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
+                            <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
+                        </div>
+                    </div>
+                    <div class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
+                        <span class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2" data-translate="semifinals">Semifinal</span> - <span class="text-center text-xs md:text-sm text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs md:text-sm ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>
+                    </div>
+                </div>
+            `);
+        }
+        if (cardsPerGroup.length === juegos && grupos.includes(m.GRUPO)) {
+            const html = `
+                <div class="mb-6" >
+                    <div class="flex flex-row items-center gap-2">
+                        <h4 class="text-3xl font-bold text-brand-gold mb-6 flex items-center gap-2">${m.CICLO}</h4>
+                        <h4 class="text-3xl font-bold text-brand-red mb-6 flex items-center gap-2" data-translate="semifinals">
+                            Semifinal
+                        </h4> 
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6" id="cards-per-group-${m.GRUPO}">
+                        ${cardsPerGroup.map(card => card).join("")}
+                    </div>
+                </div>
+                `;
+            cardsPerGroup = [];
+            grupo = m.GRUPO;
+            cardsGroup.push(html);
+        }
+    });
+
+    if (cardsGroup.length > 0) {
+        div.classList.add("mb-6", "mt-6");
+    }
+
+    div.innerHTML = cardsGroup.map(card => card).join("");
+}
+
+// --- TABLA DE RESULTADOS TERCER PUESTO Y FINAL ---
 export function tablaResultadosTercerFinalPuesto(list, ciclo) {
     const div = document.getElementById("tercerFinalPuesto" + ciclo);
     if (!div) return;
-    div.classList.add("mb-6", "mt-6");
+    
     const grupos = ["3RPUESTO", "1RPUESTO"];
-    const juegos = 1;
     let cardsGroup = [];
 
     div.classList.add("grid", "grid-cols-1", "md:grid-cols-2", "gap-6");
@@ -317,9 +428,36 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
             // Filtrar por ciclo y tipo de grupo específico
             if (m.GRUPO === tipoGrupo && m.CICLO === ciclo) {
                 // Formatear fecha
-                const mesNombre = meses[parseInt(m.MES) - 1] || m.MES;
-                const diaFormateado = String(m.DIA).padStart(2, '0');
-                const fechaFormateada = `${diaFormateado} ${mesNombre}`;
+                const anio = m.ANIO ? parseInt(m.ANIO) : new Date().getFullYear();
+                const mes = parseInt(m.MES);
+                const dia = parseInt(m.DIA);
+                let estatus = '';
+
+                switch (m.ESTATUS) {
+                    case 'JUGADO':
+                        estatus = `<span class="text-center text-xs md:text-sm text-brand-green font-bold uppercase" data-translate="match_status_jugado">JUGADO</span>`;
+                        break;
+                    case 'CANCELADO':
+                        estatus = `<span class="text-center text-xs md:text-sm text-red-500 font-bold uppercase" data-translate="match_status_cancelado">CANCELADO</span>`;
+                        break;
+                    default:
+                        estatus = `<span class="text-center text-xs md:text-sm text-gray-500 font-bold uppercase" data-translate="match_status_pendiente">PENDIENTE</span>`;
+                        break;
+                }            
+                
+                // Validar que los valores sean números válidos
+                if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+                    console.warn('Fecha inválida en partido:', partido);
+                    return;
+                } 
+                const fechaFormateada = `${String(dia).padStart(2, '0')}/${meses[mes - 1] || mes}/${anio}`;
+
+                let text = '';
+                if (m.GRUPO === "3RPUESTO") {
+                    text = `<span class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2" data-translate="third_and_fourth_place">Tercer puesto</span> - <span class="text-center text-xs md:text-sm text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs md:text-sm ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>`;
+                } else {
+                    text = `<span class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2" data-translate="final">Final</span> - <span class="text-center text-xs md:text-sm text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs md:text-sm ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>`;
+                }
 
                 cardsPerGroup.push(`                
                     <!-- Match Card ${i} -->
@@ -339,6 +477,9 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
                         </div>
                         <div class="text-center text-xs md:text-sm text-gray-600 mt-6">
                            ${m.GRUPO === "3RPUESTO" ? "Tercer Puesto" : "Primer Puesto"} - ${fechaFormateada}, ${m.HORA + ' hrs' || ''}
+                        </div>
+                        <div class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
+                            ${text}
                         </div>
                     </div>
                 `);
@@ -363,6 +504,10 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
             cardsGroup.push(html);
         }
     });
+
+    if (cardsGroup.length > 0) {
+        div.classList.add("mb-6", "mt-6");
+    }
 
     div.innerHTML = cardsGroup.map(card => card).join("");
 }
@@ -391,35 +536,35 @@ export function tablaClasificacion(list, ciclo) {
                         </div>
                         <div class="grid grid-cols-2 gap-y-2 md:gap-y-4 gap-x-6 md:gap-x-8">
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg lg:text-lg">PTS:</span>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_points">PTS</span>:
                                 <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.PUNTOS}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">G:</span>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_won">PG</span>:
                                 <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.GANADOS}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">E:</span>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_drawn">PE</span>:
                                 <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.EMPATADOS}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">P:</span>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_lost">PP</span>:
                                 <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.PERDIDOS}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">GF:</span>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_goals_for">GF</span>:
                                 <div class="ttext-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.GOLESAFAVOR}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">GC:</span>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_goals_against">GC</span>:
                                 <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.GOLESENCONTRA}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">DIF:</span>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_goals_diff">DG</span>:
                                 <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.DIFERENCIADEGOLES}</div>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg">FP:</span>
+                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_fair_play">FPY</span>:
                                 <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.FAIRPLAY}</div>
                             </div>
                         </div>
@@ -429,7 +574,7 @@ export function tablaClasificacion(list, ciclo) {
             if (cardsPerGroup.length === temsPerGroup && grupos.includes(m.GRUPO)) {
                 const html = `
                 <div class="mb-6">
-                    <div class="text-3xl font-bold py-3 font-bold mb-6">
+                    <div class="text-3xl py-3 font-bold mb-6">
                         <div class="flex items-center gap-2">
                             <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${m.CICLO}</h4>    
                             <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"> <span class="text-3xl font-bold text-brand-red flex items-center" data-translate="group">Grupo</span> ${grupo}</h4> 
@@ -661,7 +806,7 @@ export function tablaResultados(list, ciclo) {
         const dgFormatted = equipo.DG >= 0 ? `+${equipo.DG}` : `${equipo.DG}`;
 
         html += `
-            <tr class="bg-white bg-white border-gray-100 border border-b">
+            <tr class="bg-white border-gray-100 border border-b">
                 <td class="py-2 px-2 md:py-4 md:px-4 font-medium" style="text-align: left; padding-left: 1rem; color: #333333;">${pos}</td>
                 <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
                     <div class="flex items-center gap-3">
@@ -1818,7 +1963,7 @@ export function renderGalería(galeriaItems = []) {
 
                 if (videoId) {
                     return `
-                        <div class="galeria-item bg-white shadow-lg ring-1 ring-black/5 rounded-brand overflow-hidden hover:shadow-xl transition-shadow duration-300 bg-gray-100">
+                        <div class="galeria-item shadow-lg ring-1 ring-black/5 rounded-brand overflow-hidden hover:shadow-xl transition-shadow duration-300 bg-gray-100">
                             <div class="w-full max-w-full mx-auto aspect-video">
                                 <iframe
                                     class="w-full h-full border-0"
@@ -1844,7 +1989,7 @@ export function renderGalería(galeriaItems = []) {
             if (!imagenUrl) return '';
 
             return `
-                <div class="galeria-item bg-white shadow-lg ring-1 ring-black/5 rounded-brand overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer bg-gray-100" data-galeria-index="${index}">
+                <div class="galeria-item shadow-lg ring-1 ring-black/5 rounded-brand overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer bg-gray-100" data-galeria-index="${index}">
                     <img 
                         src="${convertGoogleDriveUrl(imagenUrl)}" 
                         class="w-full h-64 md:h-80 lg:h-96 object-cover transition-transform duration-300 hover:scale-105" 

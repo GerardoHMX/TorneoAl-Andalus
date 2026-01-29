@@ -4,6 +4,7 @@ import { updateAllTranslations, translate } from "./translations.js";
 import {
     tablaEquipos,
     tablaResultadosFaseDeGrupos,
+    tablaResultadosCuartosDeFinal,
     tablaResultadosSemifinal,
     tablaResultadosTercerFinalPuesto, 
     tablaClasificacion,
@@ -42,7 +43,7 @@ let     STATE = {
             goleadoresBCH: "TODOS"
         }
     };
-let semanaOffset = 0;
+
 let diaOffsetProximosPartidos = 0; // Offset en días para navegación día por día
 let diaOffsetNoticias = 0; // Offset en días para navegación día por día en noticias
 let diaOffsetGaleria = 0; // Offset en días para navegación día por día en galería
@@ -1155,8 +1156,33 @@ function esVerdadero(valor) {
 function encontrarElementoPorId(id) {
     if (!id) return null;
     
+    // Limpiar el ID de espacios y caracteres especiales
+    const idLimpio = id.toString().trim();
+    
     // Buscar directamente con el ID proporcionado
-    const elemento = document.getElementById(id);
+    let elemento = document.getElementById(idLimpio);
+    
+    // Si no se encuentra, intentar con diferentes variaciones
+    if (!elemento) {
+        // Intentar con minúsculas
+        elemento = document.getElementById(idLimpio.toLowerCase());
+    }
+    if (!elemento) {
+        // Intentar con mayúsculas
+        elemento = document.getElementById(idLimpio.toUpperCase());
+    }
+    if (!elemento) {
+        // Intentar buscar por selector de atributo (más flexible)
+        elemento = document.querySelector(`[id="${idLimpio}"]`);
+    }
+    if (!elemento) {
+        // Intentar buscar sin distinguir mayúsculas/minúsculas
+        const todosLosElementos = document.querySelectorAll('[id]');
+        elemento = Array.from(todosLosElementos).find(el => 
+            el.id && el.id.toLowerCase() === idLimpio.toLowerCase()
+        );
+    }
+    
     return elemento;
 }
 
@@ -1177,8 +1203,7 @@ function generarNavegacion(otros = []) {
         
         const menu = menuKey ? (item[menuKey] || '').toString().trim() : '';
         const seccion = seccionKey ? (item[seccionKey] || '').toString().trim() : '';
-        const nombre = nombreKey ? (item[nombreKey] || '').toString().trim() : '';
-        
+        const nombre = nombreKey ? (item[nombreKey] || '').toString().trim() : '';        
         const estaEnMenu = esVerdadero(menu);
         
         return estaEnMenu && seccion && nombre && nombre !== '-';
@@ -1215,31 +1240,31 @@ function generarNavegacion(otros = []) {
             const href = '#' + seccion;
             switch (seccion) {
                 case 'inicio':                
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">INICIO</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">INICIO</a>`;
                     break;
                 case 'equipos':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">EQUIPOS</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">EQUIPOS</a>`;
                     break;
                 case 'jornadas':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">JORNADAS</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">JORNADAS</a>`;
                     break;
                 case 'clasificacionGrupal':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">CLASIFICACIÓN</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">CLASIFICACIÓN</a>`;
                     break;
                 case 'bracket':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">BRACKET</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">BRACKET</a>`;
                     break;
                 case 'goleadoresSection':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">LÍDERES</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">LÍDERES</a>`;
                     break;
                 case 'sancionadosSection':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">SANCIONADOS</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">SANCIONADOS</a>`;
                     break;
                 case 'resultadosSection':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">RESULTADOS</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">RESULTADOS</a>`;
                     break;
                 case 'noticiasSection':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">NOTICIAS</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">NOTICIAS</a>`;
                     break;
                 default:
                     nombreTraducido = '';
@@ -1271,7 +1296,7 @@ function generarNavegacion(otros = []) {
             const nombreTraducido = translate(seccion) || nombre;
             
             const href = '#' + seccion;
-            return `<a href="${href}" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase" data-translate="${seccion}">${nombreTraducido}</a>`;
+            return `<a href="${href}" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">${nombreTraducido}</a>`;
         }).join('');
         
     } else {
@@ -1314,15 +1339,30 @@ function controlarVisibilidadSecciones(otros = []) {
         if (elemento) {
             const debeSerVisible = mapaSecciones[seccionId];
             if (debeSerVisible) {
-                // Mostrar la sección: remover clase hidden
+                // Mostrar la sección: remover clase hidden y cualquier estilo inline que oculte
                 elemento.classList.remove('hidden');
+                elemento.style.display = '';
+                console.log(`✅ Sección "${seccionId}" mostrada`);
             } else {
                 // Ocultar la sección: agregar clase hidden
                 elemento.classList.add('hidden');
+                console.log(`👁️ Sección "${seccionId}" ocultada`);
             }
         } else {
             // Mostrar warning para ayudar a depurar
             console.warn(`⚠ No se encontró el elemento con ID: "${seccionId}"`);
+            // Listar todos los IDs disponibles que sean similares para ayudar a depurar
+            const todosLosIds = Array.from(document.querySelectorAll('[id]')).map(el => el.id);
+            const idsSimilares = todosLosIds.filter(id => {
+                const idLower = id.toLowerCase();
+                const seccionLower = seccionId.toLowerCase();
+                return idLower.includes(seccionLower) || seccionLower.includes(idLower);
+            });
+            if (idsSimilares.length > 0) {
+                console.log(`📋 IDs similares encontrados:`, idsSimilares);
+            } else {
+                console.log(`📋 Total de elementos con ID en el DOM: ${todosLosIds.length}`);
+            }
         }
     });
 }
@@ -1582,7 +1622,7 @@ function updateUI() {
     if (OTROS && OTROS.length > 0) {
         generarNavegacion(OTROS);
     }
-
+    
     // Equipos
     const grupoEquipos = STATE.grupoSeleccionado.equipos || "TODOS";
     if (ciclos.equipos === "TODOS") {
@@ -1599,16 +1639,19 @@ function updateUI() {
     if (ciclos.jornadas === "TODOS") {
         tablaResultadosFaseDeGrupos(STATE.data.CLASIFICACION, "ESO");
         tablaResultadosFaseDeGrupos(STATE.data.CLASIFICACION, "BCH");
+        tablaResultadosCuartosDeFinal(STATE.data.CLASIFICACION, "ESO");        
+        tablaResultadosCuartosDeFinal(STATE.data.CLASIFICACION, "BCH");
         tablaResultadosSemifinal(STATE.data.CLASIFICACION, "ESO");
         tablaResultadosSemifinal(STATE.data.CLASIFICACION, "BCH");
         tablaResultadosTercerFinalPuesto(STATE.data.CLASIFICACION, "ESO");
         tablaResultadosTercerFinalPuesto(STATE.data.CLASIFICACION, "BCH");
     } else {
         tablaResultadosFaseDeGrupos(STATE.data.CLASIFICACION, ciclos.jornadas);
+        tablaResultadosCuartosDeFinal(STATE.data.CLASIFICACION, ciclos.jornadas);
         tablaResultadosSemifinal(STATE.data.CLASIFICACION, ciclos.jornadas);
         tablaResultadosTercerFinalPuesto(STATE.data.CLASIFICACION, ciclos.jornadas);
         const otroCiclo = ciclos.jornadas === "ESO" ? "BCH" : "ESO";
-        ["faseDeGrupos", "semifinal", "tercerFinalPuesto"].forEach(tipo => {
+        ["faseDeGrupos", "cuartosDeFinal", "semifinal", "tercerFinalPuesto"].forEach(tipo => {
             const otroDiv = document.getElementById(`${tipo}${otroCiclo}`);
             if (otroDiv) {
                 otroDiv.innerHTML = "";
@@ -1801,17 +1844,20 @@ function updateUI() {
     }
 
     // Controlar visibilidad de secciones después de que todas se hayan renderizado
-    // Usar requestAnimationFrame para asegurar que el DOM se haya actualizado
+    // Usar múltiples requestAnimationFrame para asegurar que el DOM se haya actualizado completamente
     if (OTROS && OTROS.length > 0) {
+        // Doble requestAnimationFrame para asegurar que todas las funciones de renderizado hayan terminado
         requestAnimationFrame(() => {
-            controlarVisibilidadSecciones(OTROS);
-            // Actualizar todas las traducciones después de renderizar
-            updateAllTranslations();
-            // Ocultar preloader solo después de que todo esté completamente actualizado
-            if (esCargaInicial) {
-                ocultarPreloader();
-                esCargaInicial = false;
-            }
+            requestAnimationFrame(() => {
+                controlarVisibilidadSecciones(OTROS);
+                // Actualizar todas las traducciones después de renderizar
+                updateAllTranslations();
+                // Ocultar preloader solo después de que todo esté completamente actualizado
+                if (esCargaInicial) {
+                    ocultarPreloader();
+                    esCargaInicial = false;
+                }
+            });
         });
     } else {
         // Si no hay datos de OTROS, ocultar preloader igualmente
