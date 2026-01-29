@@ -1,8 +1,8 @@
-# Resumen del Sitio Web - Torneo Al-Ándalus
+# Resumen del Sitio Web
 
 ## Objetivo del Sitio
 
-El sitio web del **Torneo Escolar de Fútbol Sala Al-Ándalus** tiene como objetivo principal proporcionar una plataforma digital completa para gestionar y visualizar toda la información relacionada con el torneo deportivo del Colegio San Francisco de Asís. 
+El sitio web del **Torneo Escolar de Fútbol Sala** tiene como objetivo principal proporcionar una plataforma digital completa para gestionar y visualizar toda la información relacionada con el torneo deportivo del Colegio San Francisco de Asís. 
 
 Sus objetivos específicos incluyen:
 
@@ -19,7 +19,7 @@ Sus objetivos específicos incluyen:
 El sitio está organizado en las siguientes secciones principales:
 
 ### 1. **Inicio (Hero Section)**
-   - Presentación visual del torneo con el nombre "Al-Ándalus 2025-2026"
+   - Presentación visual del torneo con el nombre del torneo
    - Diseño con fondo rojo característico del colegio
 
 ### 2. **Bases del Torneo**
@@ -56,36 +56,43 @@ El sitio está organizado en las siguientes secciones principales:
    - Visualización del árbol de eliminación del torneo
    - Muestra el progreso de los equipos hacia la final
 
-### 9. **Líderes Goleadores**
+### 9. **Podio**
+   - Visualización de los tres equipos ganadores del torneo
+   - Muestra el primer, segundo y tercer puesto con sus logos y nombres
+   - Los datos se obtienen de la hoja CLASIFICACION:
+     - Primer y segundo puesto: Desde registros con `GRUPO: "1RPUESTO"` (campos `GANA`, `GLOGO`, `PIERDE`, `PLOGO`)
+     - Tercer puesto: Desde registros con `GRUPO: "3RPUESTO"` (campos `GANA`, `GLOGO`)
+
+### 10. **Líderes Goleadores**
    - Ranking de los jugadores con más goles
    - Filtrado por ciclo educativo
    - Filtrado adicional por curso dentro de cada ciclo
 
-### 10. **Sancionados**
+### 11. **Sancionados**
     - Listado de jugadores sancionados
     - Información sobre el tipo de sanción y duración
     - Filtrado por ciclo y curso
 
-### 11. **Resultados**
+### 12. **Resultados**
     - Historial completo de resultados de todos los partidos
     - Filtrado por ciclo educativo
     - Información detallada de cada encuentro
 
-### 12. **Noticias**
+### 13. **Noticias**
     - Sección de noticias y actualizaciones del torneo
     - Navegación por fecha con botones anterior/siguiente
     - Visualización en formato de tarjetas con imágenes
     - Diálogo modal para ver noticias completas
     - **Imágenes**: Las imágenes se almacenan en Google Drive con acceso público y se referencian desde Google Sheets
 
-### 13. **Galería**
+### 14. **Galería**
     - Galería de imágenes del torneo
     - Navegación por fecha
     - Soporte para diferentes tipos de contenido multimedia
     - Visualización en grid responsive
     - **Imágenes**: Las imágenes se almacenan en Google Drive con acceso público y se referencian desde Google Sheets
 
-### 14. **Footer**
+### 15. **Footer**
     - Información de contacto del colegio
     - Enlaces a redes sociales
     - Créditos y licencia del proyecto
@@ -479,5 +486,4 @@ El sitio incluye soporte completo para español e inglés:
 
 ---
 
-*Documento generado el 24 de enero de 2026*  
-*Última actualización: 25 de enero de 2026 - Sistema de personalización y multilenguaje implementado*
+*Documento generado el 29 de enero de 2026*  
