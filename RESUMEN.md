@@ -306,8 +306,7 @@ A pesar de las ventajas del sistema actual, se han identificado algunas limitaci
 1. **Crear una guía visual paso a paso** con capturas de pantalla detalladas del proceso de subida y configuración de permisos **Implementado**
 2. **Desarrollar un script de Google Apps Script** que automatice la configuración de permisos públicos al subir imágenes a una carpeta específica
 3. **Implementar un formulario de Google Forms** que permita subir imágenes directamente y que automáticamente configure los permisos y genere el enlace
-4. **Crear una interfaz web simple** (página HTML con JavaScript) que permita arrastrar y soltar imágenes y que automáticamente las suba a Drive y configure permisos mediante la API de Google Drive
-5. **Usar un servicio alternativo** como Imgur, Cloudinary o un bucket de almacenamiento con interfaz más simple, aunque esto requeriría cambios en la arquitectura
+4. **Usar un servicio alternativo** como Imgur, Cloudinary o un bucket de almacenamiento con interfaz más simple, aunque esto requeriría cambios en la arquitectura
 
 ### 2. **Edición de Texto en Celdas de Google Sheets**
 

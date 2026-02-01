@@ -74,28 +74,36 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
             const key = `${ciclo}_${grupo}`;
             const data = equiposPorCicloGrupo[key];            
             if (data && data.equipos.length > 0) {
+
+                let listaEquipos = [];
+                data.equipos.forEach((equipo) => {
+                    listaEquipos.push({
+                        EQUIPO: equipo.EQUIPO,
+                        GRUPO: equipo.GRUPO,
+                        CICLO: equipo.CICLO,
+                        LOGO: equipo.LOGO
+                    });
+                });
+
                 html += `
                     <div class="w-full mb-6">
-                        <div class="text-3xl py-3 font-bold">
-                            <div class="flex items-center gap-2">
-                                <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${ciclo}</h4>
-                                <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"><span class="text-3xl font-bold text-brand-red flex items-center" data-translate="group">Grupo</span> ${grupo}</h4>                                
-                            </div>
-                        </div>
                         <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                            ${data.equipos.map((equipo, index) => `
-                                <div class="p-6 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden">
+                            ${listaEquipos.map((equipo, index) => `
+                                <div class="p-2 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden">
                                     <div class="flex flex-col items-center text-center">
                                         ${equipo.LOGO ? `
-                                            <img src="${convertGoogleDriveUrl(equipo.LOGO)}" alt="${equipo.EQUIPO}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-4" onerror="this.style.display='none'">
+                                            <img src="${convertGoogleDriveUrl(equipo.LOGO)}" alt="${equipo.EQUIPO}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1" onerror="this.style.display='none'">
                                         ` : `
-                                            <div class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-${brandColors[index]} rounded-full flex items-center justify-center mb-4">                                                
+                                            <div class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-${brandColors[index]} rounded-full flex items-center justify-center mb-1">                                                
                                             </div>
                                         `}
-                                        <h5 class="text-sm sm:text-md md:text-lg font-bold text-brand-text-dark mb-3 uppercase">
+                                        <h5 class="text-sm sm:text-md md:text-lg font-bold text-brand-text-dark mb-1 uppercase">
                                             ${equipo.EQUIPO}
                                         </h5>
-                                        <p class="text-xs md:text-sm text-gray-600 leading-relaxed" data-translate="team_participant_description" data-group="${grupo}" data-cycle="${ciclo}"></p>
+                                        <p class="text-xs md:text-sm text-gray-600 leading-relaxed">                                        
+                                            <span class="text-xs md:text-sm leading-relaxed text-brand-gold" data-translate="group">Grupo </span> ${equipo.GRUPO} -  
+                                            <span class="text-xs md:text-sm leading-relaxed text-brand-red" data-translate="course">Curso: </span> ${equipo.CICLO}                                         
+                                        </p>
                                     </div>
                                 </div>
                             `).join('')}
@@ -104,45 +112,7 @@ export function tablaEquipos(list, ciclo, grupoFiltro = "TODOS") {
                 `;
             }
         });
-    }
-
-    // Si hay equipos sin ciclo definido, mostrarlos al final
-    Object.keys(equiposPorCicloGrupo).forEach(key => {
-        if (!key.startsWith('ESO_') && !key.startsWith('BCH_')) {
-            const data = equiposPorCicloGrupo[key];
-            html += `
-                <div class="w-full mb-6">
-                    <div class="text-3xl px-4 py-3 font-bold mb-6">
-                        <div class="flex items-center gap-2">
-                            <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${data.ciclo}</h4>    
-                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"><span class="text-3xl font-bold text-brand-red flex items-center"  data-translate="group">Grupo</span> ${data.grupo}</h4>                            
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                        ${data.equipos.map(equipo => `
-                            <div class="bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand p-6 hover:shadow-brand-lg transition-all duration-300 hover:scale-105">
-                                <div class="flex flex-col items-center text-center">
-                                    ${equipo.LOGO ? `
-                                        <img src="${equipo.LOGO}" alt="${equipo.EQUIPO}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-4" onerror="this.style.display='none'">
-                                    ` : `
-                                        <div class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                            <span class="text-4xl">⚽</span>
-                                        </div>
-                                    `}
-                                    <h5 class="text-sm sm:text-md md:text-lg font-bold text-brand-text-dark mb-3 uppercase">
-                                        ${equipo.EQUIPO}
-                                    </h5>
-                                    <p class="text-xs md:text-sm text-gray-600 leading-relaxed">                                        
-                                        <span class="text-xs md:text-sm text-gray-600 leading-relaxed" data-translate="team_participant_at">Equipo participante </span> ${data.GRUPO}  ${data.ciclo}                                         
-                                    </p>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-    });
+    } 
 
     div.innerHTML = html;
 }
@@ -169,13 +139,13 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
 
             switch (m.ESTATUS) {
                 case 'JUGADO':
-                    estatus = `<span class="text-center text-xs md:text-sm text-brand-green font-bold uppercase" data-translate="match_status_jugado">JUGADO</span>`;
+                    estatus = `<span class="text-center text-xs sm:text-md md:text-lg text-brand-green font-bold uppercase" data-translate="match_status_jugado">JUGADO</span>`;
                     break;
                 case 'CANCELADO':
-                    estatus = `<span class="text-center text-xs md:text-sm text-red-500 font-bold uppercase" data-translate="match_status_cancelado">CANCELADO</span>`;
+                    estatus = `<span class="text-center text-xs sm:text-md md:text-lg text-red-500 font-bold uppercase" data-translate="match_status_cancelado">CANCELADO</span>`;
                     break;
                 default:
-                    estatus = `<span class="text-center text-xs md:text-sm text-gray-500 font-bold uppercase" data-translate="match_status_pendiente">PENDIENTE</span>`;
+                    estatus = `<span class="text-center text-xs sm:text-md md:text-lg text-brand-gold font-bold uppercase" data-translate="match_status_pendiente">PENDIENTE</span>`;
                     break;
             }            
             
@@ -189,21 +159,21 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
             cardsPerGroup.push(`
                 <!-- Match Card ${i} -->
                 <div class="p-2 sm:p-6 md:p-8 bg-gray-100 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden ">
-                    <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-6 mb-6">
+                    <div class="flex flex-col lg:flex-row items-center justify-between gap-1 lg:gap-2 mb-2">
                         <div class="flex flex-col items-center flex-1">
                             ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16  object-contain mb-2 md:mb-3 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
-                            <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
+                            <div class="text-xs md:text-sm text-gray-800 uppercase text-center break-words">${m.LOCAL}</div>
                         </div>
-                        <div class="text-5xl font-bold text-gray-800 flex justify-center items-center gap-2 flex-shrink-0">
+                        <div class="flex justify-center items-center gap-1 flex-shrink-0 flex-1/2">
                            <span class="text-3xl">${m.LSCORE || '0'}</span> <span class="text-3xl text-brand-gold">:</span> <span class="text-3xl">${m.VSCORE || '0'}</span>
                         </div>
                         <div class="flex flex-col items-center flex-1">
                             ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16  object-contain mb-2 md:mb-3 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
-                            <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
+                            <div class="text-xs md:text-sm text-gray-800 uppercase text-center break-words">${m.VISITANTE}</div>
                         </div>
                     </div>
-                    <div class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
-                        <span class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2" data-translate="group">Grupo</span> ${m.GRUPO} - <span class="text-center text-xs md:text-sm text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs md:text-sm ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>
+                    <div class="text-center text-xs sm:text-md md:text-lg text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
+                        <span class="text-center text-xs sm:text-md md:text-lg text-gray-600 mt-2 uppercase" data-translate="group">Grupo</span> ${m.GRUPO} - <span class="text-center text-xs sm:text-md md:text-lg text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs sm:text-md md:text-lg ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>
                     </div>
                 </div>
             `);
@@ -261,13 +231,13 @@ export function tablaResultadosCuartosDeFinal(list, ciclo) {
 
             switch (m.ESTATUS) {
                 case 'JUGADO':
-                    estatus = `<span class="text-center text-xs md:text-sm text-brand-green font-bold uppercase" data-translate="match_status_jugado">JUGADO</span>`;
+                    estatus = `<span class="text-center text-xs sm:text-md md:text-lg text-brand-green font-bold uppercase" data-translate="match_status_jugado">JUGADO</span>`;
                     break;
                 case 'CANCELADO':
-                    estatus = `<span class="text-center text-xs md:text-sm text-red-500 font-bold uppercase" data-translate="match_status_cancelado">CANCELADO</span>`;
+                    estatus = `<span class="text-center text-xs sm:text-md md:text-lg text-red-500 font-bold uppercase" data-translate="match_status_cancelado">CANCELADO</span>`;
                     break;
                 default:
-                    estatus = `<span class="text-center text-xs md:text-sm text-gray-500 font-bold uppercase" data-translate="match_status_pendiente">PENDIENTE</span>`;
+                    estatus = `<span class="text-center text-xs sm:text-md md:text-lg text-brand-gold font-bold uppercase" data-translate="match_status_pendiente">PENDIENTE</span>`;
                     break;
             }            
             
@@ -280,22 +250,22 @@ export function tablaResultadosCuartosDeFinal(list, ciclo) {
 
             cardsPerGroup.push(`                
                 <!-- Match Card ${i} -->
-                <div class="p-8 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">                   
+                <div class="p-4 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">                   
                     <div class="flex items-center justify-between gap-6 mb-6">
                         <div class="flex flex-col items-center flex-1">
-                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
-                            <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
+                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
+                            <div class="text-xs sm:text-sm lg:text-md font-bold text-gray-800 uppercase text-center break-words">${m.LOCAL}</div>
                         </div>
                         <div class="text-3xl font-bold text-gray-800">
                             ${m.LSCORE || '0'} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'}
                         </div>
                         <div class="flex flex-col items-center flex-1">
-                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
-                            <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
+                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
+                            <div class="text-xs sm:text-sm lg:text-md font-bold text-gray-800 uppercase text-center break-words">${m.VISITANTE}</div>
                         </div>
                     </div>
-                    <div class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
-                        <span class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2" data-translate="quarter_finals">Cuartos de Final</span> - <span class="text-center text-xs md:text-sm text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs md:text-sm ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>
+                    <div class="text-center text-xs sm:text-md md:text-lg text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
+                        <span class="text-center text-xs sm:text-md md:text-lg text-gray-600 mt-2 uppercase" data-translate="quarter_finals">Cuartos de Final</span> - <span class="text-center text-xs sm:text-md md:text-lg text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs md:text-sm ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>
                     </div>
                 </div>
             `);
@@ -352,13 +322,13 @@ export function tablaResultadosSemifinal(list, ciclo) {
 
             switch (m.ESTATUS) {
                 case 'JUGADO':
-                    estatus = `<span class="text-center text-xs md:text-sm text-brand-green font-bold uppercase" data-translate="match_status_jugado">JUGADO</span>`;
+                    estatus = `<span class="text-center text-xs sm:text-md md:text-lg text-brand-green font-bold uppercase" data-translate="match_status_jugado">JUGADO</span>`;
                     break;
                 case 'CANCELADO':
-                    estatus = `<span class="text-center text-xs md:text-sm text-red-500 font-bold uppercase" data-translate="match_status_cancelado">CANCELADO</span>`;
+                    estatus = `<span class="text-center text-xs sm:text-md md:text-lg text-red-500 font-bold uppercase" data-translate="match_status_cancelado">CANCELADO</span>`;
                     break;
                 default:
-                    estatus = `<span class="text-center text-xs md:text-sm text-gray-500 font-bold uppercase" data-translate="match_status_pendiente">PENDIENTE</span>`;
+                    estatus = `<span class="text-center text-xs sm:text-md md:text-lg text-brand-gold font-bold uppercase" data-translate="match_status_pendiente">PENDIENTE</span>`;
                     break;
             }            
             
@@ -371,22 +341,22 @@ export function tablaResultadosSemifinal(list, ciclo) {
 
             cardsPerGroup.push(`                
                 <!-- Match Card ${i} -->
-                <div class="p-8 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">                   
+                <div class="p-4 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">                   
                     <div class="flex items-center justify-between gap-6 mb-6">
                         <div class="flex flex-col items-center flex-1">
-                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
-                            <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
+                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150 mb-2" onerror="this.style.display='none'">` : ''}
+                            <div class="text-xs sm:text-sm lg:text-md font-bold text-gray-800 uppercase text-center break-words">${m.LOCAL}</div>
                         </div>
                         <div class="text-3xl font-bold text-gray-800">
                             ${m.LSCORE || '0'} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'}
                         </div>
                         <div class="flex flex-col items-center flex-1">
-                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
-                            <div class="text-sm font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
+                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150 mb-2" onerror="this.style.display='none'">` : ''}
+                            <div class="text-xs sm:text-sm lg:text-md font-bold text-gray-800 uppercase text-center break-words">${m.VISITANTE}</div>
                         </div>
                     </div>
-                    <div class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
-                        <span class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2" data-translate="semifinals">Semifinal</span> - <span class="text-center text-xs md:text-sm text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs md:text-sm ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>
+                    <div class="text-center text-xs sm:text-md md:text-lg text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
+                        <span class="text-center text-xs sm:text-md md:text-lg text-gray-600 mt-2" data-translate="semifinals">Semifinal</span> - <span class="text-center text-xs sm:text-md md:text-lg text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs sm:text-md md:text-lg ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>
                     </div>
                 </div>
             `);
@@ -443,13 +413,13 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
 
                 switch (m.ESTATUS) {
                     case 'JUGADO':
-                        estatus = `<span class="text-center text-xs md:text-sm text-brand-green font-bold uppercase" data-translate="match_status_jugado">JUGADO</span>`;
+                        estatus = `<span class="text-center text-xs sm:text-md md:text-lg text-brand-green font-bold uppercase" data-translate="match_status_jugado">JUGADO</span>`;
                         break;
                     case 'CANCELADO':
-                        estatus = `<span class="text-center text-xs md:text-sm text-red-500 font-bold uppercase" data-translate="match_status_cancelado">CANCELADO</span>`;
+                        estatus = `<span class="text-center text-xs sm:text-md md:text-lg text-red-500 font-bold uppercase" data-translate="match_status_cancelado">CANCELADO</span>`;
                         break;
                     default:
-                        estatus = `<span class="text-center text-xs md:text-sm text-gray-500 font-bold uppercase" data-translate="match_status_pendiente">PENDIENTE</span>`;
+                        estatus = `<span class="text-center text-xs sm:text-md md:text-lg text-brand-gold font-bold uppercase" data-translate="match_status_pendiente">PENDIENTE</span>`;
                         break;
                 }            
                 
@@ -462,28 +432,28 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
 
                 let text = '';
                 if (m.GRUPO === "3RPUESTO") {
-                    text = `<span class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2" data-translate="third_and_fourth_place">Tercer puesto</span> - <span class="text-center text-xs md:text-sm text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs md:text-sm ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>`;
+                    text = `<span class="text-center text-xs sm:text-md md:text-lg text-gray-600 mt-2" data-translate="third_and_fourth_place">Tercer puesto</span> - <span class="text-center text-xs sm:text-md md:text-lg text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs sm:text-md md:text-lg ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>`;
                 } else {
-                    text = `<span class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2" data-translate="final">Final</span> - <span class="text-center text-xs md:text-sm text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs md:text-sm ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>`;
+                    text = `<span class="text-center text-xs sm:text-md md:text-lg text-gray-600 mt-2" data-translate="final">Final</span> - <span class="text-center text-xs sm:text-md md:text-lg text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs sm:text-md md:text-lg ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>`;
                 }
 
                 cardsPerGroup.push(`                
                     <!-- Match Card ${i} -->
-                    <div class="p-8 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">
+                    <div class="p-4 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">
                         <div class="flex items-center justify-between gap-6 mb-6">
                             <div class="flex flex-col items-center flex-1">
-                                ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
+                                ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150 mb-2" onerror="this.style.display='none'">` : ''}
                                 <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
                             </div>
                             <div class="text-3xl font-bold text-gray-800">
                                 ${m.LSCORE || '0'} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'}
                             </div>
                             <div class="flex flex-col items-center flex-1">
-                                ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-20 h-20 object-contain mb-3" onerror="this.style.display='none'">` : ''}
+                                ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150 mb-2" onerror="this.style.display='none'">` : ''}
                                 <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
                             </div>
                         </div>
-                        <div class="text-center text-xs md:text-sm text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
+                        <div class="text-center text-xs sm:text-md md:text-lg text-gray-600 mt-2 uppercase border-t border-gray-200 pt-2">
                             ${text}
                         </div>
                     </div>
@@ -521,7 +491,6 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
 export function tablaClasificacion(list, ciclo) {
     const div = document.getElementById("clasificacion" + ciclo);
     if (!div) return;
-    div.classList.add("overflow-x-auto", "mb-6", "mt-6");
     let grupo = "A";
     let cardsPerGroup = [];
     let cardsGroup = []; 
@@ -534,61 +503,59 @@ export function tablaClasificacion(list, ciclo) {
             if (grupos.includes(m.GRUPO) && m.GRUPO === grupo) {
                 cardsPerGroup.push(`                
                     <!-- Team Card ${i} -->
-                    <div class="p-3 md:p-6 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden">
-                        <div class="flex items-center justify-center mb-6 gap-1">
-                            ${m.LOGO ? `<img src="${convertGoogleDriveUrl(m.LOGO)}" alt="${m.EQUIPOS}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain" onerror="this.style.display='none'">` : ''}
-                            <div class="text-xs sm:text-sm md:text-md lg:text-lg font-bold flex-1">${m.EQUIPOS}</div>
+                    <div class="p-3 md:p-6 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow ">
+                        <div class="flex items-center justify-center mb-2 gap-1">
+                            ${m.GLOGO ? `<img src="${convertGoogleDriveUrl(m.GLOGO)}" alt="${m.EQUIPOS}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain" onerror="this.style.display='none'">` : ''}
+                            <div class="text-xs sm:text-md md:text-lg lg:text-lg font-bold flex-1">${m.EQUIPOS}</div>
                         </div>
-                        <div class="grid grid-cols-2 gap-y-2 md:gap-y-4 gap-x-6 md:gap-x-8">
-                            <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_points">PTS</span>:
-                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.PUNTOS}</div>
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-y-2">
+                            <div class="flex gap-1">
+                                <span class="text-gray-500 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_points">PTS</span>:
+                                <div class="text-gray-900 font-bold text-xs sm:text-md md:text-lg lg:text-lg">${m.PUNTOS}</div>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_won">PG</span>:
-                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.GANADOS}</div>
+                            <div class="flex gap-1">
+                                <span class="text-gray-500 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_won">PG</span>:
+                                <div class="text-gray-900 font-bold text-xs sm:text-md md:text-lg lg:text-lg">${m.GANADOS}</div>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_drawn">PE</span>:
-                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.EMPATADOS}</div>
+                            <div class="flex gap-1">
+                                <span class="text-gray-500 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_drawn">PE</span>:
+                                <div class="text-gray-900 font-bold text-xs sm:text-md md:text-lg lg:text-lg">${m.EMPATADOS}</div>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_lost">PP</span>:
-                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.PERDIDOS}</div>
+                            <div class="flex gap-1">
+                                <span class="text-gray-500 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_lost">PP</span>:
+                                <div class="text-gray-900 font-bold text-xs sm:text-md md:text-lg lg:text-lg">${m.PERDIDOS}</div>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_goals_for">GF</span>:
-                                <div class="ttext-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.GOLESAFAVOR}</div>
+                            <div class="flex gap-1">
+                                <span class="text-gray-500 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_goals_for">GF</span>:
+                                <div class="ttext-gray-900 font-bold text-xs sm:text-md md:text-lg lg:text-lg">${m.GOLESAFAVOR}</div>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_goals_against">GC</span>:
-                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.GOLESENCONTRA}</div>
+                            <div class="flex gap-1">
+                                <span class="text-gray-500 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_goals_against">GC</span>:
+                                <div class="text-gray-900 font-bold text-xs sm:text-md md:text-lg lg:text-lg">${m.GOLESENCONTRA}</div>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_goals_diff">DG</span>:
-                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.DIFERENCIADEGOLES}</div>
+                            <div class="flex gap-1">
+                                <span class="text-gray-500 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_goals_diff">DG</span>:
+                                <div class="text-gray-900 font-bold text-xs sm:text-md md:text-lg lg:text-lg">${m.DIFERENCIADEGOLES}</div>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-500 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_fair_play">FPY</span>:
-                                <div class="text-gray-900 font-bold text-xs sm:text-sm md:text-md lg:text-lg">${m.FAIRPLAY}</div>
+                            <div class="flex gap-1">
+                                <span class="text-gray-500 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_fair_play">FPY</span>:
+                                <div class="text-gray-900 font-bold text-xs sm:text-md md:text-lg lg:text-lg">${m.FAIRPLAY}</div>
                             </div>
                         </div>
                     </div> 
                 `);
             }
             if (cardsPerGroup.length === temsPerGroup && grupos.includes(m.GRUPO)) {
-                const html = `
-                <div >
-                    <div class="text-3xl py-3 font-bold">
-                        <div class="flex items-center gap-2">
-                            <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${m.CICLO}</h4>    
-                            <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"> <span class="text-3xl font-bold text-brand-red flex items-center" data-translate="group">Grupo</span> ${grupo}</h4> 
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6" id="points-per-team-${m.GRUPO}">
-                        ${cardsPerGroup.map(card => card).join("")}
+                const html = ` 
+                <div class="pb-3 pt-4">
+                    <div class="flex items-center gap-2">
+                        <h4 class="text-3xl font-bold text-brand-gold flex items-center">${m.CICLO}</h4>    
+                        <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"> <span class="text-3xl font-bold text-brand-red flex items-center" data-translate="group">Grupo</span> ${grupo}</h4> 
                     </div>
                 </div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6" id="points-per-team-${m.GRUPO}">
+                    ${cardsPerGroup.map(card => card).join("")}
+                </div> 
                 `;
                 cardsPerGroup = [];
                 cardsGroup.push(html);
@@ -664,27 +631,26 @@ export function tablaClasificacionGrupal(list, ciclo) {
 
         html += `
             <div class="mb-8">
-                <div class="flex items-center justify-between gap-2 mb-4">                
-                    <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">
-                        ${ciclo} - <span class="text-3xl font-bold text-brand-gold flex items-center gap-2" data-translate="group">Grupo</span> ${grupo}
-                    </h4>
+                <div class="flex items-center gap-2">
+                    <h4 class="text-3xl font-bold text-brand-gold flex items-center gap-2">${ciclo}</h4>
+                    <h4 class="text-3xl font-bold text-brand-red flex items-center gap-2"> <span class="text-3xl font-bold text-brand-red flex items-center" data-translate="group">Grupo</span> ${grupo}</h4>
                 </div>
                 <div class="rounded-brand overflow-hidden shadow-lg">
                     <div class="overflow-x-auto">
                         <table class="w-full min-w-full" style="border-collapse: collapse;">
                             <thead>
                                 <tr style="background-color: #B30000; color: white;">
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_position">POS</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_team">EQUIPO</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_played">PJ</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_points">PTS</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_won">PG</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_drawn">PE</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_lost">PP</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_goals_for">GF</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_goals_against">GC</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_goals_diff">DG</th>
-                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-right: 1rem;">FPY</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_position">POS</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_team">EQUIPO</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_played">PJ</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_points">PTS</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_won">PG</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_drawn">PE</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_lost">PP</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_goals_for">GF</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_goals_against">GC</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_goals_diff">DG</th>
+                                    <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center; padding-right: 1rem;">FPY</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -700,18 +666,18 @@ export function tablaClasificacionGrupal(list, ciclo) {
                     <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
                         <div class="flex items-center gap-3">
                             ${equipo.LOGO ? `<img src="${convertGoogleDriveUrl(equipo.LOGO)}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150" style="min-width: 32px; min-height: 32px;" onerror="this.style.display='none'">` : ''}
-                            <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg">${equipo.EQUIPOS}</span>
+                            <span class="font-medium uppercase text-xs sm:text-md md:text-lg lg:text-lg">${equipo.EQUIPOS}</span>
                         </div>
                     </td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.PJ}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.PUNTOS}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.GANADOS}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.EMPATADOS}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.PERDIDOS}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.GOLESAFAVOR}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${equipo.GOLESENCONTRA}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg">${dgFormatted}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333; padding-right: 1rem;">${equipo.FAIRPLAY}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg">${equipo.PJ}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg">${equipo.PUNTOS}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg">${equipo.GANADOS}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg">${equipo.EMPATADOS}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg">${equipo.PERDIDOS}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg">${equipo.GOLESAFAVOR}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg">${equipo.GOLESENCONTRA}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg">${dgFormatted}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg" style="color: #333333; padding-right: 1rem;">${equipo.FAIRPLAY}</td>
                 </tr>
             `;
         });
@@ -722,16 +688,16 @@ export function tablaClasificacionGrupal(list, ciclo) {
                     </div>
                     <div class="bg-gray-100 py-2 px-2 md:py-4 md:px-4 border-t border-gray-300">
                         <div class="flex flex-wrap gap-x-6 gap-y-1 justify-center">
-                            <span><strong class="text-xs" data-translate="table_position">Pos</strong>: <span class="text-xs text-gray-600" data-translate="table_position_description">Posición</span> </span>
-                            <span><strong class="text-xs" data-translate="table_played">PJ</strong>: <span class="text-xs text-gray-600" data-translate="table_played_description">Partidos Jugados</span></span>
-                            <span><strong class="text-xs" data-translate="table_points">PTS</strong>: <span class="text-xs text-gray-600" data-translate="table_points_description">Puntos</span></span>
-                            <span><strong class="text-xs" data-translate="table_won">PG</strong>: <span class="text-xs text-gray-600" data-translate="table_won_description">Partidos Ganados</span></span>
-                            <span><strong class="text-xs" data-translate="table_drawn">PE</strong>: <span class="text-xs text-gray-600" data-translate="table_drawn_description">Partidos Empatados</span></span>
-                            <span><strong class="text-xs" data-translate="table_lost">PP</strong>: <span class="text-xs text-gray-600" data-translate="table_lost_description">Partidos Perdidos</span></span>
-                            <span><strong class="text-xs" data-translate="table_goals_for">GF</strong>: <span class="text-xs text-gray-600" data-translate="table_goals_for_description">Goles a Favor</span></span>
-                            <span><strong class="text-xs" data-translate="table_goals_against">GC</strong>: <span class="text-xs text-gray-600" data-translate="table_goals_against_description">Goles en Contra</span></span>
-                            <span><strong class="text-xs" data-translate="table_goals_diff">DG</strong>: <span class="text-xs text-gray-600" data-translate="table_goals_diff_description">Diferencia de Goles</span></span>
-                            <span><strong class="text-xs" data-translate="table_fair_play">FPY</strong>: <span class="text-xs text-gray-600" data-translate="table_fair_play_description">Juego limpio</span></span>
+                            <span><strong class="text-xs uppercase" data-translate="table_position">Pos</strong>: <span class="text-xs uppercase" data-translate="table_position_description">Posición</span> </span>
+                            <span><strong class="text-xs uppercase" data-translate="table_played">PJ</strong>: <span class="text-xs uppercase" data-translate="table_played_description">Partidos Jugados</span></span>
+                            <span><strong class="text-xs uppercase" data-translate="table_points">PTS</strong>: <span class="text-xs uppercase" data-translate="table_points_description">Puntos</span></span>
+                            <span><strong class="text-xs uppercase" data-translate="table_won">PG</strong>: <span class="text-xs uppercase" data-translate="table_won_description">Partidos Ganados</span></span>
+                            <span><strong class="text-xs uppercase" data-translate="table_drawn">PE</strong>: <span class="text-xs uppercase" data-translate="table_drawn_description">Partidos Empatados</span></span>
+                            <span><strong class="text-xs uppercase" data-translate="table_lost">PP</strong>: <span class="text-xs uppercase" data-translate="table_lost_description">Partidos Perdidos</span></span>
+                            <span><strong class="text-xs uppercase" data-translate="table_goals_for">GF</strong>: <span class="text-xs uppercase" data-translate="table_goals_for_description">Goles a Favor</span></span>
+                            <span><strong class="text-xs uppercase" data-translate="table_goals_against">GC</strong>: <span class="text-xs uppercase" data-translate="table_goals_against_description">Goles en Contra</span></span>
+                            <span><strong class="text-xs uppercase" data-translate="table_goals_diff">DG</strong>: <span class="text-xs uppercase" data-translate="table_goals_diff_description">Diferencia de Goles</span></span>
+                            <span><strong class="text-xs uppercase" data-translate="table_fair_play">FPY</strong>: <span class="text-xs uppercase" data-translate="table_fair_play_description">Juego limpio</span></span>
                         </div>
                     </div>
                 </div>
@@ -791,16 +757,16 @@ export function tablaResultados(list, ciclo) {
                 <table class="w-full min-w-full" style="border-collapse: collapse;">
                     <thead>
                         <tr style="background-color: #B30000; color: white;">
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_position">POS</th>
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_team">Equipo</th>
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_played">PJ</th>
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_won">PG</th>
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_drawn">PE</th>
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_lost">PP</th>
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_goals_for">GF</th>
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_goals_against">GC</th>
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center;" data-translate="table_goals_diff">DG</th>
-                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="text-align: center; padding-right: 1rem;" data-translate="table_points">PTS</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_position">POS</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_team">Equipo</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_played">PJ</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_won">PG</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_drawn">PE</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_lost">PP</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_goals_for">GF</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_goals_against">GC</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center;" data-translate="table_goals_diff">DG</th>
+                            <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center; padding-right: 1rem;" data-translate="table_points">PTS</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -816,17 +782,17 @@ export function tablaResultados(list, ciclo) {
                 <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
                     <div class="flex items-center gap-3">
                         ${equipo.LOGO ? `<img src="${convertGoogleDriveUrl(equipo.LOGO)}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150" style="min-width: 32px; min-height: 32px;" onerror="this.style.display='none'">` : ''}
-                        <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.EQUIPOS}</span>
+                        <span class="font-medium uppercase text-xs sm:text-md md:text-lg lg:text-lg" >${equipo.EQUIPOS}</span>
                     </div>
                 </td>
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.PJ}</td> <!-- Partidos Jugados -->
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.PG}</td> <!-- Partidos Ganados -->
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.PE}</td> <!-- Empates -->
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.PP}</td> <!-- Partidos Perdidos -->
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.GF}</td> <!-- Goles a favor -->
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${equipo.GC}</td> <!-- Goles en contra -->
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${dgFormatted}</td> <!-- Diferencia de goles -->
-                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="color: #333333; padding-right: 1rem;">${equipo.PTS}</td> <!-- Puntos -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg" >${equipo.PJ}</td> <!-- Partidos Jugados -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg" >${equipo.PG}</td> <!-- Partidos Ganados -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg" >${equipo.PE}</td> <!-- Empates -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg" >${equipo.PP}</td> <!-- Partidos Perdidos -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg" >${equipo.GF}</td> <!-- Goles a favor -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg" >${equipo.GC}</td> <!-- Goles en contra -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg" >${dgFormatted}</td> <!-- Diferencia de goles -->
+                <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg" style="color: #333333; padding-right: 1rem;">${equipo.PTS}</td> <!-- Puntos -->
             </tr>
         `;
     });
@@ -837,15 +803,15 @@ export function tablaResultados(list, ciclo) {
             </div>
             <div class="bg-gray-100 py-2 px-2 md:py-4 md:px-4 border-t border-gray-300">
                 <div class="flex flex-wrap gap-x-6 gap-y-1 justify-center">
-                    <span><strong class="text-xs" data-translate="table_position">Pos:</strong>: <span class="text-xs text-gray-600" data-translate="table_position_description"> Posición</span></span>
-                    <span><strong class="text-xs" data-translate="table_played">PJ:</strong>: <span class="text-xs text-gray-600" data-translate="table_played_description"> Partidos Jugados</span></span>
-                    <span><strong class="text-xs" data-translate="table_won">PG:</strong>: <span class="text-xs text-gray-600" data-translate="table_won_description"> Partidos Ganados</span></span>
-                    <span><strong class="text-xs" data-translate="table_drawn">PE:</strong>: <span class="text-xs text-gray-600" data-translate="table_drawn_description"> Partidos Empatados</span></span>
-                    <span><strong class="text-xs" data-translate="table_lost">PP:</strong>: <span class="text-xs text-gray-600" data-translate="table_lost_description"> Partidos Perdidos</span></span>
-                    <span><strong class="text-xs" data-translate="table_goals_for">GF:</strong>: <span class="text-xs text-gray-600" data-translate="table_goals_for_description"> Goles a Favor</span></span>
-                    <span><strong class="text-xs" data-translate="table_goals_against">GC:</strong>: <span class="text-xs text-gray-600" data-translate="table_goals_against_description"> Goles en Contra</span></span>
-                    <span><strong class="text-xs" data-translate="table_goals_diff">DG:</strong>: <span class="text-xs text-gray-600" data-translate="table_goals_diff_description"> Diferencia de Goles</span></span>
-                    <span><strong class="text-xs" data-translate="table_points">PTS:</strong>: <span class="text-xs text-gray-600" data-translate="table_points_description"> Puntos</span></span>
+                    <span><strong class="text-xs uppercase" data-translate="table_position">Pos:</strong>: <span class="text-xs uppercase" data-translate="table_position_description"> Posición</span></span>
+                    <span><strong class="text-xs uppercase" data-translate="table_played">PJ:</strong>: <span class="text-xs uppercase" data-translate="table_played_description"> Partidos Jugados</span></span>
+                    <span><strong class="text-xs uppercase" data-translate="table_won">PG:</strong>: <span class="text-xs uppercase" data-translate="table_won_description"> Partidos Ganados</span></span>
+                    <span><strong class="text-xs uppercase" data-translate="table_drawn">PE:</strong>: <span class="text-xs uppercase" data-translate="table_drawn_description"> Partidos Empatados</span></span>
+                    <span><strong class="text-xs uppercase" data-translate="table_lost">PP:</strong>: <span class="text-xs uppercase" data-translate="table_lost_description"> Partidos Perdidos</span></span>
+                    <span><strong class="text-xs uppercase" data-translate="table_goals_for">GF:</strong>: <span class="text-xs uppercase" data-translate="table_goals_for_description"> Goles a Favor</span></span>
+                    <span><strong class="text-xs uppercase" data-translate="table_goals_against">GC:</strong>: <span class="text-xs uppercase" data-translate="table_goals_against_description"> Goles en Contra</span></span>
+                    <span><strong class="text-xs uppercase" data-translate="table_goals_diff">DG:</strong>: <span class="text-xs uppercase" data-translate="table_goals_diff_description"> Diferencia de Goles</span></span>
+                    <span><strong class="text-xs uppercase" data-translate="table_points">PTS:</strong>: <span class="text-xs uppercase" data-translate="table_points_description"> Puntos</span></span>
                 </div>
             </div>
         </div>
@@ -910,7 +876,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
                 ${ciclo}
             </h4>
             <div class="flex items-center gap-2">
-                <label for="filtro-curso-goleadores-${ciclo}" class="font-bold text-xs sm:text-sm md:text-md lg:text-lg uppercase whitespace-nowrap" data-translate="course">Curso:</label>
+                <label for="filtro-curso-goleadores-${ciclo}" class="font-bold text-xs sm:text-md md:text-lg lg:text-lg uppercase whitespace-nowrap" data-translate="course">Curso:</label>
                 <select id="filtro-curso-goleadores-${ciclo}" class="px-4 py-2 border border-gray-300 rounded-brand bg-white text-gray-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent cursor-pointer" data-ciclo="${ciclo}" data-tipo="goleadores">
                     <option value="TODOS" ${cursoFiltro === "TODOS" ? "selected" : ""} data-translate="filter_all">TODOS</option>
                     ${cursosUnicos.map(curso => `<option value="${curso}" ${cursoFiltro === curso ? "selected" : ""}>${curso}</option>`).join("")}
@@ -1007,11 +973,11 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
                     <table class="w-full min-w-full" style="border-collapse: collapse;">
                         <thead>
                             <tr style="background-color: #B30000; color: white;">
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_ciclo">CICLO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_team_name">EQUIPO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_course">CURSO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_player">JUGADOR</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: center; padding-right: 1rem; uppercase" data-translate="table_goals">GOLES</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_ciclo">CICLO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_team_name">EQUIPO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_course">CURSO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_player">JUGADOR</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: center; padding-right: 1rem; uppercase" data-translate="table_goals">GOLES</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1021,18 +987,18 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
             html += `
                 <tr class="bg-white border-gray-100 border border-b">
                     <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
-                        <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg">${lider.CICLO || ''}</span>
+                        <span class="font-medium uppercase text-xs sm:text-md md:text-lg lg:text-lg">${lider.CICLO || ''}</span>
                     </td>
                     <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
-                        <span class="font-medium uppercase text-xs sm:text-sm md:text-md lg:text-lg">${lider.EQUIPO || ''}</span>
+                        <span class="font-medium uppercase text-xs sm:text-md md:text-lg lg:text-lg">${lider.EQUIPO || ''}</span>
                     </td>
                     <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
-                        <span class="font-medium text-xs sm:text-sm md:text-md lg:text-lg">${lider.CURSO || ''}</span>
+                        <span class="font-medium text-xs sm:text-md md:text-lg lg:text-lg">${lider.CURSO || ''}</span>
                     </td>
                     <td class="py-2 px-2 md:py-4 md:px-4" style="text-align: left; padding-left: 1rem;">
-                        <span class="font-medium text-xs sm:text-sm md:text-md lg:text-lg">${lider.JUGADOR || ''}</span>
+                        <span class="font-medium text-xs sm:text-md md:text-lg lg:text-lg">${lider.JUGADOR || ''}</span>
                     </td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" style="padding-right: 1rem;">${lider.GOLES || 0}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg" style="padding-right: 1rem;">${lider.GOLES || 0}</td>
                 </tr>
             `;
         });
@@ -1047,11 +1013,11 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
 
         let mensaje = "";
         if (cursoFiltro !== "TODOS") {
-            mensaje = `<span class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_no_scorers_registered">No hay goleadores registrados para este curso.</span>`;
+            mensaje = `<span class="text-gray-700 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_no_scorers_registered">No hay goleadores registrados para este curso.</span>`;
         } else if (ciclo === "ESO") {
-            mensaje = `<span class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_no_scorers_yet">Aún no hay partidos jugados, pronto conoceremos a los primeros líderes de goleo.</span>`;
+            mensaje = `<span class="text-gray-700 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_no_scorers_yet">Aún no hay partidos jugados, pronto conoceremos a los primeros líderes de goleo.</span>`;
         } else {
-            mensaje = `<span class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_no_scorers_registered_yet">Todavía no se registran partidos. ¡Los goleadores aparecerán en cuanto ruede el balón!</span>`;
+            mensaje = `<span class="text-gray-700 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_no_scorers_registered_yet">Todavía no se registran partidos. ¡Los goleadores aparecerán en cuanto ruede el balón!</span>`;
         }
 
         // Mostrar tabla con encabezados y mensaje como celda con colspan
@@ -1061,11 +1027,11 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
                     <table class="w-full min-w-full" style="border-collapse: collapse;">
                         <thead>
                             <tr style="background-color: #B30000; color: white;">
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">CICLO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">EQUIPO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">CURSO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">JUGADOR</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 25%; text-align: center; padding-right: 1rem;">GOLES</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">CICLO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">EQUIPO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">CURSO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">JUGADOR</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: center; padding-right: 1rem;">GOLES</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1116,7 +1082,7 @@ export function tablaSancionados(list, ciclo, cursoFiltro = "TODOS") {
                     ${ciclo}
                 </h4>
                 <div class="flex items-center gap-2">
-                    <label for="filtro-curso-${ciclo}" class="font-bold text-xs sm:text-sm md:text-md lg:text-lg uppercase whitespace-nowrap" data-translate="course">Curso:</label>
+                    <label for="filtro-curso-${ciclo}" class="font-bold text-xs sm:text-md md:text-lg lg:text-lg uppercase whitespace-nowrap" data-translate="course">Curso:</label>
                     <select id="filtro-curso-${ciclo}" class="px-4 py-2 border border-gray-300 rounded-brand bg-white text-gray-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent cursor-pointer" data-ciclo="${ciclo}">
                         <option value="TODOS" ${cursoFiltro === "TODOS" ? "selected" : ""} data-translate="filter_all">TODOS</option>
                         ${cursosUnicos.map(curso => `<option value="${curso}" ${cursoFiltro === curso ? "selected" : ""}>${curso}</option>`).join("")}
@@ -1128,12 +1094,12 @@ export function tablaSancionados(list, ciclo, cursoFiltro = "TODOS") {
                     <table class="w-full" style="border-collapse: collapse;">
                         <thead>
                             <tr style="background-color: #B30000; color: white;">
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: left; padding-left: 1rem;">EQUIPO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 20%; text-align: left; " data-translate="table_course">CURSO</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 12%; text-align: left; " data-translate="table_player">JUGADOR</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: center;" data-translate="table_red_cards">ROJAS</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: center;" data-translate="table_yellow_cards">AMARILLAS</th>
-                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-sm md:text-md lg:text-lg" style="width: 16%; text-align: center;" data-translate="table_suspended">SUSPENDIDOS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 16%; text-align: left; padding-left: 1rem;">EQUIPO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 20%; text-align: left; " data-translate="table_course">CURSO</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 12%; text-align: left; " data-translate="table_player">JUGADOR</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 16%; text-align: center;" data-translate="table_red_cards">ROJAS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 16%; text-align: center;" data-translate="table_yellow_cards">AMARILLAS</th>
+                                <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 16%; text-align: center;" data-translate="table_suspended">SUSPENDIDOS</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1143,11 +1109,11 @@ export function tablaSancionados(list, ciclo, cursoFiltro = "TODOS") {
 
         let mensaje = "";
         if (cursoFiltro !== "TODOS") {
-            mensaje = `<span class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_no_sanctions_no_sanctions">No hay sanciones registradas para este curso.</span>`;
+            mensaje = `<span class="text-gray-700 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_no_sanctions_no_sanctions">No hay sanciones registradas para este curso.</span>`;
         } else if (ciclo === "ESO") {
-            mensaje = `<span class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_no_sanctions_play_clean">Todo en orden, ningún jugador ha sido sancionado hasta el momento.</span>`;
+            mensaje = `<span class="text-gray-700 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_no_sanctions_play_clean">Todo en orden, ningún jugador ha sido sancionado hasta el momento.</span>`;
         } else {
-            mensaje = `<span class="text-gray-700 text-xs sm:text-sm md:text-md lg:text-lg" data-translate="table_no_sanctions">No hay sanciones registradas para este curso.</span>`;
+            mensaje = `<span class="text-gray-700 text-xs sm:text-md md:text-lg lg:text-lg" data-translate="table_no_sanctions">No hay sanciones registradas para este curso.</span>`;
         }
 
         // Mostrar mensaje como celda con colspan cuando no hay datos
@@ -1163,12 +1129,12 @@ export function tablaSancionados(list, ciclo, cursoFiltro = "TODOS") {
         sancionados.forEach((sancionado) => {
             html += `
                 <tr class="bg-white border-gray-100 border border-b">
-                    <td class="py-2 px-2 md:py-4 md:px-4 font-medium text-xs sm:text-sm md:text-md lg:text-lg uppercase" >${sancionado.EQUIPO || '-'}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 font-medium text-xs sm:text-sm md:text-md lg:text-lg uppercase" >${sancionado.CURSO || '-'}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 font-medium text-xs sm:text-sm md:text-md lg:text-lg uppercase" >${sancionado.JUGADOR || ''}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.TROJAS || 0}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.TAMARILLAS || 0}</td>
-                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-sm md:text-md lg:text-lg" >${sancionado.JUSTIFICACION || 0}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 font-medium text-xs sm:text-md md:text-lg lg:text-lg uppercase" >${sancionado.EQUIPO || '-'}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 font-medium text-xs sm:text-md md:text-lg lg:text-lg uppercase" >${sancionado.CURSO || '-'}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 font-medium text-xs sm:text-md md:text-lg lg:text-lg uppercase" >${sancionado.JUGADOR || ''}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg" >${sancionado.TROJAS || 0}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg" >${sancionado.TAMARILLAS || 0}</td>
+                    <td class="py-2 px-2 md:py-4 md:px-4 text-center font-medium text-xs sm:text-md md:text-lg lg:text-lg" >${sancionado.JUSTIFICACION || 0}</td>
                 </tr>
             `;
         });
@@ -1191,7 +1157,7 @@ export function renderNoticias(noticias) {
     if (!div) return;
 
     if (noticias.length === 0 || noticias.every(noticia => noticia.PUBLICAR !== "SI")) {
-        div.innerHTML = '<p class="text-gray-700 col-span-full text-center" data-translate="msg_no_news_description">Parece que el Torneo Escolar todavía no da titulares… ¡pero pronto los habrá!</p>'
+        div.innerHTML = '<p class="text-gray-700 col-span-full text-center text-xs sm:text-md md:text-lg" data-translate="msg_no_news_description">Parece que el Torneo Escolar todavía no da titulares… ¡pero pronto los habrá!</p>'
         return
     }
 
@@ -1432,8 +1398,8 @@ export function mostrarDetalleNoticia(noticia) {
 // --- RENDER BRACKET --- 
 export function renderBracket(clasificacion) {
     const div = document.getElementById("bracket-container");
-    if (!div) return;
-    div.classList.add("mb-10", "mt-6", "overflow-x-auto");
+    if (!div) return;    
+    div.classList.add("overflow-x-auto", "mb-6", "mt-6");
     if (clasificacion.length === 0) {
         div.innerHTML = '<p class="text-gray-500 text-center" data-translate="msg_no_classification_data">No hay datos de clasificación disponibles</p>'
         return
@@ -1482,7 +1448,7 @@ export function renderBracket(clasificacion) {
                     Object.keys(equiposPorCiclo).forEach((ciclo) => {
                         html += `
                             <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-3 lg:p-4 min-w-[240px] w-[300px]">
-                                <div class="text-center font-bold text-xl mb-3 lg:mb-4 tracking-wide"> <span class="text-center font-bold text-xl mb-3 lg:mb-4 tracking-wide" data-translate="group">Grupo</span> ${grupo} - <span class="text-brand-gold text-xl">${ciclo}</span></div>
+                                <div class="text-center mb-3 lg:mb-4 text-xs sm:text-md md:text-lg tracking-wide uppercase"> <span class="font-bold mb-4 text-xs sm:text-md md:text-lg tracking-wide uppercase" data-translate="group">Grupo</span> ${grupo} - <span class="text-brand-gold font-bold mb-4 text-xs sm:text-md md:text-lg tracking-wide uppercase">${ciclo}</span></div>
                                 <div class="lg:space-y-2">
                             `;
                         equiposPorCiclo[ciclo].forEach((equipo) => {
@@ -1491,9 +1457,9 @@ export function renderBracket(clasificacion) {
                                 <div class="flex items-center justify-between py-2 lg:py-3 px-2 border-b border-brand-red last:border-0">
                                     <div class="flex items-center gap-3">
                                     ${equipo.GLOGO ? `<img src="${convertGoogleDriveUrl(equipo.GLOGO)}" alt="${equipo.EQUIPOS}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
-                                    <span class="font-semibold text-sm">${equipo.EQUIPOS}</span>
+                                    <span class="font-semibold text-xs sm:text-md md:text-lg tracking-wide">${equipo.EQUIPOS}</span>
                                     </div>
-                                    <span class="font-bold text-tournament-red">${equipo.PUNTOS}</span>
+                                    <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipo.PUNTOS}</span>
                                 </div>
                                 `;
                             }
@@ -1523,28 +1489,28 @@ export function renderBracket(clasificacion) {
             Object.keys(cuartosPorCiclo).forEach((ciclo) => {
                 cuartosPorCiclo[ciclo].forEach((equipos) => {
                     html += `
-                <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
-                    <div class="text-center font-bold text-xl mb-4 tracking-wide"><span class="text-center font-bold text-xl mb-4 tracking-wide" data-translate="quarter_finals">Cuartos de Final</span> - <span class="text-brand-gold text-xl">${ciclo}</span></div>
-                    <div class="space-y-2">
-                `;
+                    <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-3 lg:p-4 min-w-[240px] w-[300px]">
+                        <div class="text-center mb-3 lg:mb-4"><span class="text-center font-bold mb-4 text-xs sm:text-md md:text-lg tracking-wide uppercase" data-translate="quarter_finals">Cuartos de Final</span> - <span class="text-brand-gold text-xs sm:text-md md:text-lg tracking-wide">${ciclo}</span></div>
+                        <div class="space-y-2">
+                    `;
 
                     if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) {
                         html += `
                     <div class="flex items-center justify-between py-2 px-2">
                         <div class="flex items-center gap-2">
                         ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
-                        <span class="font-medium text-sm">${equipos.LOCAL}</span>
+                        <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.LOCAL}</span>
                         </div>
-                        <span class="font-bold text-sm">${equipos.LSCORE}</span>
+                        <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.LSCORE}</span>
                     </div>
                     `;
                         html += `
                     <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
                         <div class="flex items-center gap-2">
                         ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
-                        <span class="font-medium text-sm">${equipos.VISITANTE}</span>
+                        <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.VISITANTE}</span>
                         </div>
-                        <span class="font-bold text-sm">${equipos.VSCORE}</span>
+                        <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.VSCORE}</span>
                     </div>
                     `;
                     }
@@ -1575,7 +1541,7 @@ export function renderBracket(clasificacion) {
                 semifinalesPorCiclo[ciclo].forEach((equipos) => {
                     html += `
                 <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
-                    <div class="text-center font-bold text-xl mb-4 tracking-wide"><span class="text-center font-bold text-xl mb-4 tracking-wide" data-translate="semifinals">Semifinales</span> <span class="text-brand-gold text-xl">${ciclo}</span></div>
+                    <div class="text-center mb-3 lg:mb-4"><span class="text-center font-bold mb-4 text-xs sm:text-md md:text-lg tracking-wide uppercase" data-translate="semifinals">Semifinales</span> <span class="text-brand-gold text-xs sm:text-md md:text-lg tracking-wide">${ciclo}</span></div>
                     <div class="space-y-2">
                 `;
 
@@ -1584,18 +1550,18 @@ export function renderBracket(clasificacion) {
                     <div class="flex items-center justify-between py-2 px-2">
                         <div class="flex items-center gap-2">
                         ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
-                        <span class="font-medium text-sm">${equipos.LOCAL}</span>
+                        <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.LOCAL}</span>
                         </div>
-                        <span class="font-bold text-sm">${equipos.LSCORE}</span>
+                        <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.LSCORE}</span>
                     </div>
                     `;
                         html += `
                     <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
                         <div class="flex items-center gap-2">
                         ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
-                        <span class="font-medium text-sm">${equipos.VISITANTE}</span>
+                        <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.VISITANTE}</span>
                         </div>
-                        <span class="font-bold text-sm">${equipos.VSCORE}</span>
+                        <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.VSCORE}</span>
                     </div>
                     `;
                     }
@@ -1626,31 +1592,31 @@ export function renderBracket(clasificacion) {
                 finalesPorCiclo[ciclo].forEach((equipos) => {
 
                     html += `
-          <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
-            <div class="text-center font-bold text-xl mb-4 tracking-wide"><span class="text-center font-bold text-xl mb-4 tracking-wide" data-translate="final">Final</span> <span class="text-brand-gold text-xl">${ciclo}</span></div>
-            <div class="space-y-2">
-        `;
+                    <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
+                        <div class="text-center mb-3 lg:mb-4"><span class="text-center font-bold mb-4 text-xs sm:text-md md:text-lg tracking-wide uppercase" data-translate="final">Final</span> <span class="text-brand-gold text-xl">${ciclo}</span></div>
+                        <div class="space-y-2">
+                    `;
 
                     if (equipos) {
                         html += `
-              <div class="flex items-center justify-between py-2 px-2">
-                <div class="flex items-center gap-2">
-                ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
-                  <span class="font-medium text-sm">${equipos.LOCAL}</span>
-                </div>
-                <span class="font-bold text-sm">${equipos.LSCORE}</span>
-              </div>
-            `;
+                        <div class="flex items-center justify-between py-2 px-2">
+                            <div class="flex items-center gap-2">
+                            ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
+                            <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.LOCAL}</span>
+                            </div>
+                            <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.LSCORE}</span>
+                        </div>
+                        `;
 
                         html += `
-              <div class="flex items-center justify-between py-2 px-2 border-t border-brand-gold">
-                <div class="flex items-center gap-2">
-                ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
-                  <span class="font-medium text-sm">${equipos.VISITANTE}</span>
-                </div>
-                <span class="font-bold text-sm">${equipos.VSCORE}</span>
-              </div>
-            `;
+                        <div class="flex items-center justify-between py-2 px-2 border-t border-brand-gold">
+                            <div class="flex items-center gap-2">
+                            ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
+                            <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.VISITANTE}</span>
+                            </div>
+                            <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.VSCORE}</span>
+                        </div>
+                        `;
                     }
 
                     html += `
@@ -1672,7 +1638,7 @@ export function renderBracket(clasificacion) {
                 tercerosPorCiclo[ciclo].forEach((equipos) => {
                     html += `
                         <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
-                        <div class="text-center font-bold text-xl mb-4 tracking-wide"><span class="text-center font-bold text-xl mb-4 tracking-wide" data-translate="third_and_fourth_place">Tercer Puesto</span> <span class="text-brand-gold text-xl">${ciclo}</span></div>
+                        <div class="text-center mb-3 lg:mb-4"><span class="text-center font-bold mb-4 text-xs sm:text-md md:text-lg tracking-wide uppercase" data-translate="third_and_fourth_place">Tercer Puesto</span> <span class="text-brand-gold text-xl">${ciclo}</span></div>
                         <div class="space-y-2"> 
                     `;
 
@@ -1802,7 +1768,7 @@ export function renderProximosPartidos(partidos) {
     let html = '';
 
     if(fechasOrdenadas.length > 1){
-        div.classList.add("grid", "grid-cols-2", "gap-4");
+        div.classList.add("grid", "grid-cols-2", "gap-4", "items-stretch");
     }
 
     fechasOrdenadas.forEach(fechaKey => {
@@ -1839,54 +1805,54 @@ export function renderProximosPartidos(partidos) {
             }
 
             html += `
-                <div class="md:container mx-auto mb-8">
-                    <h4 class="text-2xl font-bold text-brand-blue mb-4 flex items-center gap-2" data-date="${fechaKey}">
+                <div class="md:container mx-auto mb-8 flex flex-col h-full">
+                    <h4 class="text-2xl font-bold text-brand-blue mb-4 flex items-center gap-2 shrink-0" data-date="${fechaKey}">
                         <svg class="w-6 h-6 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         ${diaSemana} ${fechaFormateada}
                     </h4>
-                    <div class="grid ${partidosDelDia.length > 1 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-4 lg:gap-6">
+                    <div class="grid ${partidosDelDia.length > 1 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-4 lg:gap-6 flex-1 min-h-0">
             `;
 
             partidosDelDia.forEach(partido => {
                 // Determinar el tipo de partido según el grupo
-                let tipoPartido = `<span class="text-xs sm:text-sm md:text-md text-gray-600"></span>`;
+                let tipoPartido = `<span class="text-xs sm:text-md md:text-lg text-gray-600"></span>`;
                 if (partido.GRUPO === "SEMIFINAL") {
-                    tipoPartido =  `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="semifinals">Semifinales</span>`;
+                    tipoPartido =  `<span class="text-xs sm:text-md md:text-lg text-gray-600" data-translate="semifinals">Semifinales</span>`;
                 } else if (partido.GRUPO === "3RPUESTO") {
-                    tipoPartido = `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="third_and_fourth_place">Tercer Puesto</span>`;
+                    tipoPartido = `<span class="text-xs sm:text-md md:text-lg text-gray-600" data-translate="third_and_fourth_place">Tercer Puesto</span>`;
                 } else if (partido.GRUPO === "1RPUESTO") {
-                    tipoPartido = `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="final">Final</span>`;
+                    tipoPartido = `<span class="text-xs sm:text-md md:text-lg text-gray-600" data-translate="final">Final</span>`;
                 } else if (partido.GRUPO && ["A", "B", "C", "D"].includes(partido.GRUPO)) {
-                    tipoPartido = `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="group">Grupo</span> ${partido.GRUPO}`;
+                    tipoPartido = `<span class="text-xs sm:text-md md:text-lg text-gray-600" data-translate="group">Grupo</span> ${partido.GRUPO}`;
                 }
 
-                const local = (partido.LOCAL || `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="to_define">Por definir</span>`);
-                const visitante = (partido.VISITANTE || `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="to_define">Por definir</span>`);
-                const hora = partido.HORA ? String(partido.HORA).trim() : `<span class="text-xs sm:text-sm md:text-md text-gray-600" data-translate="hour_to_confirm">Hora por confirmar</span>`;
+                const local = (partido.LOCAL || `<span class="text-xs sm:text-md md:text-lg text-gray-600" data-translate="to_define">Por definir</span>`);
+                const visitante = (partido.VISITANTE || `<span class="text-xs sm:text-md md:text-lg text-gray-600" data-translate="to_define">Por definir</span>`);
+                const hora = partido.HORA ? String(partido.HORA).trim() : `<span class="text-xs sm:text-md md:text-lg text-gray-600" data-translate="hour_to_confirm">Hora por confirmar</span>`;
                 const fecha = partido.DIA ? String(partido.DIA).trim() + "/" + String(partido.MES).trim() + "/" + String(partido.ANIO).trim() : '';
                 const ciclo = partido.CICLO ? String(partido.CICLO).trim() : '';
 
                 html += `
-                    <div class="rounded-brand p-2 sm:p-6 md:p-8 bg-white shadow-lg ring-1 ring-black/5 border border-gray-200 hover:shadow-brand-md transition-shadow overflow-hidden">                      
-                        <div class="flex flex-col lg:flex-row items-center justify-between gap-2 lg:gap-4 mb-2 lg:mb-4">
+                    <div class="rounded-brand p-2 sm:p-6 md:p-8 bg-white shadow-lg ring-1 ring-black/5 border border-gray-200 hover:shadow-brand-md transition-shadow overflow-hidden h-full flex flex-col">                      
+                        <div class="flex flex-col lg:flex-row items-center gap-1 flex-1">
                             <div class="flex flex-col items-center flex-1">
-                                ${partido.LLOGO ? `<img src="${convertGoogleDriveUrl(partido.LLOGO)}" alt="${local}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
-                                <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${local}</div>
+                                ${partido.LLOGO ? `<img src="${convertGoogleDriveUrl(partido.LLOGO)}" alt="${local}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
+                                <div class="text-xs sm:text-sm lg:text-md font-bold text-gray-800 uppercase text-center break-words">${local}</div>
                             </div>
-                            <div class="text-3xl font-bold text-gray-800 flex items-center gap-2">
+                            <div class="flex items-center">
                                 <span class="text-4xl text-brand-gold">VS</span>
                             </div>
                             <div class="flex flex-col items-center flex-1">
-                                ${partido.VLOGO ? `<img src="${convertGoogleDriveUrl(partido.VLOGO)}" alt="${visitante}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-2 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
-                                <div class="text-xs sm:text-sm md:text-md font-bold text-gray-800 uppercase text-center">${visitante}</div>
+                                ${partido.VLOGO ? `<img src="${convertGoogleDriveUrl(partido.VLOGO)}" alt="${visitante}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
+                                <div class="text-xs sm:text-sm lg:text-md font-bold text-gray-800 uppercase text-center break-words">${visitante}</div>
                             </div>
                         </div>
-                        <div class="text-center mt-2 sm:mt-4 pt-2 sm:pt-4 border-t border-gray-200 uppercase flex flex-row flex-wrap justify-center items-center gap-2 lg:gap-4">
-                           <span class="text-xs sm:text-sm md:text-md text-gray-600">${tipoPartido} ${ciclo ? `${ciclo}` : ''}</span>   
-                           <span class="text-xs sm:text-sm md:text-md text-brand-red ">${fecha.length > 0 ? `${fecha}` : ''}</span>   
-                           <span class="text-xs sm:text-sm md:text-md text-gray-600 ">${hora.length > 0 ? `${hora} hrs` : ''}</span>
+                        <div class="text-center pt-2 sm:pt-4 border-t border-gray-200 uppercase flex flex-row flex-wrap justify-center items-center gap-2 lg:gap-4 shrink-0">
+                           <span class="text-xs sm:text-md md:text-lg text-gray-600">${tipoPartido} ${ciclo ? `${ciclo}` : ''}</span>   
+                           <span class="text-xs sm:text-md md:text-lg text-brand-red ">${fecha.length > 0 ? `${fecha}` : ''}</span>   
+                           <span class="text-xs sm:text-md md:text-lg text-gray-600 ">${hora.length > 0 ? `${hora} hrs` : ''}</span>
                         </div>
                     </div>
                 `;
@@ -1954,7 +1920,7 @@ export function renderGalería(galeriaItems = []) {
     const galeriaPublicada = galeriaItems.filter(item => item.PUBLICAR === "SI");
 
     if (galeriaPublicada.length === 0) {
-            div.innerHTML = '<p class="text-gray-700 col-span-full text-center" data-translate="msg_no_gallery_description">La galería estará disponible pronto con imágenes y videos del torneo.</p>';
+            div.innerHTML = '<p class="text-gray-700 col-span-full text-center text-xs sm:text-md md:text-lg" data-translate="msg_no_gallery_description">La galería estará disponible pronto con imágenes y videos del torneo.</p>';
             return;
     }
 
@@ -2125,17 +2091,17 @@ export async function renderPodio(clasificacion) {
                     <!-- Primer Puesto (centro, arriba) -->
                     <div id="podio-primer-puesto" class="absolute flex flex-col items-center justify-center" style="top: 5%; left: 50%; transform: translateX(-50%); width: 30%;">
                         <img id="podio-primer-logo" src="${primerPuestoLogo}" alt="${primerPuestoNombre}" class="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain mb-2" onerror="this.style.display='none'">
-                        <div id="podio-primer-nombre" class="text-xs sm:text-sm md:text-md lg:text-base font-bold text-gray-800 uppercase text-center break-words px-2">${primerPuestoNombre}</div>
+                        <div id="podio-primer-nombre" class="text-xs sm:text-md md:text-lg lg:text-base font-bold text-gray-800 uppercase text-center break-words px-2">${primerPuestoNombre}</div>
                     </div>
                     <!-- Segundo Puesto (izquierda) -->
                     <div id="podio-segundo-puesto" class="absolute flex flex-col items-center justify-center" style="bottom: 75%; left: 10%; width: 25%;">
                         <img id="podio-segundo-logo" src="${segundoPuestoLogo}" alt="${segundoPuestoNombre}" class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-contain mb-2" onerror="this.style.display='none'">
-                        <div id="podio-segundo-nombre" class="text-xs sm:text-sm md:text-md lg:text-base font-bold text-gray-800 uppercase text-center break-words px-2">${segundoPuestoNombre}</div>
+                        <div id="podio-segundo-nombre" class="text-xs sm:text-md md:text-lg lg:text-base font-bold text-gray-800 uppercase text-center break-words px-2">${segundoPuestoNombre}</div>
                     </div>
                     <!-- Tercer Puesto (derecha) -->
                     <div id="podio-tercer-puesto" class="absolute flex flex-col items-center justify-center" style="bottom: 65%; right: 10%; width: 25%;">
                         <img id="podio-tercer-logo" src="${tercerPuestoLogo}" alt="${tercerPuestoNombre}" class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-contain mb-2" onerror="this.style.display='none'">
-                        <div id="podio-tercer-nombre" class="text-xs sm:text-sm md:text-md lg:text-base font-bold text-gray-800 uppercase text-center break-words px-2">${tercerPuestoNombre}</div>
+                        <div id="podio-tercer-nombre" class="text-xs sm:text-md md:text-lg lg:text-base font-bold text-gray-800 uppercase text-center break-words px-2">${tercerPuestoNombre}</div>
                     </div>
                 </div>
             </div>

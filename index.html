@@ -19,11 +19,12 @@
     <link rel="stylesheet" href="dist/output.css">
     <!-- CDN de Tailwind (solo para desarrollo) -->
     <!-- <script src="https://cdn.tailwindcss.com/3.4.17"></script> -->
-    <!-- Estilos personalizados -->
-    <link rel="stylesheet" href="styles.css">
-
+    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Estilos personalizados (después de Bootstrap para tener prioridad) -->
+    <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="https://colegiosanfranciscodeasis.com/wp-content/uploads/2023/03/cropped-favicon-32x32.png" sizes="32x32">
     <link rel="icon" href="https://colegiosanfranciscodeasis.com/wp-content/uploads/2023/03/cropped-favicon-192x192.png" sizes="192x192">
     <link rel="apple-touch-icon" href="https://colegiosanfranciscodeasis.com/wp-content/uploads/2023/03/cropped-favicon-180x180.png">
@@ -105,7 +106,7 @@
     </header>
 
     <!-- Hero Section -->
-    <section id="inicio" class="w-full h-full flex items-center overflow-hidden fondo lg:bg-fill md:bg-cover px-6 py-6">
+    <section id="inicio" class="w-full h-full flex items-center overflow-hidden hero-section lg:bg-fill md:bg-cover px-6 py-6">
         <div class="w-full flex items-center">
             <div class="w-full flex flex-col items-center gap-1 justify-center">
                 <h3 class="text-2xl md:text-3xl lg:text-4xl font-bold text-brand-gold mb-3" data-translate="hero_title">
@@ -195,7 +196,7 @@
                         <svg class="w-5 h-5 text-gray-600 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"> -->
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        <span id="semana-label" class="text-sm font-bold text-gray-800">...</span>
+                        <span id="semana-label" class="text-xs sm:text-md md:text-lg  font-bold text-gray-800">...</span>
                     </div>
                     <button id="semana-siguiente" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Día siguiente">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -216,30 +217,30 @@
             <div class="flex flex-col lg:flex-row gap-4 w-full lg:w-auto">
                 <ul class="nav nav-tabs w-full lg:w-80" id="selector-equipos" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
+                        <button class="nav-link text-xs sm:text-md md:text-lg active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-ciclo="ESO" type="button" data-translate="filter_eso">ESO</button>
+                        <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="ESO" type="button" data-translate="filter_eso">ESO</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-ciclo="BCH" type="button" data-translate="filter_bch">BCH</button>
+                        <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="BCH" type="button" data-translate="filter_bch">BCH</button>
                     </li>
                 </ul>
                 <ul class="nav nav-tabs w-full lg:w-80" id="selector-grupos-equipos" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-grupo="TODOS" type="button" data-translate="filter_all">TODOS</button>
+                        <button class="nav-link text-xs sm:text-md md:text-lg active" data-grupo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-grupo="A" type="button">A</button>
+                        <button class="nav-link text-xs sm:text-md md:text-lg" data-grupo="A" type="button">A</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-grupo="B" type="button">B</button>
+                        <button class="nav-link text-xs sm:text-md md:text-lg" data-grupo="B" type="button">B</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-grupo="C" type="button">C</button>
+                        <button class="nav-link text-xs sm:text-md md:text-lg" data-grupo="C" type="button">C</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-grupo="D" type="button">D</button>
+                        <button class="nav-link text-xs sm:text-md md:text-lg" data-grupo="D" type="button">D</button>
                     </li>
                 </ul>
             </div>
@@ -254,13 +255,13 @@
             <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold uppercase" data-translate="section_journeys_title">Jornadas</h3>
             <ul class="nav nav-tabs w-80" id="selector-jornadas" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="ESO" type="button">ESO</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="BCH" type="button">BCH</button>
                 </li>
             </ul>
         </div>
@@ -277,18 +278,18 @@
     </section>  
 
     <!-- Sección de Clasificación -->
-    <section id="clasificacion" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6 bg-brand-bg-light">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
+    <section id="clasificacion" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover p-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
             <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold uppercase" data-translate="section_classification_title">Clasificación</h3>
             <ul class="nav nav-tabs w-80" id="selector-clasificacion" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="ESO" type="button">ESO</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="BCH" type="button">BCH</button>
                 </li>
             </ul>
         </div>
@@ -304,13 +305,13 @@
             <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold uppercase" data-translate="section_classification_title">Clasificación</h3>
             <ul class="nav nav-tabs w-80" id="selector-clasificacion-grupal" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="ESO" type="button">ESO</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="BCH" type="button">BCH</button>
                 </li>
             </ul>
         </div>
@@ -321,8 +322,8 @@
     </section>
 
     <!-- Sección de Bracket -->
-    <section id="bracket" class="w-full h-full flex flex-col overflow-x-auto lg:bg-fill md:bg-cover px-6">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
+    <section id="bracket" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8">
             <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold uppercase" data-translate="section_bracket_title">Bracket</h3>
         </div>
         <div id="bracket-container"></div>
@@ -330,17 +331,17 @@
 
     <!-- Sección de Lideres Goleadores -->
     <section id="goleadoresSection" class="w-full h-full flex flex-col overflow-hidden lg:bg-fill md:bg-cover px-6 bg-brand-bg-light">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8">
             <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold uppercase" data-translate="section_top_scorers_title">Líderes Goleadores</h3>
             <ul class="nav nav-tabs w-80" id="selector-goleadores" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="ESO" type="button">ESO</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="BCH" type="button">BCH</button>
                 </li>
             </ul>
         </div>
@@ -354,13 +355,13 @@
             <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold uppercase" data-translate="section_sanctioned_title">Sancionados</h3>
             <ul class="nav nav-tabs w-80" id="selector-sancionados" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="ESO" type="button">ESO</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="BCH" type="button">BCH</button>
                 </li>
             </ul>
         </div>
@@ -374,13 +375,13 @@
             <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold uppercase" data-translate="section_results_title">Resultados</h3>
             <ul class="nav nav-tabs w-80" id="selector-resultados" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg active" data-ciclo="TODOS" type="button" data-translate="filter_all">TODOS</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-ciclo="ESO" type="button">ESO</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="ESO" type="button">ESO</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-ciclo="BCH" type="button">BCH</button>
+                    <button class="nav-link text-xs sm:text-md md:text-lg" data-ciclo="BCH" type="button">BCH</button>
                 </li>
             </ul>
         </div>
@@ -404,7 +405,7 @@
                     <svg class="w-5 h-5 text-gray-600 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                        <span id="noticias-fecha-label" class="text-sm font-bold text-gray-800">...</span>
+                        <span id="noticias-fecha-label" class="text-xs sm:text-md md:text-lg  font-bold text-gray-800">...</span>
                 </div>
                 <button id="noticias-siguiente" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Día siguiente">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -430,7 +431,7 @@
                     <svg class="w-5 h-5 text-gray-600 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                        <span id="galeria-fecha-label" class="text-sm font-bold text-gray-800">...</span>
+                        <span id="galeria-fecha-label" class="text-xs sm:text-md md:text-lg  font-bold text-gray-800">...</span>
                 </div>
                 <button id="galeria-siguiente" class="text-gray-600 hover:text-brand-blue transition-colors" aria-label="Día siguiente">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
