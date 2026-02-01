@@ -256,7 +256,7 @@ export function tablaResultadosCuartosDeFinal(list, ciclo) {
                             ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                             <div class="text-xs sm:text-sm lg:text-md font-bold text-gray-800 uppercase text-center break-words">${m.LOCAL}</div>
                         </div>
-                        <div class="text-3xl font-bold text-gray-800">
+                        <div class="text-3xl font-bold text-gray-800 flex-1/2">
                             ${m.LSCORE || '0'} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'}
                         </div>
                         <div class="flex flex-col items-center flex-1">
@@ -344,14 +344,14 @@ export function tablaResultadosSemifinal(list, ciclo) {
                 <div class="p-4 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">                   
                     <div class="flex items-center justify-between gap-6 mb-6">
                         <div class="flex flex-col items-center flex-1">
-                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150 mb-2" onerror="this.style.display='none'">` : ''}
+                            ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                             <div class="text-xs sm:text-sm lg:text-md font-bold text-gray-800 uppercase text-center break-words">${m.LOCAL}</div>
                         </div>
-                        <div class="text-3xl font-bold text-gray-800">
+                        <div class="text-3xl font-bold text-gray-800 flex-1/2">
                             ${m.LSCORE || '0'} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'}
                         </div>
                         <div class="flex flex-col items-center flex-1">
-                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150 mb-2" onerror="this.style.display='none'">` : ''}
+                            ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                             <div class="text-xs sm:text-sm lg:text-md font-bold text-gray-800 uppercase text-center break-words">${m.VISITANTE}</div>
                         </div>
                     </div>
@@ -442,14 +442,14 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
                     <div class="p-4 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">
                         <div class="flex items-center justify-between gap-6 mb-6">
                             <div class="flex flex-col items-center flex-1">
-                                ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150 mb-2" onerror="this.style.display='none'">` : ''}
+                                ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                                 <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
                             </div>
-                            <div class="text-3xl font-bold text-gray-800">
+                            <div class="text-3xl font-bold text-gray-800 flex-1/2">
                                 ${m.LSCORE || '0'} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'}
                             </div>
                             <div class="flex flex-col items-center flex-1">
-                                ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150 mb-2" onerror="this.style.display='none'">` : ''}
+                                ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                                 <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${m.VISITANTE}</div>
                             </div>
                         </div>
