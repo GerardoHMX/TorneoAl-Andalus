@@ -2087,7 +2087,7 @@ export async function renderPodio(clasificacion) {
             </div>
             <div class="w-full py-8 flex justify-center items-center">
                 <div class="relative w-full max-w-4xl mx-auto">
-                    <img src="/img/podium.png" class="h-60 w-auto object-contain mx-auto block" alt="Podio del Torneo">
+                    <img src="img/podium.png" class="h-60 w-auto object-contain mx-auto block" alt="Podio del Torneo">
                     <!-- Primer Puesto (centro, arriba) -->
                     <div id="podio-primer-puesto" class="absolute flex flex-col items-center justify-center" style="top: 5%; left: 50%; transform: translateX(-50%); width: 30%;">
                         <img id="podio-primer-logo" src="${primerPuestoLogo}" alt="${primerPuestoNombre}" class="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain mb-2" onerror="this.style.display='none'">
