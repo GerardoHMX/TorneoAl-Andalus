@@ -1241,31 +1241,31 @@ function generarNavegacion(otros = []) {
             const href = '#' + seccion;
             switch (seccion) {
                 case 'inicio':                
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">INICIO</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm lg:text-md font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">INICIO</a>`;
                     break;
                 case 'equipos':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">EQUIPOS</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm lg:text-md font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">EQUIPOS</a>`;
                     break;
                 case 'jornadas':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">JORNADAS</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm lg:text-md font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">JORNADAS</a>`;
                     break;
                 case 'clasificacionGrupal':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">CLASIFICACIÓN</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm lg:text-md font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">CLASIFICACIÓN</a>`;
                     break;
                 case 'bracket':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">BRACKET</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm lg:text-md font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">BRACKET</a>`;
                     break;
                 case 'goleadoresSection':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">LÍDERES</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm lg:text-md font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">LÍDERES</a>`;
                     break;
                 case 'sancionadosSection':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">SANCIONADOS</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm lg:text-md font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">SANCIONADOS</a>`;
                     break;
                 case 'resultadosSection':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">RESULTADOS</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm lg:text-md font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">RESULTADOS</a>`;
                     break;
                 case 'noticiasSection':
-                    nombreTraducido = `<a href="${href}" class="text-sm md:text-md xl:text-lg font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">NOTICIAS</a>`;
+                    nombreTraducido = `<a href="${href}" class="text-sm lg:text-md font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">NOTICIAS</a>`;
                     break;
                 default:
                     nombreTraducido = '';
@@ -1297,7 +1297,7 @@ function generarNavegacion(otros = []) {
             const nombreTraducido = translate(seccion) || nombre;
             
             const href = '#' + seccion;
-            return `<a href="${href}" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline" data-translate="${seccion}">${nombreTraducido}</a>`;
+            return `<a href="${href}" class="text-base font-medium text-brand-text-dark hover:text-brand-red transition-colors uppercase no-underline hover:bg-brand-gold px-2 py-1 rounded-md" data-translate="${seccion}">${nombreTraducido}</a>`;
         }).join('');
         
     } else {
@@ -1343,11 +1343,9 @@ function controlarVisibilidadSecciones(otros = []) {
                 // Mostrar la sección: remover clase hidden y cualquier estilo inline que oculte
                 elemento.classList.remove('hidden');
                 elemento.style.display = '';
-                console.log(`✅ Sección "${seccionId}" mostrada`);
             } else {
                 // Ocultar la sección: agregar clase hidden
                 elemento.classList.add('hidden');
-                console.log(`👁️ Sección "${seccionId}" ocultada`);
             }
         } else {
             // Mostrar warning para ayudar a depurar
