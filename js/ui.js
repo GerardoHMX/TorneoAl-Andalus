@@ -1881,7 +1881,7 @@ export function renderProximosPartidos(partidos) {
 
 // Función para convertir URLs de Google Drive
 export const convertGoogleDriveUrl = (url) => {
-    if (!url) return url;
+    if (!url) return '';
 
     // Si ya es una URL directa o no es de Google Drive, devolverla tal cual
     if (!url.includes('drive.google.com')) return url;
