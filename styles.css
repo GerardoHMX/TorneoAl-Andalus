@@ -60,7 +60,7 @@
 ::before,
 ::after {
     font-family: 'LaLiga Text', 'Roboto', sans-serif;
-    font-size: 18px;
+    font-size: 1.125rem; /* 18px con base 16px; evita diferencias dev/producción */
     letter-spacing: 0.1em;
     line-height: 1.1;
     margin: 0;
@@ -83,6 +83,7 @@
 }
 
 :root {
+    font-size: 16px; /* Base fija para rem consistente en todos los entornos */
     --brand-red: #c62828;
     --brand-orange: #ff5722;
     --brand-gold: #e5af24;
