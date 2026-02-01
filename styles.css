@@ -36,8 +36,8 @@
 
 @font-face {
     font-family: 'LaLiga Text Bold';
-    src: url('./fonts/LALIGAText-Bold.woff');
-    src: url('./fonts/LALIGAText-Bold.woff2'), url('./fonts/LALIGAText-Bold.otf') format('opentype');
+    src: url('./fonts/LALIGAHeadline-StdBold.woff') format('woff');
+    src: url('./fonts/LALIGAHeadline-StdBold.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -120,11 +120,6 @@ h4::after
 {
     text-transform: uppercase ;
     font-family: "LaLiga Headline VF", 'LaLiga Headline VF', sans-serif;
-    font-variation-settings: "wght" 600, "wdth" 540 ;
-}
-
-strong {
-    font-family: 'LaLiga Text Bold', sans-serif;
     font-variation-settings: "wght" 600, "wdth" 540 ;
 }
 
