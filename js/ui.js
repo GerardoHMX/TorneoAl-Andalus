@@ -638,7 +638,7 @@ export function tablaClasificacionGrupal(list, ciclo) {
                 <div class="rounded-brand overflow-hidden shadow-lg">
                     <div class="overflow-x-auto">
                         <table class="w-full min-w-full" style="border-collapse: collapse;">
-                            <thead>
+                            <thead class="sticky top-0">
                                 <tr style="background-color: #B30000; color: white;">
                                     <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_position">POS</th>
                                     <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_team">EQUIPO</th>
@@ -653,7 +653,7 @@ export function tablaClasificacionGrupal(list, ciclo) {
                                     <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center; padding-right: 1rem;">FPY</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="h-96 overflow-y-auto">
         `;
 
         equiposPorGrupo[grupo].forEach((equipo, index) => {
@@ -755,7 +755,7 @@ export function tablaResultados(list, ciclo) {
                     </h4>
                 </div>
                 <table class="w-full min-w-full" style="border-collapse: collapse;">
-                    <thead>
+                    <thead class="sticky top-0">
                         <tr style="background-color: #B30000; color: white;">
                             <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_position">POS</th>
                             <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: left; padding-left: 1rem;" data-translate="table_team">Equipo</th>
@@ -769,7 +769,7 @@ export function tablaResultados(list, ciclo) {
                             <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="text-align: center; padding-right: 1rem;" data-translate="table_points">PTS</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="h-96 overflow-y-auto">
     `;
 
     equipos.forEach((equipo, index) => {
@@ -971,7 +971,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
             <div class="rounded-brand overflow-hidden shadow-lg mt-8">
                 <div class="overflow-scroll max-h-[32rem]">
                     <table class="w-full min-w-full" style="border-collapse: collapse;">
-                        <thead>
+                        <thead class="sticky top-0">
                             <tr style="background-color: #B30000; color: white;">
                                 <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_ciclo">CICLO</th>
                                 <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem; uppercase" data-translate="table_team_name">EQUIPO</th>
@@ -980,7 +980,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
                                 <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: center; padding-right: 1rem; uppercase" data-translate="table_goals">GOLES</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="h-96 overflow-y-auto">
         `;
 
         goleadoresCiclo.forEach((lider) => {
@@ -1025,7 +1025,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
             <div class="rounded-brand overflow-hidden shadow-lg mt-8">
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-full" style="border-collapse: collapse;">
-                        <thead>
+                        <thead class="sticky top-0">
                             <tr style="background-color: #B30000; color: white;">
                                 <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">CICLO</th>
                                 <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: left; padding-left: 1rem;">EQUIPO</th>
@@ -1034,7 +1034,7 @@ export function tablaLideresGoleadores(list, ciclo, otros = [], cursoFiltro = "T
                                 <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 25%; text-align: center; padding-right: 1rem;">GOLES</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="h-96 overflow-y-auto">
                             <tr class="bg-white border-gray-100 border border-b">
                                 <td colspan="5" class="py-8 px-4 text-center">
                                     <p>${mensaje}</p>
@@ -1092,7 +1092,7 @@ export function tablaSancionados(list, ciclo, cursoFiltro = "TODOS") {
             <div class="rounded-brand overflow-hidden shadow-lg">
                 <div class="overflow-scroll max-h-[32rem]">
                     <table class="w-full" style="border-collapse: collapse;">
-                        <thead>
+                        <thead class="sticky top-0">
                             <tr style="background-color: #B30000; color: white;">
                                 <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 16%; text-align: left; padding-left: 1rem;">EQUIPO</th>
                                 <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 20%; text-align: left; " data-translate="table_course">CURSO</th>
@@ -1102,7 +1102,7 @@ export function tablaSancionados(list, ciclo, cursoFiltro = "TODOS") {
                                 <th class="font-bold uppercase py-2 px-2 md:py-4 md:px-4 text-xs sm:text-md md:text-lg lg:text-lg" style="width: 16%; text-align: center;" data-translate="table_suspended">SUSPENDIDOS</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="h-96 overflow-y-auto">
     `;
 
     if (sancionados.length === 0) {
