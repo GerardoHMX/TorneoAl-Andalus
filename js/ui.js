@@ -151,7 +151,7 @@ export function tablaResultadosFaseDeGrupos(list, ciclo) {
             
             // Validar que los valores sean números válidos
             if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
-                console.warn('Fecha inválida en partido:', partido);
+                console.warn('Fecha inválida en partido:', m.PARTIDO);
                 return;
             } 
             const fechaFormateada = `${String(dia).padStart(2, '0')}/${meses[mes - 1] || mes}/${anio}`;
@@ -243,7 +243,7 @@ export function tablaResultadosCuartosDeFinal(list, ciclo) {
             
             // Validar que los valores sean números válidos
             if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
-                console.warn('Fecha inválida en partido:', partido);
+                console.warn('Fecha inválida en partido:', m.PARTIDO);
                 return;
             } 
             const fechaFormateada = `${String(dia).padStart(2, '0')}/${meses[mes - 1] || mes}/${anio}`;
@@ -334,7 +334,7 @@ export function tablaResultadosSemifinal(list, ciclo) {
             
             // Validar que los valores sean números válidos
             if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
-                console.warn('Fecha inválida en partido:', partido);
+                console.warn('Fecha inválida en partido:', m.PARTIDO);
                 return;
             } 
             const fechaFormateada = `${String(dia).padStart(2, '0')}/${meses[mes - 1] || mes}/${anio}`;
@@ -425,7 +425,7 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
                 
                 // Validar que los valores sean números válidos
                 if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
-                    console.warn('Fecha inválida en partido:', partido);
+                    console.warn('Fecha inválida en partido:', m.PARTIDO);
                     return;
                 } 
                 const fechaFormateada = `${String(dia).padStart(2, '0')}/${meses[mes - 1] || mes}/${anio}`;
@@ -1725,7 +1725,7 @@ export function renderProximosPartidos(partidos) {
             
             // Validar que los valores sean números válidos
             if (isNaN(mes) || isNaN(dia) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
-                console.warn('Fecha inválida en partido:', partido);
+                console.warn('Fecha inválida en partido:', m.PARTIDO);
                 return;
             }
             
