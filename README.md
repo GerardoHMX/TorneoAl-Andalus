@@ -1,8 +1,24 @@
 # V Torneo Fútbol Sala Al-Ándalus — Colegio San Francisco de Asís
 ---
 **Autor:** Alumno de 1º Bachillerato Gerardo Huizar Castro
-**Proyecto escolar:** V Torneo Fútbol Sala Al-Ándalus  
+**Proyecto escolar:** V Torneo Fútbol Sala Al-Ándalus
 **Tecnologías:** HTML5 · CSS3 · JavaScript (ES6) · Tailwind CSS · Google Sheets CSV
+
+## 📚 Documentación Completa
+
+Para información detallada sobre la arquitectura, funcionamiento y características del proyecto, consulta la documentación completa:
+
+**➡️ [RESUMEN.md](RESUMEN.md)** - Documentación técnica completa del proyecto
+
+La documentación incluye:
+- Arquitectura técnica y módulos JavaScript
+- Flujo de funcionamiento y gestión de datos
+- Sistema de personalización y multilenguaje
+- Configuración de Tailwind CSS y variables CSS
+- Estadísticas del proyecto y tecnologías utilizadas
+- Limitaciones identificadas y soluciones propuestas
+
+---
 
 ## Instalación y Compilación
 
