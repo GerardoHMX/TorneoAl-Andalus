@@ -1517,6 +1517,12 @@ function applyConfig() {
         colegioDireccionEl.textContent = getConfigValue('COLEGIO_DIRECCION');
     }
 
+    const colegioMapsLinkEl = document.querySelector('[data-config="colegio-maps-link"]');
+    if (colegioMapsLinkEl) {
+        const mapsUrl = getConfigValue('COLEGIO_MAPS_URL');
+        if (mapsUrl) colegioMapsLinkEl.href = mapsUrl;
+    }
+
     const colegioLocalidadEl = document.querySelector('[data-config="colegio-localidad"]');
     if (colegioLocalidadEl) {
         colegioLocalidadEl.textContent = getConfigValue('COLEGIO_LOCALIDAD');
@@ -1529,12 +1535,24 @@ function applyConfig() {
 
     // Logo del colegio (header y footer) desde hoja CONFIGURACION - COLEGIO_LOGO_URL
     const colegioLogoUrl = getConfigValue('COLEGIO_LOGO_URL');
+    const logoEls = document.querySelectorAll('[data-config="colegio-logo"]');
     if (colegioLogoUrl) {
         const logoUrlConverted = convertGoogleDriveUrl(colegioLogoUrl);
-        document.querySelectorAll('[data-config="colegio-logo"]').forEach(el => {
+        logoEls.forEach(el => {
+            el.style.opacity = 0;
+            el.style.visibility = 'hidden';
+            delete el.dataset.loaded;
             el.src = logoUrlConverted;
         });
     }
+    // Si la imagen ya estaba en caché, onload puede no dispararse; mostrarla si ya está complete
+    logoEls.forEach(el => {
+        if (el.complete) {
+            el.style.opacity = 1;
+            el.style.visibility = 'visible';
+            el.dataset.loaded = 'true';
+        }
+    });
 
     // URL del colegio (enlaces del logo y favicons) desde hoja CONFIGURACION - COLEGIO_URL
     const colegioUrl = getConfigValue('COLEGIO_URL');

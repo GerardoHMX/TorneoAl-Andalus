@@ -10,6 +10,18 @@
     <meta name="author" content="Gerardo Huizar Castro">
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
+  
+	<link rel="canonical" href="https://colegiosanfranciscodeasis.com/">
+	<meta property="og:locale" content="es_ES">
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="Torneo escolar de Fútbol Sala Al-Ándalus">
+	<meta property="og:description" content="Torneo escolar de Fútbol Sala Al-Ándalus del Colegio San Francisco de Asís">
+	<meta property="og:url" content="https://colegiosanfranciscodeasis.com/">
+	<meta property="og:image" content="https://colegiosanfranciscodeasis.com/wp-content/uploads/2023/03/logo-ColegioSanFranciscodeAsis.png">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:site_name" content="Torneo escolar de Fútbol Sala Al-Ándalus">
+
     <!-- Google Fonts Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,10 +76,10 @@
     <header class="w-full bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <div class="mx-auto px-2 sm:px-4 lg:px-6">
             <div class="flex items-center justify-between h-16 md:h-20 gap-2">
-                <!-- Logo (src y enlace se rellenan desde hoja CONFIGURACION: COLEGIO_LOGO_URL, COLEGIO_URL) -->
-                <div class="flex items-center">
-                    <a href="#" target="_blank" rel="noopener noreferrer" data-config="colegio-link">
-                        <img src="img/profile.jpg" alt="Logo" class="h-full w-auto md:w-16 md:h-16 object-contain" data-config="colegio-logo" onerror="this.onerror=null; this.src='img/profile.jpg';">
+                <!-- Logo (src y enlace se rellenan desde hoja CONFIGURACION: COLEGIO_LOGO_URL, COLEGIO_URL). Oculta hasta que cargue. -->
+                <div class="flex items-center min-w-[4rem] min-h-[2.5rem] md:min-w-16 md:min-h-16">
+                    <a href="#" target="_blank" rel="noopener noreferrer" data-config="colegio-link" class="block">
+                        <img src="#" alt="Logo" class="h-full w-auto md:w-16 md:h-16 object-contain transition-opacity duration-200" style="opacity:0;visibility:hidden" data-config="colegio-logo" onload="this.style.opacity=1;this.style.visibility='visible';this.dataset.loaded='true'" onerror="this.onerror=null">
                     </a>
                 </div>
                 <!-- Navegación Desktop (visible desde 1135px) -->
@@ -77,7 +89,7 @@
                 <div class="flex items-center justify-center gap-2">
                     <!-- Selector de Idioma -->
                     <div id="language-selector" class="flex items-center gap-1">
-                        <button data-lang="es" class="lang-btn px-1 py-1 rounded text-sm font-medium text-gray-600 hover:text-brand-blue transition-colors active bg-brand-blue text-white" aria-label="Español">ES</button>
+                        <button data-lang="es" class="lang-btn px-1 py-1 rounded text-sm font-medium hover:text-brand-blue transition-colors active bg-brand-blue text-white" aria-label="Español">ES</button>
                         <button data-lang="en" class="lang-btn px-1 py-1 rounded text-sm font-medium text-gray-600 hover:text-brand-blue transition-colors" aria-label="English">EN</button>
                     </div>
                     <a href="#" target="_blank" rel="noopener noreferrer" class="text-brand-text-dark hover:text-brand-red transition-colors px-1" aria-label="Instagram" data-config="instagram-link">
@@ -446,14 +458,27 @@
     <footer class="masthead text-brand-dark py-4 px-3 flex-shrink-0">
         <div class="flex flex-col items-center justify-center gap-2">
             <div class="flex flex-row flex-wrap items-center justify-center gap-1">
-                <img src="img/profile.jpg" alt="Logo" class="w-28 h-28 transition-transform duration-300 hover:scale-150 object-contain" data-config="colegio-logo" onerror="this.onerror=null; this.src='img/profile.jpg';"> 
+                <img src="#" alt="Logo" class="w-28 h-28 hover:scale-150 object-contain transition-opacity duration-200" style="opacity:0;visibility:hidden" data-config="colegio-logo" onload="this.style.opacity=1;this.style.visibility='visible';this.dataset.loaded='true'" onerror="this.onerror=null"> 
                 <div class="flex flex-col flex-wrap items-center sm:items-start justify-center gap-1">                
-                    <span class="text-xl md:text-2xl text-brand-blue" data-config="colegio-nombre">Colegio San Francisco de Asís</span>
-                    <div><a href="tel:+34952473424" class="text-xs md:text-md text-gray-600 no-underline hover:underline"><span data-config="colegio-telefono1">952 47 34 24</span></a> – <a href="tel:+34952663717" class="text-xs md:text-md text-gray-600 no-underline hover:underline"><span data-config="colegio-telefono2">952 66 37 17</span></a></div>
-                    <a href="#" target="_blank" class="text-xs md:text-md text-gray-600 no-underline hover:underline"><span data-config="colegio-email"></span></a>
-                    <div class="flex flex-row sm:flex-col flex-wrap items-center sm:items-start justify-center">
-                        <a href="https://goo.gl/maps/Z9XU1Uv5AAixNX2s6" target="_blank" class="text-xs md:text-md text-gray-600 text-wrap no-underline hover:underline"><span data-config="colegio-direccion">Plaza Maite Alcázar Zambrano, Urbanización El Coto.</span> </a> 
-                        <span class="text-xs md:text-md text-gray-600"><span data-config="colegio-localidad">Mijas Costa</span>, <span data-config="colegio-provincia">Málaga</span>.</span>
+                    <span class="text-xl sm:text-2xl text-brand-blue" data-config="colegio-nombre">Colegio San Francisco de Asís</span>
+                    <div>
+                        <a href="#" class="text-xs md:text-md text-gray-600 no-underline hover:underline">
+                            <span data-config="colegio-telefono1" class="text-xs md:text-md text-gray-600">952 47 34 24</span>
+                        </a> 
+                        – 
+                        <a href="#" class="text-xs md:text-md text-gray-600 no-underline hover:underline">
+                            <span data-config="colegio-telefono2" class="text-xs md:text-md text-gray-600">952 66 37 17</span>
+                        </a>
+                    </div>
+                    <a href="#" target="_blank" class="text-xs md:text-md text-gray-600 no-underline hover:underline">
+                        <span data-config="colegio-email" class="text-xs md:text-md text-gray-600"></span>
+                    </a>
+                    <div>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="flex flex-row sm:flex-col flex-wrap items-center sm:items-start justify-center gap-1 text-wrap no-underline hover:underline" data-config="colegio-maps-link">
+                            <span data-config="colegio-direccion" class="text-xs md:text-md text-gray-600 text-wrap">Plaza Maite Alcázar Zambrano, Urbanización El Coto.</span>
+                            <span data-config="colegio-localidad" class="text-xs md:text-md text-gray-600">Mijas Costa</span> 
+                            <span data-config="colegio-provincia" class="text-xs md:text-md text-gray-600">Málaga</span> 
+                        </a>                        
                     </div>
                 </div>
             </div>            
@@ -467,11 +492,11 @@
                     <img src="img/profile.jpg" alt="Perfil de Gerardo Huizar Castro" class="h-10 w-10 object-contain transition-transform duration-300 hover:scale-150">
                 </a>
                 <div>
-                    <a property="dct:title" rel="cc:attributionURL" href="https://github.com/GerardoHMX/TorneoAl-Andalus" class="no-underline hover:underline" target="_blank" data-translate="footer_made_by">Realizado por</a>   
-                    <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/GerardoHMX" class="no-underline hover:underline">Gerardo Huizar Castro</a>                   
+                    <a property="dct:title" rel="cc:attributionURL" href="https://github.com/GerardoHMX/TorneoAl-Andalus" class="no-underline hover:underline text-xs" target="_blank" data-translate="footer_made_by">Realizado por</a>   
+                    <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/GerardoHMX" class="no-underline hover:underline text-xs">Gerardo Huizar Castro</a>                   
                 </div>                
-                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" class="flex flex-row flex-wrap items-center justify-center gap-1 no-underline hover:underline">
-                    <span data-translate="footer_license">bajo licencia</span>    
+                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" class="flex flex-row flex-wrap items-center justify-center gap-1 no-underline hover:underline text-xs">
+                    <span class="text-xs" data-translate="footer_license">bajo licencia</span>    
                     <div><img class="h-4 w-4 object-contain transition-transform duration-300 hover:scale-150" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="" target="_blank"></div>
                     <div><img class="h-4 w-4 object-contain transition-transform duration-300 hover:scale-150" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="" target="_blank"></div>
                     <div><img class="h-4 w-4 object-contain transition-transform duration-300 hover:scale-150" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt="" target="_blank"></div>
