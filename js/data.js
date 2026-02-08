@@ -203,3 +203,29 @@ export async function loadAllData() {
 
     return { CLASIFICACION, EQUIPOS, LIDERES, SANCIONES, NOTICIAS, OTROS: OTROS || [], GALERIA: GALERIA || [], CONFIGURACION: CONFIGURACION || [] };
 }
+
+/** Obtiene un valor de la hoja CONFIGURACION (columnas CAMPO / VALOR). Case-insensitive. */
+export async function getConfigValueFromSheet(key) {
+    if (!URLS.CONFIGURACION) return '';
+    let rows = [];
+    try {
+        rows = await fetchCSVRows(URLS.CONFIGURACION);
+    } catch {
+        return '';
+    }
+    if (!rows || rows.length < 4) return '';
+    const headers = rows[1];
+    const campoIndex = headers.findIndex(h => h && h.toUpperCase().trim() === 'CAMPO');
+    const valorIndex = headers.findIndex(h => h && h.toUpperCase().trim() === 'VALOR');
+    if (campoIndex === -1 || valorIndex === -1) return '';
+    const keyUpper = (key || '').toString().trim().toUpperCase();
+    for (let i = 3; i < rows.length; i++) {
+        const row = rows[i];
+        const campo = (row[campoIndex] || '').trim().toUpperCase();
+        if (campo !== keyUpper) continue;
+        let valor = (row[valorIndex] || '').trim();
+        if (!valor) valor = 'Sin Datos';
+        return valor === 'Sin Datos' ? '' : valor;
+    }
+    return '';
+}

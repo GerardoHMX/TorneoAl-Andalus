@@ -16,7 +16,8 @@ import {
     renderGalería,
     renderBracket,
     renderProximosPartidos,
-    renderPodio
+    renderPodio,
+    convertGoogleDriveUrl
 } from "./ui.js";
 
 
@@ -1526,18 +1527,28 @@ function applyConfig() {
         colegioProvinciaEl.textContent = getConfigValue('COLEGIO_PROVINCIA');
     }
 
-    // Header - Logo y URL del colegio
-    const colegioLogoEl = document.querySelector('[data-config="colegio-logo"]');
-    if (colegioLogoEl) {
-        const logoUrl = getConfigValue('COLEGIO_LOGO_URL');
-        if (logoUrl) {
-            colegioLogoEl.src = logoUrl;
-        }
+    // Logo del colegio (header y footer) desde hoja CONFIGURACION - COLEGIO_LOGO_URL
+    const colegioLogoUrl = getConfigValue('COLEGIO_LOGO_URL');
+    if (colegioLogoUrl) {
+        const logoUrlConverted = convertGoogleDriveUrl(colegioLogoUrl);
+        document.querySelectorAll('[data-config="colegio-logo"]').forEach(el => {
+            el.src = logoUrlConverted;
+        });
     }
 
-    const colegioLinkEl = document.querySelector('[data-config="colegio-link"]');
-    if (colegioLinkEl) {
-        colegioLinkEl.href = getConfigValue('COLEGIO_URL');
+    // URL del colegio (enlaces del logo y favicons) desde hoja CONFIGURACION - COLEGIO_URL
+    const colegioUrl = getConfigValue('COLEGIO_URL');
+    if (colegioUrl) {
+        const base = colegioUrl.replace(/\/$/, '');
+        const colegioLinkEls = document.querySelectorAll('[data-config="colegio-link"]');
+        colegioLinkEls.forEach(el => { el.href = colegioUrl; });
+
+        const favicon32 = document.querySelector('[data-config="colegio-favicon-32"]');
+        if (favicon32) favicon32.href = `${base}/wp-content/uploads/2023/03/cropped-favicon-32x32.png`;
+        const favicon192 = document.querySelector('[data-config="colegio-favicon-192"]');
+        if (favicon192) favicon192.href = `${base}/wp-content/uploads/2023/03/cropped-favicon-192x192.png`;
+        const faviconApple = document.querySelector('[data-config="colegio-favicon-apple"]');
+        if (faviconApple) faviconApple.href = `${base}/wp-content/uploads/2023/03/cropped-favicon-180x180.png`;
     }
 
     // Redes sociales - Instagram

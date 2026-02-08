@@ -345,7 +345,7 @@ A pesar de las ventajas del sistema actual, se han identificado algunas limitaci
 - Necesidad de restaurar desde backups manuales
 - Pérdida de tiempo y confianza en el sistema
 
-**Soluciones Propuestas:**
+**Soluciones implementadas:**
 
 1. **Implementar protección de rangos en Google Sheets:**
    - Proteger las filas de encabezado (columnas, estructura)
@@ -357,33 +357,54 @@ A pesar de las ventajas del sistema actual, se han identificado algunas limitaci
    - **Hoja de edición controlada**: Datos principales (CLASIFICACION, EQUIPOS)
    - **Hoja de edición libre**: Contenido dinámico (NOTICIAS, GALERIA)
 
-3. **Implementar validación de datos:**
+3. **Historial de versiones**
+   - Google Sheets ya guarda historial.
+   - **Uso:**
+      Archivo → Historial de versiones
+      Restaurar versiones anteriores
+   - **Recomendación:**
+      Nombrar versiones importantes
+
+4. **Implementar validación de datos:**
    - Usar validación de datos de Google Sheets para campos críticos
    - Crear reglas que prevengan valores inválidos
-   - Validar formatos de fechas, URLs, números
+     - Listas controladas desde hoja LISTAS
+       - Uso: campos con valores predefinidos.
+     - Validación para texto entre comillas (CSV)
+       - Uso: campos de texto que se exportan a CSV.
+     - Protección de celdas con fórmulas
+       - Uso: columnas calculadas o automáticas.
+   - Validar formatos de:
+      - fechas, 
+      - URLs, 
+      - números enteros positivos,
+      - validación de meses (1–12),
+      - Validación de días (1–31),
 
-4. **Configurar permisos granulares:**
+**Soluciones pendientes por aplicar:**
+
+1. **Configurar permisos granulares:**
    - Crear diferentes niveles de acceso (lectura, edición limitada, administrador)
    - Asignar permisos específicos por hoja según el rol del usuario
    - Usar grupos de Google Workspace para gestionar permisos
 
-5. **Implementar sistema de backups automáticos:**
+2. **Implementar sistema de backups automáticos:**
    - Usar Google Apps Script para crear backups diarios automáticos
    - Guardar versiones en una carpeta de Google Drive separada
    - Crear un script que permita restaurar versiones anteriores fácilmente
 
-6. **Agregar validación en el frontend:**
+3. **Agregar validación en el frontend:**
    - Verificar la estructura de datos antes de renderizar
    - Mostrar mensajes de error claros si faltan datos críticos
    - Implementar un modo de "modo seguro" que use datos en caché si detecta errores
 
-7. **Crear una interfaz de administración protegida:**
+4. **Crear una interfaz de administración protegida:**
    - Desarrollar una aplicación web que actúe como intermediario
    - Validar todos los cambios antes de aplicarlos a Sheets
    - Mantener un log de cambios y quién los hizo
    - Requerir confirmación para operaciones destructivas
 
-8. **Documentar procedimientos de recuperación:**
+5. **Documentar procedimientos de recuperación:**
    - Crear guías claras sobre cómo restaurar desde backups
    - Documentar la estructura esperada de cada hoja
    - Proporcionar plantillas de recuperación

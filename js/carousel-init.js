@@ -3,7 +3,7 @@
 
 import { initCarousel } from './carousel.js';
 import { convertGoogleDriveUrl } from './ui.js';
-import { fetchCSV, URLS } from './data.js';
+import { fetchCSV, URLS, getConfigValueFromSheet } from './data.js';
 
 // Función auxiliar para verificar si un valor es "SI"
 function esVerdadero(valor) {
@@ -63,11 +63,17 @@ async function initializeCarousel() {
         }
     }
 
+    // Logo del colegio desde hoja CONFIGURACION (COLEGIO_LOGO_URL)
+    const colegioLogoUrlRaw = await getConfigValueFromSheet('COLEGIO_LOGO_URL');
+    const colegioLogoUrl = colegioLogoUrlRaw ? convertGoogleDriveUrl(colegioLogoUrlRaw) : '';
+    const logoCard1 = colegioLogoUrl || convertGoogleDriveUrl('https://drive.google.com/file/d/1NefYP3OCHQ7kie9qQgmy1yUOEnZXvvCA/view?usp=sharing');
+    const logoCard2 = colegioLogoUrl || convertGoogleDriveUrl('https://drive.google.com/file/d/1wUqSjzfL4POj_t5pC0_RDkLlsgbyDqXT/view?usp=sharing');
+
     const carouselCards = [
         {
             text: `
                 <div class="flex-1 flex flex-col gap-3 items-center justify-center"> 
-                    <img src="img/logoTorneo.png" alt="Al-Ándalus" class="w-60 md:w-80 object-contain"> 
+                    <img src="${logoCard1}" alt="Al-Ándalus" class="w-60 md:w-80 object-contain" onerror="this.style.display='none'"> 
                     <h3 class="text-brand-gold text-md font-bold">2025-2026</h3>  
                 </div>
             `,
@@ -78,7 +84,7 @@ async function initializeCarousel() {
         {
             text: `
                 <div class="flex-1 flex flex-col gap-3 items-center justify-center"> 
-                    <img src="${convertGoogleDriveUrl('https://drive.google.com/file/d/1wUqSjzfL4POj_t5pC0_RDkLlsgbyDqXT/view?usp=sharing')}" alt="Al-Ándalus" class="w-60 md:w-80 object-contain"> 
+                    <img src="${logoCard2}" alt="Al-Ándalus" class="w-60 md:w-80 object-contain" onerror="this.style.display='none'"> 
                     <h3 class="text-brand-gold text-md font-bold">Cartel del Torneo escolar</h3>  
                 </div>
             `,
@@ -231,23 +237,7 @@ async function initializeCarousel() {
             `,
             bgColor: 'bg-brand-white',
             textColor: 'text-gray-700'
-        },
-        // {
-        //     text: `
-        //         <div class="flex-1 flex flex-col gap-3">
-        //             <h3 class="text-2xl md:text-3xl text-brand-blue font-bold text-center mb-3">Torneo escolar de Fútbol Sala</h3>
-        //             <div class="flex flex-row flex-wrap items-center justify-center gap-3">
-        //                 <img src="img/logo.png" alt="Al-Ándalus" class="w-40 md:w-50 h-40 md:h-50">
-        //                 <div class="flex flex-col gap-1 items-end">
-        //                     <h1 class="text-4xl sm:text-5xl text-brand-red">Al-Ándalus</h1>
-        //                     <h3 class="text-brand-gold text-md font-bold">2025-2026</h3>
-        //                 </div>
-        //             </div>             
-        //         </div>
-        //     `,
-        //     bgColor: 'bg-brand-white',
-        //     textColor: 'text-brand-blue'
-        // }
+        }
     ];
 
     // Inicializar el carrusel

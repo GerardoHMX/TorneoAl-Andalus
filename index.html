@@ -25,9 +25,9 @@
     
     <!-- Estilos personalizados (después de Bootstrap para tener prioridad) -->
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="https://colegiosanfranciscodeasis.com/wp-content/uploads/2023/03/cropped-favicon-32x32.png" sizes="32x32">
-    <link rel="icon" href="https://colegiosanfranciscodeasis.com/wp-content/uploads/2023/03/cropped-favicon-192x192.png" sizes="192x192">
-    <link rel="apple-touch-icon" href="https://colegiosanfranciscodeasis.com/wp-content/uploads/2023/03/cropped-favicon-180x180.png">
+    <link rel="icon" href="#" sizes="32x32" data-config="colegio-favicon-32">
+    <link rel="icon" href="#" sizes="192x192" data-config="colegio-favicon-192">
+    <link rel="apple-touch-icon" href="#" data-config="colegio-favicon-apple">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2N3LTTCYQS"></script>
     <script>
@@ -64,10 +64,10 @@
     <header class="w-full bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <div class="mx-auto px-2 sm:px-4 lg:px-6">
             <div class="flex items-center justify-between h-16 md:h-20 gap-2">
-                <!-- Logo -->
+                <!-- Logo (src y enlace se rellenan desde hoja CONFIGURACION: COLEGIO_LOGO_URL, COLEGIO_URL) -->
                 <div class="flex items-center">
-                    <a href="https://colegiosanfranciscodeasis.com" target="_blank" data-config="colegio-link">
-                        <img src="img/logoColegio.png" alt="Al-Ándalus" class="h-full w-auto md:w-16 md:h-16 object-contain" data-config="colegio-logo">
+                    <a href="#" target="_blank" rel="noopener noreferrer" data-config="colegio-link">
+                        <img src="img/profile.jpg" alt="Logo" class="h-full w-auto md:w-16 md:h-16 object-contain" data-config="colegio-logo" onerror="this.onerror=null; this.src='img/profile.jpg';">
                     </a>
                 </div>
                 <!-- Navegación Desktop (visible desde 1135px) -->
@@ -80,7 +80,7 @@
                         <button data-lang="es" class="lang-btn px-1 py-1 rounded text-sm font-medium text-gray-600 hover:text-brand-blue transition-colors active bg-brand-blue text-white" aria-label="Español">ES</button>
                         <button data-lang="en" class="lang-btn px-1 py-1 rounded text-sm font-medium text-gray-600 hover:text-brand-blue transition-colors" aria-label="English">EN</button>
                     </div>
-                    <a href="https://www.instagram.com/colegiosfasismijas" target="_blank" class="text-brand-text-dark hover:text-brand-red transition-colors px-1" aria-label="Instagram" data-config="instagram-link">
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="text-brand-text-dark hover:text-brand-red transition-colors px-1" aria-label="Instagram" data-config="instagram-link">
                         <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="currentColor" viewBox="0 0 24 24">
                             <path
                                 d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
@@ -446,11 +446,11 @@
     <footer class="masthead text-brand-dark py-4 px-3 flex-shrink-0">
         <div class="flex flex-col items-center justify-center gap-2">
             <div class="flex flex-row flex-wrap items-center justify-center gap-1">
-                <img src="https://colegiosanfranciscodeasis.com/wp-content/uploads/2023/03/logo-ColegioSanFranciscodeAsis.png" alt="Al-Ándalus" class="w-28 h-28 transition-transform duration-300 hover:scale-150"> 
+                <img src="img/profile.jpg" alt="Logo" class="w-28 h-28 transition-transform duration-300 hover:scale-150 object-contain" data-config="colegio-logo" onerror="this.onerror=null; this.src='img/profile.jpg';"> 
                 <div class="flex flex-col flex-wrap items-center sm:items-start justify-center gap-1">                
                     <span class="text-xl md:text-2xl text-brand-blue" data-config="colegio-nombre">Colegio San Francisco de Asís</span>
                     <div><a href="tel:+34952473424" class="text-xs md:text-md text-gray-600 no-underline hover:underline"><span data-config="colegio-telefono1">952 47 34 24</span></a> – <a href="tel:+34952663717" class="text-xs md:text-md text-gray-600 no-underline hover:underline"><span data-config="colegio-telefono2">952 66 37 17</span></a></div>
-                    <a href="mailto:administracion@colegiosanfranciscodeasis.com" target="_blank" class="text-xs md:text-md text-gray-600 no-underline hover:underline"><span data-config="colegio-email">administracion@colegiosanfranciscodeasis.com</span></a>
+                    <a href="#" target="_blank" class="text-xs md:text-md text-gray-600 no-underline hover:underline"><span data-config="colegio-email"></span></a>
                     <div class="flex flex-row sm:flex-col flex-wrap items-center sm:items-start justify-center">
                         <a href="https://goo.gl/maps/Z9XU1Uv5AAixNX2s6" target="_blank" class="text-xs md:text-md text-gray-600 text-wrap no-underline hover:underline"><span data-config="colegio-direccion">Plaza Maite Alcázar Zambrano, Urbanización El Coto.</span> </a> 
                         <span class="text-xs md:text-md text-gray-600"><span data-config="colegio-localidad">Mijas Costa</span>, <span data-config="colegio-provincia">Málaga</span>.</span>
