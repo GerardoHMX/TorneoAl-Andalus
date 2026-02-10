@@ -16,9 +16,15 @@ module.exports = {
     'w-80',
     'md:w-80',
     'lg:w-80',
+    // Hover en menú móvil (clases en template literals en JS)
+    'hover:bg-brand-gold',
   ],
   theme: {
     extend: {
+        screens: {
+            // Menú: desktop desde 1135px, móvil hasta 1134px
+            'desktopNav': '1135px',
+        },
         colors: {
             'brand': {
                 'red': '#c62828',

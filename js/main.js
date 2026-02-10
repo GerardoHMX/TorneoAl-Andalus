@@ -1606,6 +1606,12 @@ function applyConfig() {
     if (pageTitle) {
         pageTitle.textContent = `Torneo Escolar - ${getConfigValue('TORNEO_NOMBRE')}`;
     }
+
+    // URL del Web App de Google Apps Script para el widget de valoración (hoja FEEDBACK)
+    const feedbackScriptUrl = getConfigValue('FEEDBACK_SCRIPT_URL');
+    if (typeof window !== 'undefined') {
+        window.__FEEDBACK_SCRIPT_URL = feedbackScriptUrl || '';
+    }
 }
 
 // --- carga inicial ---

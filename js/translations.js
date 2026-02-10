@@ -131,6 +131,17 @@ const translations = {
     hour_to_confirm: "Hora por confirmar",
     to_define: "Por definir",
 
+    feedback_title: "¿Cómo fue tu experiencia?",
+    feedback_rating: "Valoración",
+    feedback_comment: "Comentario (opcional)",
+    feedback_submit: "Enviar",
+    feedback_submit_sent: "Enviado",
+    feedback_comment_placeholder: "Escribe aquí…",
+    feedback_submit_placeholder: "Enviar",
+    feedback_message_rating: "Elige una valoración.",
+    feedback_message_error_server: "La valoración no está conectada al servidor. Gracias por tu intención.",
+    feedback_message_success: "¡Gracias por tu valoración!",
+
     // Navegación
     noticia: "Noticia",
     close: "Cerrar",
@@ -288,6 +299,17 @@ const translations = {
 
     hour_to_confirm: "Hour to confirm",
     to_define: "To define",
+
+    feedback_title: "How was your experience?",
+    feedback_rating: "Rating",
+    feedback_comment: "Comment (optional)",
+    feedback_submit: "Submit",
+    feedback_submit_sent: "Sent",
+    feedback_comment_placeholder: "Write here…",
+    feedback_submit_placeholder: "Submit",
+    feedback_message_rating: "Choose a rating.",
+    feedback_message_error_server: "The rating is not connected to the server. Thank you for your intention.",
+    feedback_message_success: "Thank you for your rating!",
 
     // Navegación
     noticia: "News",

@@ -295,6 +295,15 @@ Todas las hojas siguen una estructura estándar excepto CONFIGURACION:
 - **Resiliente**: Si una hoja falla, las demás continúan cargando
 - **Auto-refresh**: Recarga completa cada 5 minutos sin necesidad de recargar la página
 
+**Hoja FEEDBACK (valoraciones de visitantes):**
+- No se lee como CSV desde el sitio; se escribe desde un Google Apps Script al recibir el envío del widget.
+- Estructura (columnas):
+  - **FECHA_HORA**: Fecha y hora del envío (ISO).
+  - **VALORACION**: Número del 1 al 5.
+  - **TIPO**: `estrellas` o `caritas`.
+  - **COMENTARIO**: Texto opcional que escribe el usuario.
+- El sitio envía los datos mediante un formulario POST a la URL del Web App (configurable con `FEEDBACK_SCRIPT_URL` en CONFIGURACION). Ver archivo `docs/FEEDBACK_APPS_SCRIPT.md` para el código del script.
+
 #### 3. **Filtrado y Visualización**
 
 - **Filtros dinámicos**: Los usuarios pueden filtrar contenido por ciclo (ESO/BCH), grupo (A/B/C/D), curso, etc.
@@ -807,6 +816,9 @@ El sitio incluye un sistema completo de personalización que permite modificar e
 
   **Analítica:**
   - `GA_TRACKING_ID`: ID de Google Analytics (para tracking y análisis de visitas)
+
+  **Widget de valoración:**
+  - `FEEDBACK_SCRIPT_URL`: URL del Web App de Google Apps Script que recibe las valoraciones y las escribe en la hoja FEEDBACK (ver sección «Widget de valoración y hoja FEEDBACK»)
 
 **Implementación:**
 
