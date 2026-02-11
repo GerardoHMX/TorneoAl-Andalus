@@ -247,7 +247,9 @@ export function tablaResultadosCuartosDeFinal(list, ciclo) {
                 return;
             } 
             const fechaFormateada = `${String(dia).padStart(2, '0')}/${meses[mes - 1] || mes}/${anio}`;
-
+            
+            const penalesLocal = m.PUNTOS > 0 ? `<span class="text-center text-3xl text-brand-red font-bold uppercase" >(${m.PUNTOS})</span>` : '';
+            const penalesVisitante = m.GANADOS > 0 ? `<span class="text-center text-3xl text-brand-red font-bold uppercase" >(${m.GANADOS})</span>` : '';
             cardsPerGroup.push(`                
                 <!-- Match Card ${i} -->
                 <div class="p-4 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">                   
@@ -256,8 +258,8 @@ export function tablaResultadosCuartosDeFinal(list, ciclo) {
                             ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                             <div class="text-xs sm:text-sm lg:text-md font-bold text-gray-800 uppercase text-center break-words">${m.LOCAL}</div>
                         </div>
-                        <div class="text-3xl font-bold text-gray-800 flex-1/2">
-                            ${m.LSCORE || '0'} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'}
+                        <div class="text-3xl font-bold text-gray-800 flex flex-1/2 gap-1">
+                            ${m.LSCORE || '0'} ${penalesLocal} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'} ${penalesVisitante}
                         </div>
                         <div class="flex flex-col items-center flex-1">
                             ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
@@ -339,6 +341,8 @@ export function tablaResultadosSemifinal(list, ciclo) {
             } 
             const fechaFormateada = `${String(dia).padStart(2, '0')}/${meses[mes - 1] || mes}/${anio}`;
 
+            const penalesLocal = m.PUNTOS > 0 ? `<span class="text-center text-3xl text-brand-red font-bold uppercase" >(${m.PUNTOS})</span>` : '';
+            const penalesVisitante = m.GANADOS > 0 ? `<span class="text-center text-3xl text-brand-red font-bold uppercase" >(${m.GANADOS})</span>` : '';
             cardsPerGroup.push(`                
                 <!-- Match Card ${i} -->
                 <div class="p-4 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">                   
@@ -347,8 +351,8 @@ export function tablaResultadosSemifinal(list, ciclo) {
                             ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                             <div class="text-xs sm:text-sm lg:text-md font-bold text-gray-800 uppercase text-center break-words">${m.LOCAL}</div>
                         </div>
-                        <div class="text-3xl font-bold text-gray-800 flex-1/2">
-                            ${m.LSCORE || '0'} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'}
+                        <div class="text-3xl font-bold text-gray-800 flex flex-1/2 gap-1">
+                            ${m.LSCORE || '0'} ${penalesLocal} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'} ${penalesVisitante}
                         </div>
                         <div class="flex flex-col items-center flex-1">
                             ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
@@ -437,6 +441,8 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
                     text = `<span class="text-center text-xs sm:text-md md:text-lg text-gray-600 mt-2" data-translate="final">Final</span> - <span class="text-center text-xs sm:text-md md:text-lg text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs sm:text-md md:text-lg ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>`;
                 }
 
+                const penalesLocal = m.PUNTOS > 0 ? `<span class="text-center text-3xl text-brand-red font-bold uppercase" >(${m.PUNTOS})</span>` : '';
+                const penalesVisitante = m.GANADOS > 0 ? `<span class="text-center text-3xl text-brand-red font-bold uppercase" >(${m.GANADOS})</span>` : '';
                 cardsPerGroup.push(`                
                     <!-- Match Card ${i} -->
                     <div class="p-4 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">
@@ -445,8 +451,8 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
                                 ${m.LLOGO ? `<img src="${convertGoogleDriveUrl(m.LLOGO)}" alt="${m.LOCAL}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
                                 <div class="text-sm sm:text-md md:text-lg font-bold text-gray-800 uppercase text-center">${m.LOCAL}</div>
                             </div>
-                            <div class="text-3xl font-bold text-gray-800 flex-1/2">
-                                ${m.LSCORE || '0'} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'}
+                            <div class="text-3xl font-bold text-gray-800 flex flex-1/2 gap-1">
+                                ${m.LSCORE || '0'} ${penalesLocal} <span class="text-3xl text-brand-gold">:</span> ${m.VSCORE || '0'} ${penalesVisitante}
                             </div>
                             <div class="flex flex-col items-center flex-1">
                                 ${m.VLOGO ? `<img src="${convertGoogleDriveUrl(m.VLOGO)}" alt="${m.VISITANTE}" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain mb-1 transition-transform duration-300 hover:scale-150" onerror="this.style.display='none'">` : ''}
@@ -1495,13 +1501,16 @@ export function renderBracket(clasificacion) {
                     `;
 
                     if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) {
+                        const penalesLocal = equipos.PUNTOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.PUNTOS})</span>` : '';
+                        const penalesVisitante = equipos.GANADOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.GANADOS})</span>` : '';
+
                         html += `
                     <div class="flex items-center justify-between py-2 px-2">
                         <div class="flex items-center gap-2">
                         ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
-                        <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.LOCAL}</span>
+                            <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.LOCAL}</span>
                         </div>
-                        <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.LSCORE}</span>
+                        <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.LSCORE} ${penalesLocal}</span> 
                     </div>
                     `;
                         html += `
@@ -1510,7 +1519,7 @@ export function renderBracket(clasificacion) {
                         ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.VISITANTE}</span>
                         </div>
-                        <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.VSCORE}</span>
+                        <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.VSCORE} ${penalesVisitante}</span> 
                     </div>
                     `;
                     }
@@ -1545,14 +1554,17 @@ export function renderBracket(clasificacion) {
                     <div class="space-y-2">
                 `;
 
-                    if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) {
+                    if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) { 
+                        const penalesLocal = equipos.PUNTOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.PUNTOS})</span>` : '';
+                        const penalesVisitante = equipos.GANADOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.GANADOS})</span>` : '';
+
                         html += `
                     <div class="flex items-center justify-between py-2 px-2">
                         <div class="flex items-center gap-2">
                         ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.LOCAL}</span>
                         </div>
-                        <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.LSCORE}</span>
+                        <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.LSCORE} ${penalesLocal}</span> 
                     </div>
                     `;
                         html += `
@@ -1561,7 +1573,7 @@ export function renderBracket(clasificacion) {
                         ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.VISITANTE}</span>
                         </div>
-                        <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.VSCORE}</span>
+                        <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.VSCORE} ${penalesVisitante}</span> 
                     </div>
                     `;
                     }
@@ -1595,16 +1607,18 @@ export function renderBracket(clasificacion) {
                     <div class="bg-transparent shadow-lg ring-1 ring-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-brand-gold rounded-brand p-4 min-w-[240px] w-[300px]">
                         <div class="text-center mb-3 lg:mb-4"><span class="text-center font-bold mb-4 text-xs sm:text-md md:text-lg tracking-wide uppercase" data-translate="final">Final</span> <span class="text-brand-gold text-xl">${ciclo}</span></div>
                         <div class="space-y-2">
-                    `;
+                    `; 
 
                     if (equipos) {
+                        const penalesLocal = equipos.PUNTOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.PUNTOS})</span>` : '';
+                        const penalesVisitante = equipos.GANADOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.GANADOS})</span>` : '';
                         html += `
                         <div class="flex items-center justify-between py-2 px-2">
                             <div class="flex items-center gap-2">
                             ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                             <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.LOCAL}</span>
                             </div>
-                            <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.LSCORE}</span>
+                            <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.LSCORE} ${penalesLocal}</span> 
                         </div>
                         `;
 
@@ -1614,7 +1628,7 @@ export function renderBracket(clasificacion) {
                             ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                             <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.VISITANTE}</span>
                             </div>
-                            <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.VSCORE}</span>
+                            <span class="font-bold text-xs sm:text-md md:text-lg tracking-wide">${equipos.VSCORE} ${penalesVisitante}</span> 
                         </div>
                         `;
                     }
@@ -1643,13 +1657,16 @@ export function renderBracket(clasificacion) {
                     `;
 
                     if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) {
+                        const penalesLocal = equipos.PUNTOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.PUNTOS})</span>` : '';
+                        const penalesVisitante = equipos.GANADOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.GANADOS})</span>` : '';
+
                         html += `
                             <div class="flex items-center justify-between py-2 px-2">
                             <div class="flex items-center gap-2">
                                 ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                                 <span class="font-medium text-sm">${equipos.LOCAL}</span>
                             </div>
-                            <span class="font-bold text-sm">${equipos.LSCORE}</span>
+                            <span class="font-bold text-sm">${equipos.LSCORE} ${penalesLocal}</span>
                             </div>
                         `;
 
@@ -1659,7 +1676,7 @@ export function renderBracket(clasificacion) {
                                 ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                                 <span class="font-medium text-sm">${equipos.VISITANTE}</span>
                             </div>
-                            <span class="font-bold text-sm">${equipos.VSCORE}</span>
+                            <span class="font-bold text-sm">${equipos.VSCORE} ${penalesVisitante}</span>
                             </div>
                         `;
                     }
