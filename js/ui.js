@@ -248,8 +248,8 @@ export function tablaResultadosCuartosDeFinal(list, ciclo) {
             } 
             const fechaFormateada = `${String(dia).padStart(2, '0')}/${meses[mes - 1] || mes}/${anio}`;
             
-            const penalesLocal = m.PUNTOS > 0 ? `<span class="text-center text-3xl text-brand-red font-bold uppercase" >(${m.PUNTOS})</span>` : '';
-            const penalesVisitante = m.GANADOS > 0 ? `<span class="text-center text-3xl text-brand-red font-bold uppercase" >(${m.GANADOS})</span>` : '';
+            const penalesLocal = m.PUNTOS > 0 ? `<span class="text-center text-3xl text-brand-blue font-bold uppercase" >(${m.PUNTOS})</span>` : '';
+            const penalesVisitante = m.GANADOS > 0 ? `<span class="text-center text-3xl text-brand-blue font-bold uppercase" >(${m.GANADOS})</span>` : '';
             cardsPerGroup.push(`                
                 <!-- Match Card ${i} -->
                 <div class="p-4 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">                   
@@ -341,8 +341,8 @@ export function tablaResultadosSemifinal(list, ciclo) {
             } 
             const fechaFormateada = `${String(dia).padStart(2, '0')}/${meses[mes - 1] || mes}/${anio}`;
 
-            const penalesLocal = m.PUNTOS > 0 ? `<span class="text-center text-3xl text-brand-red font-bold uppercase" >(${m.PUNTOS})</span>` : '';
-            const penalesVisitante = m.GANADOS > 0 ? `<span class="text-center text-3xl text-brand-red font-bold uppercase" >(${m.GANADOS})</span>` : '';
+            const penalesLocal = m.PUNTOS > 0 ? `<span class="text-center text-3xl text-brand-blue font-bold uppercase" >(${m.PUNTOS})</span>` : '';
+            const penalesVisitante = m.GANADOS > 0 ? `<span class="text-center text-3xl text-brand-blue font-bold uppercase" >(${m.GANADOS})</span>` : '';
             cardsPerGroup.push(`                
                 <!-- Match Card ${i} -->
                 <div class="p-4 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">                   
@@ -441,8 +441,8 @@ export function tablaResultadosTercerFinalPuesto(list, ciclo) {
                     text = `<span class="text-center text-xs sm:text-md md:text-lg text-gray-600 mt-2" data-translate="final">Final</span> - <span class="text-center text-xs sm:text-md md:text-lg text-brand-red">${fechaFormateada}</span>, ${m.HORA + ' hrs' || ''},  <span class="text-center text-xs sm:text-md md:text-lg ${m.ESTATUS === 'JUGADO' ? 'text-brand-green' : 'text-gray-500'} font-bold uppercase">${estatus}</span>`;
                 }
 
-                const penalesLocal = m.PUNTOS > 0 ? `<span class="text-center text-3xl text-brand-red font-bold uppercase" >(${m.PUNTOS})</span>` : '';
-                const penalesVisitante = m.GANADOS > 0 ? `<span class="text-center text-3xl text-brand-red font-bold uppercase" >(${m.GANADOS})</span>` : '';
+                const penalesLocal = m.PUNTOS > 0 ? `<span class="text-center text-3xl text-brand-blue font-bold uppercase" >(${m.PUNTOS})</span>` : '';
+                const penalesVisitante = m.GANADOS > 0 ? `<span class="text-center text-3xl text-brand-blue font-bold uppercase" >(${m.GANADOS})</span>` : '';
                 cardsPerGroup.push(`                
                     <!-- Match Card ${i} -->
                     <div class="p-4 bg-transparent shadow-lg ring-1 ring-black/5 border border-gray-200 rounded-brand hover:shadow-brand-md transition-shadow overflow-hidden" style="background-color: #F5F5F5;">
@@ -1501,11 +1501,11 @@ export function renderBracket(clasificacion) {
                     `;
 
                     if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) {
-                        const penalesLocal = equipos.PUNTOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.PUNTOS})</span>` : '';
-                        const penalesVisitante = equipos.GANADOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.GANADOS})</span>` : '';
+                        const penalesLocal = equipos.PUNTOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-blue" >(${equipos.PUNTOS})</span>` : '';
+                        const penalesVisitante = equipos.GANADOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-blue" >(${equipos.GANADOS})</span>` : '';
 
                         html += `
-                    <div class="flex items-center justify-between py-2 px-2">
+                    <div class="flex items-center justify-between py-2">
                         <div class="flex items-center gap-2">
                         ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                             <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.LOCAL}</span>
@@ -1514,7 +1514,7 @@ export function renderBracket(clasificacion) {
                     </div>
                     `;
                         html += `
-                    <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
+                    <div class="flex items-center justify-between py-2 border-t border-brand-blue">
                         <div class="flex items-center gap-2">
                         ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.VISITANTE}</span>
@@ -1555,11 +1555,11 @@ export function renderBracket(clasificacion) {
                 `;
 
                     if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) { 
-                        const penalesLocal = equipos.PUNTOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.PUNTOS})</span>` : '';
-                        const penalesVisitante = equipos.GANADOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.GANADOS})</span>` : '';
+                        const penalesLocal = equipos.PUNTOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-blue" >(${equipos.PUNTOS})</span>` : '';
+                        const penalesVisitante = equipos.GANADOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-blue" >(${equipos.GANADOS})</span>` : '';
 
                         html += `
-                    <div class="flex items-center justify-between py-2 px-2">
+                    <div class="flex items-center justify-between py-2">
                         <div class="flex items-center gap-2">
                         ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.LOCAL}</span>
@@ -1568,7 +1568,7 @@ export function renderBracket(clasificacion) {
                     </div>
                     `;
                         html += `
-                    <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
+                    <div class="flex items-center justify-between py-2 border-t border-brand-blue">
                         <div class="flex items-center gap-2">
                         ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                         <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.VISITANTE}</span>
@@ -1610,10 +1610,10 @@ export function renderBracket(clasificacion) {
                     `; 
 
                     if (equipos) {
-                        const penalesLocal = equipos.PUNTOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.PUNTOS})</span>` : '';
-                        const penalesVisitante = equipos.GANADOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.GANADOS})</span>` : '';
+                        const penalesLocal = equipos.PUNTOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-blue" >(${equipos.PUNTOS})</span>` : '';
+                        const penalesVisitante = equipos.GANADOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-blue" >(${equipos.GANADOS})</span>` : '';
                         html += `
-                        <div class="flex items-center justify-between py-2 px-2">
+                        <div class="flex items-center justify-between py-2">
                             <div class="flex items-center gap-2">
                             ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                             <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.LOCAL}</span>
@@ -1623,7 +1623,7 @@ export function renderBracket(clasificacion) {
                         `;
 
                         html += `
-                        <div class="flex items-center justify-between py-2 px-2 border-t border-brand-gold">
+                        <div class="flex items-center justify-between py-2 border-t border-brand-gold">
                             <div class="flex items-center gap-2">
                             ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                             <span class="font-medium text-xs sm:text-md md:text-lg tracking-wide">${equipos.VISITANTE}</span>
@@ -1657,11 +1657,11 @@ export function renderBracket(clasificacion) {
                     `;
 
                     if (equipos && equipos.LOCAL !== undefined && equipos.VISITANTE !== undefined) {
-                        const penalesLocal = equipos.PUNTOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.PUNTOS})</span>` : '';
-                        const penalesVisitante = equipos.GANADOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-red" >(${equipos.GANADOS})</span>` : '';
+                        const penalesLocal = equipos.PUNTOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-blue" >(${equipos.PUNTOS})</span>` : '';
+                        const penalesVisitante = equipos.GANADOS > 0 ? `<span class="text-center text-xs sm:text-md md:text-lg text-brand-blue" >(${equipos.GANADOS})</span>` : '';
 
                         html += `
-                            <div class="flex items-center justify-between py-2 px-2">
+                            <div class="flex items-center justify-between py-2">
                             <div class="flex items-center gap-2">
                                 ${equipos.LLOGO ? `<img src="${convertGoogleDriveUrl(equipos.LLOGO)}" alt="${equipos.LOCAL}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                                 <span class="font-medium text-sm">${equipos.LOCAL}</span>
@@ -1671,7 +1671,7 @@ export function renderBracket(clasificacion) {
                         `;
 
                         html += `
-                            <div class="flex items-center justify-between py-2 px-2 border-t border-brand-blue">
+                            <div class="flex items-center justify-between py-2 border-t border-brand-blue">
                             <div class="flex items-center gap-2">
                                 ${equipos.VLOGO ? `<img src="${convertGoogleDriveUrl(equipos.VLOGO)}" alt="${equipos.VISITANTE}" class="w-8 h-8 object-contain transition-transform duration-300 hover:scale-150">` : ''}
                                 <span class="font-medium text-sm">${equipos.VISITANTE}</span>
