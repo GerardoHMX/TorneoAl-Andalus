@@ -1589,7 +1589,6 @@ export function renderBracket(clasificacion) {
         }
 
         // Column 4: FINAL y TERCER PUESTO
-        debugger;
         if (grupos.FINAL || grupos.TERCERPUESTO) {
             html += '<div class="flex flex-col gap-12 items-center justify-center">'
 
