@@ -1423,7 +1423,7 @@ export function renderBracket(clasificacion) {
     let html = '<div class="min-w-max py-2">'
 
     // Check if we have bracket data
-    const hasBracket = grupos.CUARTOS || grupos.SEMIFINAL || grupos.FINAL || grupos.TERCERPUSTO
+    const hasBracket = grupos.CUARTOS || grupos.SEMIFINAL || grupos.FINAL || grupos.TERCERPUESTO
 
     if (hasBracket) {
         // Full bracket layout with connecting lines
@@ -1589,7 +1589,8 @@ export function renderBracket(clasificacion) {
         }
 
         // Column 4: FINAL y TERCER PUESTO
-        if (grupos.FINAL || grupos.TERCERPUSTO) {
+        debugger;
+        if (grupos.FINAL || grupos.TERCERPUESTO) {
             html += '<div class="flex flex-col gap-12 items-center justify-center">'
 
             // Agrupar finales por ciclo
@@ -1642,7 +1643,7 @@ export function renderBracket(clasificacion) {
 
             // Agrupar terceros puestos por ciclo
             const tercerosPorCiclo = {};
-            grupos.TERCERPUSTO?.forEach((equipo) => {
+            grupos.TERCERPUESTO?.forEach((equipo) => {
                 const ciclo = equipo.CICLO || '';
                 if (!tercerosPorCiclo[ciclo]) tercerosPorCiclo[ciclo] = [];
                 tercerosPorCiclo[ciclo].push(equipo);
