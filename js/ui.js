@@ -2099,7 +2099,7 @@ export async function renderPodio(clasificacion) {
     const tercerPuestoNombre = tercerPuesto.PASAN;
       
     let podioHtml = `
-        <div id="podio-confetti-wrapper" class="relative my-8">
+        <div id="podio-confetti-wrapper" class="relative mt-8">
             <div class="flex flex-col sm:flex-row items-start justify-between gap-4">
                 <h3 class="text-3xl md:text-4xl text-brand-blue font-bold uppercase" data-translate="section_podium_title">Podio</h3>
             </div>
