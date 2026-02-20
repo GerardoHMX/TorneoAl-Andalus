@@ -2088,43 +2088,50 @@ export async function renderPodio(clasificacion) {
 
     // Primer Puesto: GANA y GLOGO de 1RPUESTO
     const primerPuestoLogo = convertGoogleDriveUrl(primerPuesto.GLOGO); 
-    const primerPuestoNombre = primerPuesto.GANA;    
+    const primerPuestoNombre = primerPuesto.PASAN;    
 
     // Segundo Puesto: PIERDE y PLOGO de 1RPUESTO
-    const segundoPuestoLogo = convertGoogleDriveUrl(primerPuesto.PLOGO); 
-    const segundoPuestoNombre = primerPuesto.PIERDE; 
+    const segundoPuestoLogo = convertGoogleDriveUrl(primerPuesto.EMPATADOS); 
+    const segundoPuestoNombre = primerPuesto.EQUIPOS; 
 
     // Tercer Puesto: GANA y GLOGO de 3RPUESTO
     const tercerPuestoLogo = convertGoogleDriveUrl(tercerPuesto.GLOGO); 
-    const tercerPuestoNombre = tercerPuesto.GANA;
+    const tercerPuestoNombre = tercerPuesto.PASAN;
       
     let podioHtml = `
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 my-8">
-                <h3 class="text-3xl md:text-4xl text-center text-brand-blue font-bold uppercase" data-translate="section_podium_title">Podio</h3>
+        <div id="podio-confetti-wrapper" class="relative my-8">
+            <div class="flex flex-col sm:flex-row items-start justify-between gap-4">
+                <h3 class="text-3xl md:text-4xl text-brand-blue font-bold uppercase" data-translate="section_podium_title">Podio</h3>
             </div>
             <div class="w-full py-8 flex justify-center items-center">
-                <div class="relative w-full max-w-4xl mx-auto">
-                    <img src="img/podium.png" class="h-60 w-auto object-contain mx-auto block" alt="Podio del Torneo">
+                <div class="relative mx-auto">
+                    <img src="img/podium.png" class="object-contain mx-auto block" alt="Podio del Torneo" style="height: 250px; width: 460px;">
                     <!-- Primer Puesto (centro, arriba) -->
-                    <div id="podio-primer-puesto" class="absolute flex flex-col items-center justify-center" style="top: 5%; left: 50%; transform: translateX(-50%); width: 30%;">
-                        <img id="podio-primer-logo" src="${primerPuestoLogo}" alt="${primerPuestoNombre}" class="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain mb-2" onerror="this.style.display='none'">
-                        <div id="podio-primer-nombre" class="text-xs sm:text-md md:text-lg lg:text-base font-bold text-gray-800 uppercase text-center break-words px-2">${primerPuestoNombre}</div>
+                    <div id="podio-primer-puesto" class="absolute flex flex-col items-center justify-center" style="top: -40%; left: 35%;  width: 145px;">
+                        <img id="podio-primer-logo" src="${primerPuestoLogo}" alt="${primerPuestoNombre}" class="w-12 h-12 object-contain" onerror="this.style.display='none'">
+                        <div id="podio-primer-nombre" class="text-sm md:text-md font-bold text-gray-800 uppercase text-center break-words">${primerPuestoNombre}</div>
                     </div>
                     <!-- Segundo Puesto (izquierda) -->
-                    <div id="podio-segundo-puesto" class="absolute flex flex-col items-center justify-center" style="bottom: 75%; left: 10%; width: 25%;">
-                        <img id="podio-segundo-logo" src="${segundoPuestoLogo}" alt="${segundoPuestoNombre}" class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-contain mb-2" onerror="this.style.display='none'">
-                        <div id="podio-segundo-nombre" class="text-xs sm:text-md md:text-lg lg:text-base font-bold text-gray-800 uppercase text-center break-words px-2">${segundoPuestoNombre}</div>
+                    <div id="podio-segundo-puesto" class="absolute flex flex-col items-center justify-center" style="bottom: 78%; left: 0%; width: 145px;">
+                        <img id="podio-segundo-logo" src="${segundoPuestoLogo}" alt="${segundoPuestoNombre}" class="w-12 h-12 object-contain" onerror="this.style.display='none'">
+                        <div id="podio-segundo-nombre" class="text-sm md:text-md font-bold text-gray-800 uppercase text-center break-words">${segundoPuestoNombre}</div>
                     </div>
                     <!-- Tercer Puesto (derecha) -->
-                    <div id="podio-tercer-puesto" class="absolute flex flex-col items-center justify-center" style="bottom: 65%; right: 10%; width: 25%;">
-                        <img id="podio-tercer-logo" src="${tercerPuestoLogo}" alt="${tercerPuestoNombre}" class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-contain mb-2" onerror="this.style.display='none'">
-                        <div id="podio-tercer-nombre" class="text-xs sm:text-md md:text-lg lg:text-base font-bold text-gray-800 uppercase text-center break-words px-2">${tercerPuestoNombre}</div>
+                    <div id="podio-tercer-puesto" class="absolute flex flex-col items-center justify-center" style="bottom: 68%; right: 0%; width: 145px;">
+                        <img id="podio-tercer-logo" src="${tercerPuestoLogo}" alt="${tercerPuestoNombre}" class="w-12 h-12  object-contain" onerror="this.style.display='none'">
+                        <div id="podio-tercer-nombre" class="text-sm md:text-md font-bold text-gray-800 uppercase text-center break-words">${tercerPuestoNombre}</div>
                     </div>
                 </div>
             </div>
+            <canvas id="canvas" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 10;" aria-hidden="true"></canvas>
         </div>
     `;
 
     div.innerHTML = podioHtml;
-    
+
+    // Cargar confetti.js dinámicamente (los scripts en innerHTML no se ejecutan)
+    const script = document.createElement('script');
+    script.src = 'js/confetti.js';
+    script.onload = function() { /* confetti se inicia solo al cargar */ };
+    div.appendChild(script);
 }
